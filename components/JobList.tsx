@@ -1,13 +1,13 @@
 "use client";
 
+import { countryName } from "@/lib/geo";
 import type { JobView } from "@/lib/jobs";
 import { ArrowUpRightIcon } from "./icons";
 
 export function locationLabel(job: JobView): string {
   const code = job.countries[0];
   const extra = job.countries.length > 1 ? ` +${job.countries.length - 1}` : "";
-  if (job.city && code) return `${code} ${job.city}${extra}`;
-  if (code) return `${code}${extra}`;
+  if (code) return `[${countryName(code)}${extra}]${job.city ? ` ${job.city}` : ""}`;
   return job.locationRaw ?? "Location n/a";
 }
 
@@ -50,11 +50,6 @@ export function JobList({ jobs, selectedId, pending, onSelect }: Props) {
                   {job.salary ? ` · ${job.salary}` : ""}
                 </span>
               </span>
-              {job.sector ? (
-                <span className="hidden shrink-0 rounded-md border border-line bg-faint px-2 py-1 font-mono text-[11px] tracking-[0.08em] lg:block">
-                  {job.sector.toUpperCase()}
-                </span>
-              ) : null}
             </button>
             <a
               href={job.url}

@@ -7,6 +7,7 @@ import type { Filters, JobView } from "@/lib/jobs";
 import { ChevronIcon, CloseIcon, GlobeIcon } from "./icons";
 import { JobList } from "./JobList";
 import { MapPanel } from "./MapPanel";
+import { SearchBar } from "./SearchBar";
 import { Preview } from "./Preview";
 import { useFilterNav } from "./useFilterNav";
 
@@ -68,20 +69,22 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
   const shown = filters.countries.length > 0 ? filters.countries.join(", ") : SCOPE_LABEL[filters.scope];
 
   return (
-    <div className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-8 md:px-12 md:pt-10">
-      <div className="md:grid md:grid-cols-[minmax(0,1fr)_440px] md:gap-10 lg:grid-cols-[minmax(0,1fr)_470px]">
-        <section aria-label="Open roles" className={`flex min-w-0 flex-col gap-5 ${selectedJob ? "max-md:pb-44" : ""}`}>
+    <div className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-8 lg:px-12 lg:pt-10">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
+        <section aria-label="Open roles" className={`flex min-w-0 flex-col gap-5 ${selectedJob ? "max-lg:pb-44" : ""}`}>
           <div className="flex flex-col gap-3.5">
-            <p className="font-mono text-xs tracking-[0.12em] text-dim max-md:pr-14">
+            <p className="font-mono text-xs tracking-[0.12em] text-dim max-lg:pr-14">
               [{headline.roles.toLocaleString("en")}] OPEN ROLES · [{headline.companies}] COMPANIES
               {headline.updated ? ` · UPDATED ${headline.updated.toUpperCase()}` : ""}
             </p>
             <h1 className="font-display text-[clamp(44px,9vw,84px)] font-extrabold uppercase leading-[0.92] tracking-[0.01em]">
-              Every open role.
+              Find open roles.
               <br />
               Defence &amp; space.
             </h1>
           </div>
+
+          <SearchBar query={filters.q} />
 
           <div className="flex flex-col gap-3.5">
             <div className="flex flex-wrap gap-2 lg:hidden" role="group" aria-label="Region scope">
@@ -100,7 +103,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
 
             <div className="flex flex-wrap gap-2" role="group" aria-label="View">
               {[
-                { id: "all", label: "OVERVIEW" },
+                { id: "all", label: "ALL" },
                 { id: "new", label: "NEW · 24H" },
               ].map((t) => {
                 const on = (t.id === "new") === filters.newOnly;
@@ -231,9 +234,10 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
           ) : null}
         </section>
 
-        <aside className="scroll-thin contents md:sticky md:top-[96px] md:flex md:max-h-[calc(100dvh-112px)] md:flex-col md:gap-5 md:self-start md:overflow-y-auto md:pb-2">
+        <aside className="scroll-thin contents lg:sticky lg:top-[72px] lg:-mx-10 lg:flex lg:max-h-[calc(100dvh-72px)] lg:flex-col lg:gap-5 lg:self-start lg:overflow-y-auto lg:px-10 lg:py-6">
           <MapPanel
             open={mapOpen}
+            scope={filters.scope}
             counts={facets}
             selected={filters.countries}
             highlighted={selectedJob?.countries ?? []}
@@ -253,7 +257,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
         onClick={() => setMapOpen((v) => !v)}
         aria-expanded={mapOpen}
         aria-label={mapOpen ? "Close map filter" : "Open map filter"}
-        className="glass fixed right-3 top-[68px] z-50 grid size-12 place-items-center rounded-full md:hidden"
+        className="glass fixed right-3 top-[68px] z-50 grid size-12 place-items-center rounded-full md:top-[84px] lg:hidden"
       >
         {mapOpen ? <CloseIcon size={18} /> : <GlobeIcon size={22} />}
         {filters.countries.length > 0 && !mapOpen ? (

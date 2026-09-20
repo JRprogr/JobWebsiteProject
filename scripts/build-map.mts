@@ -13,7 +13,7 @@ const NUMERIC: Record<string, [string, Tier]> = {
   "705": ["SI", "eu"], "724": ["ES", "eu"], "752": ["SE", "eu"],
   "826": ["GB", "europe"], "578": ["NO", "europe"], "756": ["CH", "europe"], "352": ["IS", "europe"], "438": ["LI", "europe"],
   "688": ["RS", "europe"], "070": ["BA", "europe"], "008": ["AL", "europe"], "807": ["MK", "europe"], "499": ["ME", "europe"],
-  "804": ["UA", "near"], "498": ["MD", "near"], "792": ["TR", "near"], "112": ["BY", "near"],
+  "643": ["RU", "near"], "804": ["UA", "near"], "498": ["MD", "near"], "792": ["TR", "near"], "112": ["BY", "near"],
 };
 
 const W = 440, H = 380, STEP = 5;
@@ -24,6 +24,21 @@ const hitPath = geoPath(proj).digits(0);
 const topo = JSON.parse(readFileSync("node_modules/world-atlas/countries-50m.json", "utf8")) as Topology;
 const all = feature(topo, topo.objects.countries as GeometryCollection).features as Feature<Geometry, { name: string }>[];
 
+// A label anchor that is always inside the country: the dot with the smallest total distance to all other dots.
+function medoid(points: [number, number][]): [number, number] | null {
+  let best: [number, number] | null = null;
+  let bestSum = Infinity;
+  for (const p of points) {
+    let sum = 0;
+    for (const q of points) sum += Math.hypot(p[0] - q[0], p[1] - q[1]);
+    if (sum < bestSum) {
+      bestSum = sum;
+      best = p;
+    }
+  }
+  return best;
+}
+
 const countries = all.flatMap((f) => {
   const meta = f.properties.name === "Kosovo" ? (["XK", "europe"] as [string, Tier]) : NUMERIC[String(f.id).padStart(3, "0")];
   return meta ? [{ f, iso: meta[0], tier: meta[1] }] : [];
@@ -31,16 +46,20 @@ const countries = all.flatMap((f) => {
 
 const out = countries.map(({ f, iso, tier }) => {
   const dots: string[] = [];
+  const coords: [number, number][] = [];
   for (let y = STEP / 2; y < H; y += STEP) {
     const row = Math.round(y / STEP);
     for (let x = STEP / 2 + (row % 2 ? STEP / 2 : 0); x < W; x += STEP) {
       const ll = proj.invert?.([x, y]);
       if (!ll || ll[0] < -25 || ll[0] > 45 || ll[1] < 33 || ll[1] > 71.5) continue;
-      if (geoContains(f, ll)) dots.push(`M${x.toFixed(1)} ${y.toFixed(1)}h0`);
+      if (geoContains(f, ll)) {
+        dots.push(`M${x.toFixed(1)} ${y.toFixed(1)}h0`);
+        coords.push([x, y]);
+      }
     }
   }
   const hit = hitPath(f) ?? "";
-  const c = proj(geoCentroid(f));
+  const c = medoid(coords) ?? proj(geoCentroid(f));
   return { iso, tier, name: f.properties.name, dots: dots.join(""), dotCount: dots.length, hit, area: path.area(f), label: c ? [Math.round(c[0]), Math.round(c[1])] : null };
 }).filter((c) => c.hit);
 

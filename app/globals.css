@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: light;
-  --bg: #f7f9fe;
+  --bg: #edf1fa;
   --fg: #003399;
   --dim: rgba(0, 51, 153, 0.74);
   --line: rgba(0, 51, 153, 0.3);
@@ -17,13 +17,14 @@
     0 18px 42px rgba(0, 51, 153, 0.22);
   --glass-selected: inset 0 1px 0 rgba(255, 255, 255, 1), 0 0 0 1.5px #003399, 0 0 34px rgba(0, 51, 153, 0.24),
     0 14px 38px rgba(0, 51, 153, 0.2);
-  --glows: radial-gradient(640px 460px at 6% 4%, rgba(255, 204, 0, 0.55), transparent 70%),
-    radial-gradient(760px 520px at 98% 40%, rgba(0, 51, 153, 0.22), transparent 70%),
-    radial-gradient(700px 420px at 28% 80%, rgba(0, 51, 153, 0.16), transparent 70%);
+  --glows: radial-gradient(620px 460px at 8% 6%, rgba(255, 204, 0, 0.62), transparent 70%),
+    radial-gradient(760px 520px at 96% 42%, rgba(0, 51, 153, 0.2), transparent 70%),
+    radial-gradient(700px 480px at 30% 60%, rgba(255, 204, 0, 0.5), transparent 70%),
+    radial-gradient(700px 420px at 24% 96%, rgba(255, 204, 0, 0.4), transparent 70%);
   --map: #d4001f;
-  --map-europe: rgba(212, 0, 31, 0.55);
+  --map-europe: rgba(212, 0, 31, 0.64);
   --map-eu: rgba(212, 0, 31, 0.8);
-  --map-near: rgba(212, 0, 31, 0.3);
+  --map-near: rgba(212, 0, 31, 0.2);
   --map-selected: #ff2a45;
   --map-hover: #7a0012;
   --map-grat: rgba(212, 0, 31, 0.16);
@@ -31,8 +32,9 @@
   --map-panel: rgba(255, 255, 255, 0.55);
   --scanline: rgba(212, 0, 31, 0.05);
   --grain: 0.13;
+  --pulse: rgba(0, 51, 153, 0.5);
   --stripe-a: #003399;
-  --stripe-b: #f7f9fe;
+  --stripe-b: #edf1fa;
 }
 
 :root[data-theme="dark"] {
@@ -55,9 +57,9 @@
     radial-gradient(760px 520px at 96% 42%, rgba(0, 51, 153, 0.45), transparent 70%),
     radial-gradient(700px 420px at 30% 78%, rgba(0, 51, 153, 0.4), transparent 70%);
   --map: #33ff99;
-  --map-europe: rgba(51, 255, 153, 0.42);
+  --map-europe: rgba(51, 255, 153, 0.52);
   --map-eu: rgba(51, 255, 153, 0.62);
-  --map-near: rgba(51, 255, 153, 0.26);
+  --map-near: rgba(51, 255, 153, 0.18);
   --map-selected: #d9ffea;
   --map-hover: #ffffff;
   --map-grat: rgba(51, 255, 153, 0.16);
@@ -65,6 +67,7 @@
   --map-panel: rgba(0, 12, 6, 0.55);
   --scanline: rgba(51, 255, 153, 0.06);
   --grain: 0.11;
+  --pulse: rgba(255, 204, 0, 0.55);
   --stripe-a: #ffcc00;
   --stripe-b: #050505;
 }
@@ -136,6 +139,10 @@ body {
 }
 
 /* Listing bars: extend on hover, grey out the rest once a role is selected */
+.job-list {
+  clip-path: inset(-80px -3px -80px -60px);
+}
+
 .job-row {
   border-radius: 16px;
   transition: margin 180ms ease, box-shadow 180ms ease, opacity 180ms ease, filter 180ms ease;
@@ -199,6 +206,14 @@ body {
   stroke: var(--map-eu);
 }
 
+.map-country[data-lit="false"] .map-dots {
+  stroke: var(--map-near);
+}
+
+.map-country[data-tier="near"][data-lit="true"] .map-dots {
+  stroke: var(--map-europe);
+}
+
 .map-country[data-empty="true"] .map-dots {
   opacity: 0.45;
 }
@@ -239,4 +254,24 @@ body {
 .scroll-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--pulse);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+
+.pulse {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
 }

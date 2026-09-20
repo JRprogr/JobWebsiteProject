@@ -37,7 +37,7 @@ function where(f: Filters, opts: { skipCountries?: boolean } = {}) {
   if (f.q) {
     const escaped = f.q.replace(/[%_\\]/g, (ch) => `\\${ch}`);
     const p = add(`%${escaped}%`);
-    clauses.push(`(j.title ilike ${p} or c.name ilike ${p} or j.location_raw ilike ${p} or j.department ilike ${p})`);
+    clauses.push(`j.title ilike ${p}`);
   }
   if (f.sector) clauses.push(`c.sector = ${add(f.sector)}`);
   if (f.remote) clauses.push("j.remote");

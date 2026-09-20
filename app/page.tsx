@@ -37,7 +37,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
   return (
     <>
-      <TopBar query={filters.q} scope={filters.scope} />
+      <TopBar scope={filters.scope} />
       <Board
         jobs={jobs}
         total={total}

@@ -1,36 +1,48 @@
+const cell = "border-line p-4";
+const corner = "absolute size-3.5 border-fg";
+
 export function Footer() {
-  const cell = "border-line";
   return (
     <footer className="mx-auto mt-16 w-full max-w-[1440px] px-4 pb-10 md:px-12">
-      <div className="grid grid-cols-1 border border-line font-mono text-[11px] tracking-[0.08em] md:grid-cols-[420px_1fr_260px_260px] md:grid-rows-[44px_1fr_56px]">
-        <p className={`flex items-center border-b p-4 md:col-span-2 md:border-r ${cell}`}>
-          <span className="text-dim">DATA REFRESHES ON EACH SCRAPE RUN. NO PUSH FEED.</span>
-        </p>
-        <p className={`flex items-center border-b p-4 md:col-span-2 ${cell}`}>
-          <span className="text-dim">SOURCES · GREENHOUSE / LEVER / SITEMAPS</span>
-        </p>
-        <div className={`flex flex-col justify-end border-b p-4 md:row-span-2 md:border-b-0 md:border-r ${cell}`}>
-          <span className="font-logo text-[44px] leading-none">DS[Careers]</span>
+      <div className="border border-line font-mono text-[11px] tracking-[0.08em]">
+        <div className="flex flex-col divide-y divide-line border-b border-line sm:flex-row sm:divide-x sm:divide-y-0">
+          <p className={`${cell} flex-1 text-dim`}>DATA REFRESHES ON EACH SCRAPE RUN. NO PUSH FEED.</p>
+          <p className={`${cell} flex-1 text-dim`}>SOURCES · GREENHOUSE / LEVER / SITEMAPS</p>
         </div>
-        <ul className={`flex flex-col gap-2.5 border-b p-4 md:border-r ${cell}`}>
-          <li>[+] EUROPE FIRST</li>
-          <li>[+] EVERY OPEN ROLE LINKS TO THE EMPLOYER</li>
-          <li>[+] NO ACCOUNTS, NO TRACKING</li>
-        </ul>
-        <div className={`hazard h-16 border-b md:row-span-2 md:h-auto md:border-b-0 md:border-r ${cell}`} aria-hidden="true" />
-        <div className="relative grid min-h-28 place-items-center p-4 md:row-span-2">
-          <span className="absolute left-5 top-5 size-3.5 border-l border-t border-fg" aria-hidden="true" />
-          <span className="absolute right-5 top-5 size-3.5 border-r border-t border-fg" aria-hidden="true" />
-          <span className="absolute bottom-5 left-5 size-3.5 border-b border-l border-fg" aria-hidden="true" />
-          <span className="absolute bottom-5 right-5 size-3.5 border-b border-r border-fg" aria-hidden="true" />
-          <p className="text-center leading-7 text-dim">
-            SN-DS0001-A
-            <br />[ RESERVED ]
+
+        <div className="grid grid-cols-2 lg:grid-cols-[1.3fr_1.2fr_0.5fr_0.7fr]">
+          <div className={`${cell} col-span-2 flex flex-col justify-end border-b lg:col-span-1 lg:border-b-0 lg:border-r`}>
+            <span className="font-logo text-[44px] leading-none">DS[Careers]</span>
+          </div>
+          <ul className={`${cell} col-span-2 flex flex-col gap-2.5 border-b lg:col-span-1 lg:border-b-0 lg:border-r`}>
+            <li>[+] EUROPE FIRST</li>
+            <li>[+] EVERY OPEN ROLE LINKS TO THE EMPLOYER</li>
+            <li>[+] NO ACCOUNTS, NO TRACKING</li>
+          </ul>
+          <div className="hazard min-h-24 border-r border-line max-lg:border-b lg:border-r" aria-hidden="true" />
+          <div className="relative grid min-h-24 place-items-center p-4 max-lg:border-b border-line">
+            <span className={`${corner} left-4 top-4 border-l border-t`} aria-hidden="true" />
+            <span className={`${corner} right-4 top-4 border-r border-t`} aria-hidden="true" />
+            <span className={`${corner} bottom-4 left-4 border-b border-l`} aria-hidden="true" />
+            <span className={`${corner} bottom-4 right-4 border-b border-r`} aria-hidden="true" />
+            <p className="text-center leading-7 text-dim">
+              SN-DS0001-A
+              <br />[ RESERVED ]
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-line p-4 text-[10px] text-dim md:flex-row md:items-center md:justify-between">
+          <p>
+            © 2026 DS[Careers]® · NON-COMMERCIAL PORTFOLIO PROJECT. LISTINGS BELONG TO THEIR EMPLOYERS.
           </p>
+          {/* Placeholders until the real pages exist */}
+          <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and info (coming soon)">
+            <li>[ TERMS ]</li>
+            <li>[ Q&amp;A ]</li>
+            <li>[ ABOUT ]</li>
+          </ul>
         </div>
-        <p className={`flex items-center border-t p-4 text-[10px] text-dim md:border-r ${cell}`}>
-          NON-COMMERCIAL PORTFOLIO PROJECT. LISTINGS BELONG TO THEIR EMPLOYERS.
-        </p>
       </div>
     </footer>
   );
