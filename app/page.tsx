@@ -1,10 +1,18 @@
 import { Board } from "@/components/Board";
 import { Footer } from "@/components/Footer";
 import { TopBar } from "@/components/TopBar";
+import { parseBucket } from "@/lib/experience";
 import { parseScope } from "@/lib/geo";
-import { allCountryFacets, countryFacets, headline, listJobs, sectors, type Filters } from "@/lib/jobs";
+import { allCountryFacets, companyFacets, countryFacets, headline, listJobs, parseSort, sectors, type Filters } from "@/lib/jobs";
 
-const PAGE = 50;
+const DEFAULT_LIMIT = 50;
+
+const list = (value: string | undefined, pattern: RegExp, max: number) =>
+  (value ?? "")
+    .split(",")
+    .map((v) => v.trim())
+    .filter((v) => pattern.test(v))
+    .slice(0, max);
 
 export default async function Home({ searchParams }: PageProps<"/">) {
   const sp = await searchParams;
@@ -17,20 +25,20 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     q: (one("q") ?? "").trim().slice(0, 80),
     sector: one("sector")?.slice(0, 40) || null,
     scope: parseScope(one("scope")),
-    countries: (one("c") ?? "")
-      .split(",")
-      .map((c) => c.trim().toUpperCase())
-      .filter((c) => /^[A-Z]{2}$/.test(c))
-      .slice(0, 12),
+    countries: list(one("c")?.toUpperCase(), /^[A-Z]{2}$/, 12),
+    companies: list(one("co"), /^[a-z0-9-]{1,60}$/, 20),
+    experience: parseBucket(one("exp")),
+    sort: parseSort(one("sort")),
     remote: one("remote") === "1",
     newOnly: one("tab") === "new",
   };
-  const limit = Math.min(500, Math.max(PAGE, Number.parseInt(one("limit") ?? "", 10) || PAGE));
+  const limit = Math.min(500, Math.max(20, Number.parseInt(one("limit") ?? "", 10) || DEFAULT_LIMIT));
 
-  const [{ jobs, total }, facets, globalFacets, sectorList, head] = await Promise.all([
+  const [{ jobs, total }, facets, globalFacets, companyList, sectorList, head] = await Promise.all([
     listJobs(filters, limit),
     countryFacets(filters),
     allCountryFacets(filters),
+    companyFacets(filters),
     sectors(),
     headline(),
   ]);
@@ -45,6 +53,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         filters={filters}
         facets={facets}
         globalFacets={globalFacets}
+        companyFacets={companyList}
         sectors={sectorList}
         headline={head}
       />

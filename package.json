@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:migrate": "node --env-file=.env.local scripts/migrate.mts",
+    "check:experience": "node scripts/check-experience.mts",
     "db:seed": "node --env-file=.env.local scripts/seed.mts",
     "scrape": "node --env-file=.env.local scripts/scrape.mts"
   },

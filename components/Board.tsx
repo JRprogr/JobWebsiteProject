@@ -1,14 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { EXPERIENCE_BUCKETS } from "@/lib/experience";
 import { countryName, type Scope } from "@/lib/geo";
-import type { Filters, JobView } from "@/lib/jobs";
+import type { CompanyFacet, Filters, JobView } from "@/lib/jobs";
+import { AdvancedFilters } from "./AdvancedFilters";
 import { ChevronIcon, CloseIcon, GlobeIcon } from "./icons";
 import { JobList } from "./JobList";
 import { MapPanel } from "./MapPanel";
-import { SearchBar } from "./SearchBar";
 import { Preview } from "./Preview";
+import { ResultsBar } from "./ResultsBar";
+import { SearchBar } from "./SearchBar";
 import { useFilterNav } from "./useFilterNav";
 
 type Props = {
@@ -18,6 +21,7 @@ type Props = {
   filters: Filters;
   facets: Record<string, number>;
   globalFacets: Record<string, number>;
+  companyFacets: CompanyFacet[];
   sectors: string[];
   headline: { roles: number; companies: number; updated: string | null };
 };
@@ -26,13 +30,12 @@ const chip = "rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.
 
 const SCOPE_LABEL: Record<Scope, string> = { europe: "EUROPE", eu: "EU ONLY", outside: "OUTSIDE EUROPE", all: "GLOBAL" };
 
-export function Board({ jobs, total, limit, filters, facets, globalFacets, sectors, headline }: Props) {
+export function Board({ jobs, total, limit, filters, facets, globalFacets, companyFacets, sectors, headline }: Props) {
   const { update, pending } = useFilterNav();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [multi, setMulti] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [countryQuery, setCountryQuery] = useState("");
 
   const selectedJob = jobs.find((j) => j.id === selectedId) ?? null;
   const outside = filters.scope === "outside" && filters.countries.length === 0;
@@ -58,19 +61,29 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
     else setCountries(has && filters.countries.length === 1 ? [] : [iso]);
   }
 
-  const advancedList = useMemo(() => {
-    const q = countryQuery.trim().toLowerCase();
-    return Object.entries(globalFacets)
-      .map(([code, n]) => ({ code, n, name: countryName(code) }))
-      .filter((c) => !q || c.name.toLowerCase().includes(q) || c.code.toLowerCase() === q)
-      .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
-  }, [globalFacets, countryQuery]);
+  const companyName = (slug: string) => companyFacets.find((c) => c.slug === slug)?.name ?? slug;
 
-  const shown = filters.countries.length > 0 ? filters.countries.join(", ") : SCOPE_LABEL[filters.scope];
+  const active: { key: string; label: string; clear: () => void }[] = [
+    ...filters.countries.map((c) => ({ key: `c-${c}`, label: countryName(c), clear: () => setCountries(filters.countries.filter((x) => x !== c)) })),
+    ...filters.companies.map((slug) => ({
+      key: `co-${slug}`,
+      label: companyName(slug),
+      clear: () => {
+        const next = filters.companies.filter((x) => x !== slug);
+        update({ co: next.length ? next.join(",") : null });
+      },
+    })),
+    ...(filters.sector ? [{ key: "sector", label: filters.sector.toUpperCase(), clear: () => update({ sector: null }) }] : []),
+    ...(filters.experience ? [{ key: "exp", label: EXPERIENCE_BUCKETS[filters.experience].label, clear: () => update({ exp: null }) }] : []),
+  ];
+
+  const advancedCount = filters.countries.length + filters.companies.length + (filters.sector ? 1 : 0) + (filters.experience ? 1 : 0);
+  const summary = filters.countries.length > 0 ? filters.countries.join(", ") : SCOPE_LABEL[filters.scope];
+  const step = limit <= 20 ? 20 : 50;
 
   return (
-    <div className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-8 lg:px-12 lg:pt-10">
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
+    <div className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-8 md:px-12 md:pt-10">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_470px]">
         <section aria-label="Open roles" className={`flex min-w-0 flex-col gap-5 ${selectedJob ? "max-lg:pb-44" : ""}`}>
           <div className="flex flex-col gap-3.5">
             <p className="font-mono text-xs tracking-[0.12em] text-dim max-lg:pr-14">
@@ -101,7 +114,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-2" role="group" aria-label="View">
+            <div className="flex flex-wrap items-center gap-2">
               {[
                 { id: "all", label: "ALL" },
                 { id: "new", label: "NEW · 24H" },
@@ -119,33 +132,11 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
                   </button>
                 );
               })}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                aria-pressed={!filters.sector}
-                onClick={() => update({ sector: null })}
-                className={`${chip} ${!filters.sector ? "border-fg bg-faint" : "border-line"}`}
-              >
-                ALL SECTORS
-              </button>
-              {sectors.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  aria-pressed={filters.sector === s}
-                  onClick={() => update({ sector: filters.sector === s ? null : s })}
-                  className={`${chip} ${filters.sector === s ? "border-fg bg-faint" : "border-line"}`}
-                >
-                  {s.toUpperCase()}
-                </button>
-              ))}
               <button
                 type="button"
                 aria-pressed={filters.remote}
                 onClick={() => update({ remote: filters.remote ? null : "1" })}
-                className={`${chip} ${filters.remote ? "border-fg bg-faint" : "border-line"}`}
+                className={`${chip} py-2.5 ${filters.remote ? "border-fg bg-faint" : "border-line"}`}
               >
                 REMOTE
               </button>
@@ -153,63 +144,54 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
                 type="button"
                 aria-expanded={advancedOpen}
                 onClick={() => setAdvancedOpen((v) => !v)}
-                className={`${chip} ml-auto flex items-center gap-1.5 border-line`}
+                className={`${chip} ml-auto flex items-center gap-2 py-2.5 ${advancedCount ? "border-fg" : "border-line"}`}
               >
                 ADVANCED
+                {advancedCount ? <span className="rounded-full bg-accent px-1.5 text-[10px] font-bold text-on-accent">{advancedCount}</span> : null}
                 <ChevronIcon className={`transition-transform ${advancedOpen ? "rotate-180" : ""}`} />
               </button>
             </div>
 
             {advancedOpen ? (
-              <div className="glass flex flex-col gap-3 rounded-2xl p-4">
-                <div className="flex items-center gap-3">
-                  <label className="flex flex-1 items-center gap-2 font-mono text-[11px] tracking-[0.08em]">
-                    COUNTRY
-                    <input
-                      type="search"
-                      value={countryQuery}
-                      onChange={(e) => setCountryQuery(e.target.value)}
-                      placeholder="Search any country"
-                      className="min-w-0 flex-1 rounded-lg border border-line bg-faint px-3 py-2 font-mono text-xs outline-none placeholder:text-dim"
-                    />
-                  </label>
-                  {filters.countries.length > 0 ? (
-                    <button type="button" onClick={() => setCountries([])} className={`${chip} border-line`}>
-                      CLEAR
+              <AdvancedFilters
+                countries={filters.countries}
+                countryFacets={globalFacets}
+                companies={filters.companies}
+                companyFacets={companyFacets}
+                sector={filters.sector}
+                sectors={sectors}
+                experience={filters.experience}
+                onChange={update}
+              />
+            ) : null}
+
+            {active.length > 0 ? (
+              <ul className="flex flex-wrap items-center gap-2" aria-label="Active filters">
+                {active.map((a) => (
+                  <li key={a.key}>
+                    <button
+                      type="button"
+                      onClick={a.clear}
+                      aria-label={`Remove filter ${a.label}`}
+                      className="flex items-center gap-1.5 rounded-full border border-fg bg-faint py-1 pl-3 pr-2 font-mono text-[11px] tracking-[0.06em]"
+                    >
+                      {a.label}
+                      <CloseIcon size={11} />
                     </button>
-                  ) : null}
-                </div>
-                <ul className="scroll-thin grid max-h-52 grid-cols-2 gap-1.5 overflow-y-auto sm:grid-cols-3">
-                  {advancedList.map((c) => {
-                    const on = filters.countries.includes(c.code);
-                    return (
-                      <li key={c.code}>
-                        <button
-                          type="button"
-                          aria-pressed={on}
-                          onClick={() => setCountries(on ? filters.countries.filter((x) => x !== c.code) : [...filters.countries, c.code])}
-                          className={`flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left font-mono text-[11px] ${on ? "border-fg bg-faint font-bold" : "border-line"}`}
-                        >
-                          <span className="truncate">
-                            {c.code} · {c.name}
-                          </span>
-                          <span className="text-dim">{c.n}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                  {advancedList.length === 0 ? <li className="col-span-full font-mono text-[11px] text-dim">NO MATCHING COUNTRY</li> : null}
-                </ul>
-              </div>
+                  </li>
+                ))}
+              </ul>
             ) : null}
           </div>
 
-          <div className="flex items-center justify-between gap-3 font-mono text-[11px] tracking-[0.08em] text-dim">
-            <span>
-              {total.toLocaleString("en")} {total === 1 ? "ROLE" : "ROLES"} · {shown}
-            </span>
-            <span>SORT: LATEST</span>
-          </div>
+          <ResultsBar
+            total={total}
+            summary={summary}
+            sort={filters.sort}
+            limit={limit}
+            onSort={(sort) => update({ sort: sort === "latest" ? null : sort })}
+            onLimit={(n) => update({ limit: n === 50 ? null : String(n) })}
+          />
 
           {jobs.length === 0 ? (
             <div className="glass rounded-2xl p-6 font-mono text-xs leading-7 tracking-[0.06em]">
@@ -226,7 +208,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, secto
           {jobs.length < total ? (
             <button
               type="button"
-              onClick={() => update({ limit: String(limit + 50) })}
+              onClick={() => update({ limit: String(limit + step) })}
               className="mx-auto rounded-[10px] border border-line px-5 py-2.5 font-mono text-xs tracking-[0.1em]"
             >
               LOAD MORE · {jobs.length.toLocaleString("en")} / {total.toLocaleString("en")}

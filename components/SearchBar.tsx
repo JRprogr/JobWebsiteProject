@@ -14,6 +14,7 @@ export function SearchBar({ query }: { query: string }) {
       first.current = false;
       return;
     }
+    if (text.trim() === query) return;
     const id = setTimeout(() => update({ q: text.trim() || null }), 300);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-run when the typed text changes

@@ -103,9 +103,18 @@ type NormalizedJob = {
   salary_currency: string | null;
   posted_at: string | null; // ISO
   country_hint?: string | null; // ISO-2 when the source provides one (e.g. Lever)
+  description?: string | null; // plain text, only for jobs not processed before; used for experience extraction, never stored
 };
 
-type Adapter = (company: Company) => Promise<NormalizedJob[]>;
+type AdapterContext = {
+  known: Map<string, string>; // external_id -> title of jobs whose details were already processed
+  backfill: boolean; // CLI backfill may fetch many more detail pages than a cron run
+};
+
+type Adapter = (company: Company, ctx: AdapterContext) => Promise<NormalizedJob[]>;
+
+// Per-source fetch of one listing's plain text; used by /api/jobs/[id]/details (fetched on demand, then cached in job_details)
+type DetailFetcher = (company: Company, job: { external_id: string; url: string }) => Promise<string | null>;
 ```
 
 Adapters normalize into this shape; the diffing/upsert logic above is
@@ -136,3 +145,8 @@ exhaustive).
 7. Workday adapter for 2-3 priority companies
 8. Coffee button (Stripe Payment Link, no custom payment flow)
 9. Polish + deploy
+
+## Schema additions since the original design
+- `jobs.location_region` and `jobs.location_countries text[]` (all countries a posting lists; `location_country` stays the primary).
+- `jobs.experience_min/max/kind` ('explicit' | 'estimated') extracted from listing text during scraping; `jobs.details_checked_at` marks jobs whose text was processed.
+- `job_details(job_id, body, fetched_at)`: on-demand cache of listing text, capped at 20k chars per job. Full descriptions are deliberately NOT stored for every job (Neon free tier is 0.5 GB); re-extracting experience means re-reading sources (`npm run scrape -- --backfill`).
