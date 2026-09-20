@@ -102,6 +102,7 @@ type NormalizedJob = {
   salary_max: number | null;
   salary_currency: string | null;
   posted_at: string | null; // ISO
+  country_hint?: string | null; // ISO-2 when the source provides one (e.g. Lever)
 };
 
 type Adapter = (company: Company) => Promise<NormalizedJob[]>;

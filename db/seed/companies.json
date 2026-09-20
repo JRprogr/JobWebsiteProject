@@ -1,0 +1,67 @@
+[
+  {
+    "name": "SpaceX",
+    "slug": "spacex",
+    "sector": "launch",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "spacex",
+      "default_country": "US"
+    },
+    "active": true
+  },
+  {
+    "name": "Palantir",
+    "slug": "palantir",
+    "sector": "dual-use",
+    "source_type": "lever",
+    "source_config": {
+      "site": "palantir"
+    },
+    "active": true
+  },
+  {
+    "name": "Helsing",
+    "slug": "helsing",
+    "sector": "dual-use",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "helsing"
+    },
+    "active": true
+  },
+  {
+    "name": "Isar Aerospace",
+    "slug": "isar-aerospace",
+    "sector": "launch",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "isaraerospace"
+    },
+    "active": true
+  },
+  {
+    "name": "DLR",
+    "slug": "dlr",
+    "sector": "research",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "sitemap-dlr",
+      "base_url": "https://jobs.dlr.de",
+      "default_country": "DE"
+    },
+    "active": true
+  },
+  {
+    "name": "CNES",
+    "slug": "cnes",
+    "sector": "research",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "sitemap-cnes",
+      "base_url": "https://recrutement.cnes.fr",
+      "default_country": "FR"
+    },
+    "active": true
+  }
+]
