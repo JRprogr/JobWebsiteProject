@@ -17,12 +17,9 @@ type MapCountry = {
 
 const map = mapJson as unknown as { w: number; h: number; graticule: string; countries: MapCountry[] };
 
-// Which tiers are lit for each scope; everything else fades back
+// EU only lights the 27 members; Europe and Global light the whole map (each country then shows whether it has openings)
 function isLit(tier: Tier, scope: Scope): boolean {
-  if (scope === "all") return true;
-  if (scope === "eu") return tier === "eu";
-  if (scope === "outside") return tier === "near";
-  return tier !== "near";
+  return scope === "eu" ? tier === "eu" : true;
 }
 
 type Props = {
@@ -37,7 +34,7 @@ type Props = {
 
 export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, onToggle }: Props) {
   return (
-    <svg viewBox={`0 0 ${map.w} ${map.h}`} className="mx-auto block h-auto max-h-[38dvh] w-full" role="group" aria-label="Map of Europe. Select countries to filter roles.">
+    <svg viewBox={`0 0 ${map.w} ${map.h}`} className="mx-auto block h-auto max-h-[38dvh] lg:max-h-[clamp(150px,calc(100dvh-610px),38dvh)] w-full" role="group" aria-label="Map of Europe. Select countries to filter roles.">
       <path d={map.graticule} fill="none" stroke="var(--map-grat)" strokeWidth={0.7} />
       {map.countries.map((c) => {
         const count = counts[c.iso] ?? 0;

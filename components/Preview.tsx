@@ -9,9 +9,9 @@ import { ArrowUpRightIcon, CloseIcon, ExpandIcon } from "./icons";
 
 function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="flex min-w-0 flex-col gap-1">
+    <div className="flex min-w-0 flex-col gap-0.5">
       <dt className="font-mono text-[10px] tracking-[0.1em] text-dim">{label}</dt>
-      <dd className="truncate font-mono text-sm font-bold" title={hint}>
+      <dd className="truncate font-mono text-[13px] font-bold" title={hint ? `${value} (${hint})` : value}>
         {value}
       </dd>
     </div>
@@ -45,13 +45,13 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
   const experience = job.experience ? formatExperience(job.experience.min, job.experience.max, job.experience.kind) : null;
 
   return (
-    <section aria-label="Role preview" className={`glass flex flex-col gap-4 rounded-[22px] p-5 lg:p-[22px] ${wrapper}`}>
+    <section aria-label="Role preview" className={`glass flex flex-col gap-3 rounded-[22px] p-5 lg:gap-3 lg:p-4 ${wrapper}`}>
       <div className="flex items-start gap-3.5">
-        <span aria-hidden="true" className="grid size-[52px] shrink-0 place-items-center rounded-full border border-line bg-faint font-mono text-xl font-bold">
+        <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full border border-line bg-faint font-mono text-xl font-bold">
           {job.company.charAt(0)}
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <h2 className="text-lg font-bold leading-tight lg:text-xl">{job.title}</h2>
+          <h2 className="line-clamp-2 text-lg font-bold leading-tight lg:text-lg" title={job.title}>{job.title}</h2>
           <p className="truncate font-mono text-xs text-dim">
             {job.company.toUpperCase()} · {job.city ? `${job.city}, ` : ""}
             {job.countries[0] ?? "—"}
@@ -63,29 +63,24 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
         </button>
       </div>
 
-      <div className="h-px bg-line max-lg:hidden" />
-      <dl className="grid grid-cols-3 gap-3 max-lg:hidden">
+      <dl className="grid grid-cols-3 gap-x-3 gap-y-2.5 border-t border-line pt-3 max-lg:hidden">
         <Fact label="SALARY" value={job.salary ?? "—"} />
-        <Fact label="POSTED" value={job.ago} />
+        <Fact label="ADDED" value={job.ago} />
         <Fact
           label="EXPERIENCE"
           value={experience ?? "—"}
           hint={job.experience?.kind === "estimated" ? "Estimated from the listing text or title" : "Stated in the listing"}
         />
-      </dl>
-      <dl className="grid grid-cols-2 gap-3 max-lg:hidden">
-        <Fact label="SECTOR" value={job.sector ? job.sector.toUpperCase() : "—"} />
+        <Fact label="LOCATION" value={where} />
         <Fact label="DEPARTMENT" value={job.department ?? "—"} />
-        <div className="col-span-2">
-          <Fact label="LOCATION" value={where} />
-        </div>
+        <Fact label="SECTOR" value={job.sector ? job.sector.toUpperCase() : "—"} />
       </dl>
 
       <div className="flex gap-2.5">
         <button
           type="button"
           onClick={() => setOpenId(job.id)}
-          className="flex h-[46px] flex-1 items-center justify-center gap-2 rounded-xl border border-fg font-mono text-[12px] font-bold tracking-[0.08em]"
+          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-fg font-mono text-[12px] font-bold tracking-[0.08em]"
         >
           <ExpandIcon />
           FULL LISTING
@@ -94,7 +89,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
           href={job.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex h-[46px] flex-1 items-center justify-center gap-2 rounded-xl bg-accent font-mono text-[12px] font-bold tracking-[0.08em] text-on-accent"
+          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-accent font-mono text-[12px] font-bold tracking-[0.08em] text-on-accent"
         >
           APPLY
           <ArrowUpRightIcon />

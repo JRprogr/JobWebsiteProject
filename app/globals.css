@@ -17,10 +17,10 @@
     0 18px 42px rgba(0, 51, 153, 0.22);
   --glass-selected: inset 0 1px 0 rgba(255, 255, 255, 1), 0 0 0 1.5px #003399, 0 0 34px rgba(0, 51, 153, 0.24),
     0 14px 38px rgba(0, 51, 153, 0.2);
-  --glows: radial-gradient(620px 460px at 8% 6%, rgba(255, 204, 0, 0.62), transparent 70%),
+  --glows: radial-gradient(620px 460px at 8% 6%, rgba(255, 204, 0, 0.31), transparent 70%),
     radial-gradient(760px 520px at 96% 42%, rgba(0, 51, 153, 0.2), transparent 70%),
-    radial-gradient(700px 480px at 30% 60%, rgba(255, 204, 0, 0.5), transparent 70%),
-    radial-gradient(700px 420px at 24% 96%, rgba(255, 204, 0, 0.4), transparent 70%);
+    radial-gradient(700px 480px at 30% 60%, rgba(255, 204, 0, 0.25), transparent 70%),
+    radial-gradient(700px 420px at 24% 96%, rgba(255, 204, 0, 0.2), transparent 70%);
   --map: #d4001f;
   --map-europe: rgba(212, 0, 31, 0.64);
   --map-eu: rgba(212, 0, 31, 0.8);
@@ -145,6 +145,8 @@ body {
 
 .job-row {
   border-radius: 16px;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   transition: margin 180ms ease, box-shadow 180ms ease, opacity 180ms ease, filter 180ms ease;
 }
 

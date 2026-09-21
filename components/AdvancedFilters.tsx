@@ -64,7 +64,7 @@ function PickList({ items, selected, placeholder, onToggle }: { items: Item[]; s
 }
 
 export function AdvancedFilters({ countries, countryFacets, companies, companyFacets, sector, sectors, experience, onChange }: Props) {
-  const [open, setOpen] = useState<Section | null>("country");
+  const [open, setOpen] = useState<Section | null>(null);
 
   const countryItems = useMemo(
     () =>

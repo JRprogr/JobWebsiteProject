@@ -5,7 +5,7 @@ import { parseBucket } from "@/lib/experience";
 import { parseScope } from "@/lib/geo";
 import { allCountryFacets, companyFacets, countryFacets, headline, listJobs, parseSort, sectors, type Filters } from "@/lib/jobs";
 
-const DEFAULT_LIMIT = 50;
+const DEFAULT_LIMIT = 20;
 
 const list = (value: string | undefined, pattern: RegExp, max: number) =>
   (value ?? "")
@@ -45,7 +45,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
   return (
     <>
-      <TopBar scope={filters.scope} />
+      <TopBar />
       <Board
         jobs={jobs}
         total={total}

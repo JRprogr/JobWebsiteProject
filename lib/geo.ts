@@ -8,12 +8,11 @@ export const OTHER_EUROPE_COUNTRIES = ["NO", "IS", "LI", "GB", "CH", "AL", "BA",
 
 export const EUROPE_COUNTRIES: readonly string[] = [...EU_COUNTRIES, ...OTHER_EUROPE_COUNTRIES];
 
-export type Scope = "europe" | "eu" | "outside" | "all";
+export type Scope = "europe" | "eu" | "all";
 
 export const SCOPES: { value: Scope; label: string }[] = [
   { value: "europe", label: "EUROPE" },
   { value: "eu", label: "EU ONLY" },
-  { value: "outside", label: "OUTSIDE EUROPE" },
   { value: "all", label: "GLOBAL" },
 ];
 

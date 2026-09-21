@@ -16,11 +16,14 @@ export function parseSort(value: string | undefined): Sort {
   return SORTS.some((s) => s.value === value) ? (value as Sort) : "latest";
 }
 
+// Alphabetical key: skips leading bracketed tags and symbols, so "(Senior) Project Manager" sits with "Project Manager"
+const TITLE_KEY = "lower(coalesce(nullif(regexp_replace(j.title, '^([[:space:]]*[([][^])]*[])])*[^[:alnum:]]*', ''), ''), j.title))";
+
 const ORDER: Record<Sort, string> = {
-  latest: "coalesce(j.posted_at, j.first_seen_at) desc, j.id",
-  oldest: "coalesce(j.posted_at, j.first_seen_at) asc, j.id",
-  az: "lower(j.title) asc, j.id",
-  za: "lower(j.title) desc, j.id",
+  latest: "j.first_seen_at desc, j.id",
+  oldest: "j.first_seen_at asc, j.id",
+  az: `${TITLE_KEY} asc, j.id`,
+  za: `${TITLE_KEY} desc, j.id`,
 };
 
 export type Filters = {
@@ -49,7 +52,6 @@ export type JobView = {
   department: string | null;
   salary: string | null;
   experience: { min: number; max: number | null; kind: string } | null;
-  postedAt: string;
   firstSeenAt: string;
   ago: string;
 };
@@ -80,8 +82,6 @@ function where(f: Filters, skip: Skip = {}) {
     clauses.push(`j.location_countries && ${add([...EU_COUNTRIES])}::text[]`);
   } else if (f.scope === "europe") {
     clauses.push(`j.location_countries && ${add([...EUROPE_COUNTRIES])}::text[]`);
-  } else if (f.scope === "outside") {
-    clauses.push(`cardinality(j.location_countries) > 0 and not (j.location_countries && ${add([...EUROPE_COUNTRIES])}::text[])`);
   }
   return { sql: clauses.join(" and "), params };
 }
@@ -103,7 +103,7 @@ export async function listJobs(f: Filters, limit: number): Promise<{ jobs: JobVi
       `select j.id, j.title, j.url, c.name as company, c.slug as company_slug, c.sector, j.location_city, j.location_countries,
               j.location_raw, j.remote, j.department, j.salary_min, j.salary_max, j.salary_currency,
               j.experience_min, j.experience_max, j.experience_kind,
-              coalesce(j.posted_at, j.first_seen_at) as posted_at, j.first_seen_at
+              j.first_seen_at
        from jobs j join companies c on c.id = j.company_id
        where ${w.sql}
        order by ${ORDER[f.sort]}
@@ -130,9 +130,8 @@ export async function listJobs(f: Filters, limit: number): Promise<{ jobs: JobVi
       r.experience_min === null
         ? null
         : { min: r.experience_min as number, max: (r.experience_max as number | null) ?? null, kind: String(r.experience_kind) },
-    postedAt: new Date(r.posted_at as string).toISOString(),
     firstSeenAt: new Date(r.first_seen_at as string).toISOString(),
-    ago: timeAgo(new Date(r.posted_at as string).toISOString(), now),
+    ago: timeAgo(new Date(r.first_seen_at as string).toISOString(), now),
   }));
   return { jobs, total: (totals as Row[])[0].n as number };
 }
