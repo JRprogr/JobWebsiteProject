@@ -6,10 +6,14 @@
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "spacex",
-      "extra_board_tokens": ["spacexglobal"],
+      "extra_board_tokens": [
+        "spacexglobal"
+      ],
       "default_country": "US"
     },
-    "active": true
+    "active": true,
+    "careers_url": "https://www.spacex.com/careers/jobs",
+    "hq_country": "US"
   },
   {
     "name": "Palantir",
@@ -19,7 +23,9 @@
     "source_config": {
       "site": "palantir"
     },
-    "active": true
+    "active": true,
+    "careers_url": "https://www.palantir.com/careers/",
+    "hq_country": "US"
   },
   {
     "name": "Helsing",
@@ -29,7 +35,9 @@
     "source_config": {
       "board_token": "helsing"
     },
-    "active": true
+    "active": true,
+    "careers_url": "https://helsing.ai/careers",
+    "hq_country": "DE"
   },
   {
     "name": "Isar Aerospace",
@@ -39,7 +47,9 @@
     "source_config": {
       "board_token": "isaraerospace"
     },
-    "active": true
+    "active": true,
+    "careers_url": "https://www.isaraerospace.com/careers",
+    "hq_country": "DE"
   },
   {
     "name": "DLR",
@@ -51,7 +61,9 @@
       "base_url": "https://jobs.dlr.de",
       "default_country": "DE"
     },
-    "active": true
+    "active": true,
+    "careers_url": "https://jobs.dlr.de",
+    "hq_country": "DE"
   },
   {
     "name": "CNES",
@@ -63,6 +75,8 @@
       "base_url": "https://recrutement.cnes.fr",
       "default_country": "FR"
     },
-    "active": true
+    "active": true,
+    "careers_url": "https://recrutement.cnes.fr",
+    "hq_country": "FR"
   }
 ]
