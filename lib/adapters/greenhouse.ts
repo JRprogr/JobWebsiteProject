@@ -1,6 +1,6 @@
 import { mapPool } from "../pool.ts";
 import { decodeEntities, htmlToText } from "../text.ts";
-import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
+import type { Adapter, AdapterContext, Company, DetailFetcher, NormalizedJob } from "../types.ts";
 
 type GhJob = {
   id: number;
@@ -23,10 +23,23 @@ async function getJson<T>(url: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-function base(company: { slug: string; source_config: Record<string, unknown> }): string {
-  const token = company.source_config.board_token;
-  if (typeof token !== "string") throw new Error(`${company.slug}: source_config.board_token missing`);
-  return `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(token)}`;
+type Config = { slug: string; source_config: Record<string, unknown> };
+
+// A company may publish on several boards (e.g. SpaceX has a separate international board): board_token is the main one, extra_board_tokens the rest
+function tokens(company: Config): string[] {
+  const main = company.source_config.board_token;
+  if (typeof main !== "string") throw new Error(`${company.slug}: source_config.board_token missing`);
+  const extra = company.source_config.extra_board_tokens;
+  return [main, ...(Array.isArray(extra) ? extra.filter((t): t is string => typeof t === "string") : [])];
+}
+
+const boardApi = (token: string) => `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(token)}`;
+
+// Listing URLs look like https://job-boards.greenhouse.io/<token>/jobs/<id>; fall back to the main board
+function tokenFromUrl(company: Config, url: string): string {
+  const all = tokens(company);
+  const m = url.match(/greenhouse\.io\/([^/]+)\/jobs\//);
+  return m && all.includes(m[1]) ? m[1] : all[0];
 }
 
 const bodyText = (content: string | undefined | null) => (content ? htmlToText(decodeEntities(content)) : null);
@@ -42,12 +55,12 @@ function departmentIndex(depts: GhDepartment[]): Map<number, string> {
 }
 
 export const greenhouseDetail: DetailFetcher = async (company, job) => {
-  const j = await getJson<{ content?: string }>(`${base(company)}/jobs/${encodeURIComponent(job.external_id)}`);
+  const j = await getJson<{ content?: string }>(`${boardApi(tokenFromUrl(company, job.url))}/jobs/${encodeURIComponent(job.external_id)}`);
   return bodyText(j.content);
 };
 
-export const greenhouse: Adapter = async (company, ctx) => {
-  const api = base(company);
+async function fetchBoard(company: Company, token: string, ctx: AdapterContext): Promise<NormalizedJob[]> {
+  const api = boardApi(token);
 
   const [{ jobs }, { departments }] = await Promise.all([
     getJson<{ jobs: GhJob[] }>(`${api}/jobs`),
@@ -95,4 +108,9 @@ export const greenhouse: Adapter = async (company, ctx) => {
       description: text.get(j.id) ?? null,
     };
   });
+};
+
+export const greenhouse: Adapter = async (company, ctx) => {
+  const boards = await Promise.all(tokens(company).map((token) => fetchBoard(company, token, ctx)));
+  return boards.flat();
 };

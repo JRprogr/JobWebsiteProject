@@ -6,6 +6,7 @@
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "spacex",
+      "extra_board_tokens": ["spacexglobal"],
       "default_country": "US"
     },
     "active": true
