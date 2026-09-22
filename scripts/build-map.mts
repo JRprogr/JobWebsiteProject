@@ -63,7 +63,8 @@ const out = countries.map(({ f, iso, tier }) => {
   return { iso, tier, name: f.properties.name, dots: dots.join(""), dotCount: dots.length, hit, area: path.area(f), label: c ? [Math.round(c[0]), Math.round(c[1])] : null };
 }).filter((c) => c.hit);
 
-const graticule = path(geoGraticule().step([10, 5]).extent([[-30, 30], [50, 75]])()) ?? "";
+// Extent is generous on purpose: clipExtent above crops it to the frame, so this just has to reach every corner (lon ~-35..61, lat ~33..64).
+const graticule = path(geoGraticule().step([10, 5]).extent([[-42, 25], [66, 78]])()) ?? "";
 const json = { w: W, h: H, graticule, countries: out };
 writeFileSync("lib/geo/europe-map.json", JSON.stringify(json));
 console.log("countries:", out.length, "| file KB:", Math.round(JSON.stringify(json).length / 1024), "| hit KB:", Math.round(out.reduce((a, c) => a + c.hit.length, 0) / 1024), "| dots KB:", Math.round(out.reduce((a, c) => a + c.dots.length, 0) / 1024));

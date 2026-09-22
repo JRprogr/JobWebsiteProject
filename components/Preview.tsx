@@ -91,7 +91,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
           rel="noopener noreferrer"
           className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-accent font-mono text-[12px] font-bold tracking-[0.08em] text-on-accent"
         >
-          APPLY
+          APPLY AT EMPLOYER
           <ArrowUpRightIcon />
         </a>
       </div>

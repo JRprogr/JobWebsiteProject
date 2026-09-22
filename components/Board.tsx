@@ -41,6 +41,12 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
 
   const selectedJob = jobs.find((j) => j.id === selectedId) ?? null;
 
+  // Landing here from another page (e.g. a company link from Statistics or the Register) can otherwise settle
+  // mid-list, not at the top — only runs on a fresh mount, not on in-page filter changes.
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {

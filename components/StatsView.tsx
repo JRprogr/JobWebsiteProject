@@ -66,7 +66,7 @@ function Timeline({ points }: { points: DayPoint[] }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Open roles per day, all regions and Europe">
+      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Open roles per day, global and European Union">
         {ticks.map((t) => (
           <g key={t}>
             <line x1={PAD.l} x2={W - PAD.r} y1={y(t)} y2={y(t)} stroke="var(--line)" strokeDasharray="2 4" />
@@ -92,11 +92,11 @@ function Timeline({ points }: { points: DayPoint[] }) {
       <p className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[10px] tracking-[0.1em]">
         <span className="flex items-center gap-2">
           <span className="h-0.5 w-5 bg-fg" aria-hidden="true" />
-          ALL REGIONS
+          GLOBAL
         </span>
         <span className="flex items-center gap-2">
           <span className="h-0.5 w-5" style={{ background: "var(--map)" }} aria-hidden="true" />
-          EUROPE
+          EUROPEAN UNION
         </span>
       </p>
     </div>

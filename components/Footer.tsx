@@ -41,7 +41,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-line p-4 text-[10px] text-dim md:flex-row md:items-center md:justify-between">
-          <p>© 2026 DS[Careers] · NON-COMMERCIAL PORTFOLIO PROJECT. LISTINGS BELONG TO THEIR EMPLOYERS.</p>
+          <p>© 2026 DS[Careers] · NON-COMMERCIAL PORTFOLIO PROJECT · LISTINGS BELONG TO THEIR EMPLOYERS.</p>
           <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and info">
             {PAGES.map((p) => (
               <li key={p.href}>

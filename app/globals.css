@@ -220,6 +220,20 @@ body {
   }
 }
 
+/* Sized from width only (never an independent max-height), so it can never mismatch its aspect ratio and letterbox. */
+.map-frame {
+  --map-h-budget: 38dvh;
+  width: min(100%, calc(var(--map-h-budget) * 440 / 380));
+  aspect-ratio: 440 / 380;
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .map-frame {
+    --map-h-budget: clamp(150px, calc(100dvh - 610px), 38dvh);
+  }
+}
+
 /* Terminal map */
 .map-dots {
   fill: none;
@@ -252,13 +266,15 @@ body {
   opacity: 0.45;
 }
 
+/* !important: hover/active are interaction states and must win over any tier/lit combination above,
+   including the two-attribute near+lit rule, which otherwise outranks them by specificity alone. */
 .map-country[data-hover="true"] .map-dots {
-  stroke: var(--map-hover);
+  stroke: var(--map-hover) !important;
 }
 
 .map-country[data-active="true"] .map-dots {
-  stroke: var(--map-selected);
-  stroke-width: 2.9;
+  stroke: var(--map-selected) !important;
+  stroke-width: 2.9 !important;
   filter: drop-shadow(0 0 3px var(--map));
 }
 

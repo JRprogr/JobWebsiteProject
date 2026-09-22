@@ -5,6 +5,7 @@ import { ArrowUpRightIcon } from "./icons";
 
 const label = "font-mono text-[10px] tracking-[0.1em] text-dim";
 const fmt = (n: number) => n.toLocaleString("en");
+const sourceLabel = (source: string) => (source === "custom" ? "CUSTOM SITEMAP" : source.toUpperCase());
 
 type Props = { companies: Register[]; sectors: string[]; sector: string | null };
 
@@ -62,7 +63,7 @@ export function RegisterView({ companies, sectors, sector }: Props) {
             </dl>
 
             <p className="font-mono text-[10px] tracking-[0.08em] text-dim">
-              SOURCE {c.source.toUpperCase()} · {c.checked ? `CHECKED ${c.checked.toUpperCase()}` : "NOT CHECKED YET"}
+              SOURCE: {sourceLabel(c.source)} · {c.checked ? `CHECKED ${c.checked.toUpperCase()}` : "NOT CHECKED YET"}
             </p>
 
             <div className="mt-auto flex gap-2.5">

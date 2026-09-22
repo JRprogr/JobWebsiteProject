@@ -34,7 +34,7 @@ type Props = {
 
 export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, onToggle }: Props) {
   return (
-    <svg viewBox={`0 0 ${map.w} ${map.h}`} className="mx-auto block h-auto max-h-[38dvh] lg:max-h-[clamp(150px,calc(100dvh-610px),38dvh)] w-full" role="group" aria-label="Map of Europe. Select countries to filter roles.">
+    <svg viewBox={`0 0 ${map.w} ${map.h}`} className="block h-full w-full" role="group" aria-label="Map of Europe. Select countries to filter roles.">
       <path d={map.graticule} fill="none" stroke="var(--map-grat)" strokeWidth={0.7} />
       {map.countries.map((c) => {
         const count = counts[c.iso] ?? 0;
@@ -80,7 +80,7 @@ export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, 
               fill="var(--map-label)"
               opacity={active ? 1 : lit ? 0.65 : 0.28}
               className="pointer-events-none select-none font-mono"
-              style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em" }}
+              style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}
             >
               {c.iso}
             </text>

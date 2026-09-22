@@ -72,6 +72,21 @@ export function ExpandIcon({ size = 14, className }: IconProps) {
   );
 }
 
+export function EuFlagIcon({ size = 16, className }: IconProps) {
+  const stars = Array.from({ length: 8 }, (_, i) => {
+    const a = (i / 8) * Math.PI * 2 - Math.PI / 2;
+    return [12 + 6 * Math.cos(a), 12 + 6 * Math.sin(a)];
+  });
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth={1.6} className={className} {...base}>
+      <circle cx="12" cy="12" r="9" />
+      {stars.map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r="1.1" fill="currentColor" stroke="none" />
+      ))}
+    </svg>
+  );
+}
+
 export function CoffeeIcon({ size = 16, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth={1.8} className={className} {...base}>

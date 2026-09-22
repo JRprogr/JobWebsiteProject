@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { countryName, SCOPES, type Scope } from "@/lib/geo";
 import { EuMap } from "./EuMap";
-import { CloseIcon } from "./icons";
+import { CloseIcon, EuFlagIcon, GlobeIcon } from "./icons";
+
+const SCOPE_ICON: Partial<Record<Scope, typeof GlobeIcon>> = { eu: EuFlagIcon, all: GlobeIcon };
 
 type Props = {
   open: boolean;
@@ -37,27 +39,31 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
     >
       <div className="-mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 max-lg:pr-14">
         <h2 className="whitespace-nowrap font-mono text-xs font-bold tracking-[0.12em] text-map">[ <span className="max-lg:hidden">TARGET </span>REGION ]</h2>
-        <div className="flex items-center gap-1.5" role="group" aria-label="Region scope">
-          {SCOPES.map((s) => (
+        <p className="flex min-h-5 items-center gap-2 font-mono text-[11px] tracking-[0.1em] text-map" aria-live="polite">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+          {readout}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-1.5" role="group" aria-label="Region scope">
+        {SCOPES.map((s) => {
+          const Icon = SCOPE_ICON[s.value];
+          return (
             <button
               key={s.value}
               type="button"
               onClick={() => onScope(s.value)}
               aria-pressed={scope === s.value}
-              className={`whitespace-nowrap rounded-[9px] border border-current px-2.5 py-1.5 font-mono text-[11px] tracking-[0.08em] text-map ${scope === s.value ? "bg-faint font-bold" : "opacity-70"}`}
+              className={`flex items-center gap-2.5 whitespace-nowrap rounded-[9px] border border-current px-3 py-2 font-mono text-[11px] tracking-[0.08em] text-map ${scope === s.value ? "bg-faint font-bold" : "opacity-70"}`}
             >
+              {Icon ? <Icon size={15} /> : null}
               {s.label}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
-      <p className="flex min-h-5 items-center gap-2 font-mono text-[11px] tracking-[0.1em] text-map" aria-live="polite">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
-        {readout}
-      </p>
-
-      <div className="relative overflow-hidden rounded-[14px] border border-line" style={{ background: "var(--map-panel)" }}>
+      <div className="map-frame relative overflow-hidden rounded-[14px] border border-line" style={{ background: "var(--map-panel)" }}>
         <EuMap scope={scope} counts={counts} selected={selectedSet} highlighted={highlightedSet} hovered={hovered} onHover={setHovered} onToggle={onToggle} />
         <div className="scanlines absolute inset-0" aria-hidden="true" />
       </div>
