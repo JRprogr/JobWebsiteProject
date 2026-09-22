@@ -46,17 +46,19 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   return (
     <>
       <TopBar />
-      <Board
-        jobs={jobs}
-        total={total}
-        limit={limit}
-        filters={filters}
-        facets={facets}
-        globalFacets={globalFacets}
-        companyFacets={companyList}
-        sectors={sectorList}
-        headline={head}
-      />
+      <main id="main-content" className="contents">
+        <Board
+          jobs={jobs}
+          total={total}
+          limit={limit}
+          filters={filters}
+          facets={facets}
+          globalFacets={globalFacets}
+          companyFacets={companyList}
+          sectors={sectorList}
+          headline={head}
+        />
+      </main>
       <Footer />
     </>
   );

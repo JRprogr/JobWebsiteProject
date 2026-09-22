@@ -2,7 +2,7 @@ import { PageShell } from "@/components/PageShell";
 import { StatsView } from "@/components/StatsView";
 import { loadStats, parseRange } from "@/lib/stats";
 
-export const metadata = { title: "Statistics · DS[Careers]" };
+export const metadata = { title: "Statistics" };
 
 export default async function StatisticsPage({ searchParams }: PageProps<"/statistics">) {
   const sp = await searchParams;

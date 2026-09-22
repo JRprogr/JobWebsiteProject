@@ -2,7 +2,7 @@ import { PageShell } from "@/components/PageShell";
 import { RegisterView } from "@/components/RegisterView";
 import { loadRegister } from "@/lib/stats";
 
-export const metadata = { title: "Company Register · DS[Careers]" };
+export const metadata = { title: "Company Register" };
 
 export default async function CompaniesPage({ searchParams }: PageProps<"/companies">) {
   const sp = await searchParams;

@@ -1,3 +1,6 @@
+// Set NEXT_PUBLIC_SITE_URL in the deploy environment once the domain is known; falls back to localhost for dev.
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 // Placeholders pending real accounts; swap the values below once they exist.
 export const CONTACT_EMAIL = "[@Placeholder]";
 

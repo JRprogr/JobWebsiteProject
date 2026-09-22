@@ -2,7 +2,7 @@ import { LegalSection } from "@/components/LegalSection";
 import { PageShell } from "@/components/PageShell";
 import { CONTACT_EMAIL } from "@/lib/site";
 
-export const metadata = { title: "Terms · DS[Careers]" };
+export const metadata = { title: "Terms" };
 
 export default function TermsPage() {
   return (

@@ -141,13 +141,13 @@ export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
           <table className="w-full min-w-[560px] border-collapse font-mono text-[11px] tracking-[0.06em]">
             <thead>
               <tr className="text-left text-dim">
-                <th className="pb-2 pr-3 font-normal">#</th>
-                <th className="pb-2 pr-3 font-normal">COMPANY</th>
-                <th className="pb-2 pr-3 text-right font-normal">OPEN</th>
-                <th className="pb-2 pr-3 text-right font-normal">EUROPE</th>
-                <th className="pb-2 pr-3 text-right font-normal">ADDED</th>
-                <th className="pb-2 pr-3 text-right font-normal">REMOVED</th>
-                <th className="pb-2 text-right font-normal">NET</th>
+                <th scope="col" className="pb-2 pr-3 font-normal">#</th>
+                <th scope="col" className="pb-2 pr-3 font-normal">COMPANY</th>
+                <th scope="col" className="pb-2 pr-3 text-right font-normal">OPEN</th>
+                <th scope="col" className="pb-2 pr-3 text-right font-normal">EUROPE</th>
+                <th scope="col" className="pb-2 pr-3 text-right font-normal">ADDED</th>
+                <th scope="col" className="pb-2 pr-3 text-right font-normal">REMOVED</th>
+                <th scope="col" className="pb-2 text-right font-normal">NET</th>
               </tr>
             </thead>
             <tbody>

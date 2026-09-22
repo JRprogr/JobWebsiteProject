@@ -2,7 +2,7 @@ import { LegalSection } from "@/components/LegalSection";
 import { PageShell } from "@/components/PageShell";
 import { CONTACT_EMAIL } from "@/lib/site";
 
-export const metadata = { title: "Q&A · DS[Careers]" };
+export const metadata = { title: "Q&A" };
 
 const FAQ: { q: string; a: React.ReactNode }[] = [
   {

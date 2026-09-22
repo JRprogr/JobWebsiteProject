@@ -7,7 +7,7 @@ export function PageShell({ eyebrow, title, intro, children }: Props) {
   return (
     <>
       <TopBar />
-      <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 pb-4 pt-8 md:px-12 md:pt-10">
+      <main id="main-content" className="mx-auto w-full max-w-[1440px] flex-1 px-4 pb-4 pt-8 md:px-12 md:pt-10">
         <div className="flex flex-col gap-3.5">
           <p className="font-mono text-xs tracking-[0.12em] text-dim">{eyebrow}</p>
           <h1 className="font-display text-[clamp(44px,9vw,84px)] font-extrabold uppercase leading-[0.92] tracking-[0.01em]">{title}</h1>
