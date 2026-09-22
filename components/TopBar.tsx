@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
+import { TipButton } from "./TipButton";
 
 const PAGES = [
   { href: "/", label: "OVERVIEW" },
@@ -33,7 +34,8 @@ export function TopBar() {
             );
           })}
         </nav>
-        <div className="ml-auto md:ml-0">
+        <div className="ml-auto flex items-center gap-2 md:ml-0">
+          <TipButton />
           <ThemeToggle />
         </div>
       </div>

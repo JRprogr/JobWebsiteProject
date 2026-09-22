@@ -1,5 +1,13 @@
+import Link from "next/link";
+
 const cell = "border-line p-4";
 const corner = "absolute size-3.5 border-fg";
+
+const PAGES = [
+  { href: "/terms", label: "TERMS" },
+  { href: "/faq", label: "Q&A" },
+  { href: "/about", label: "ABOUT" },
+];
 
 export function Footer() {
   return (
@@ -33,14 +41,15 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-line p-4 text-[10px] text-dim md:flex-row md:items-center md:justify-between">
-          <p>
-            © 2026 DS[Careers]® · NON-COMMERCIAL PORTFOLIO PROJECT. LISTINGS BELONG TO THEIR EMPLOYERS.
-          </p>
-          {/* Placeholders until the real pages exist */}
-          <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and info (coming soon)">
-            <li>[ TERMS ]</li>
-            <li>[ Q&amp;A ]</li>
-            <li>[ ABOUT ]</li>
+          <p>© 2026 DS[Careers] · NON-COMMERCIAL PORTFOLIO PROJECT. LISTINGS BELONG TO THEIR EMPLOYERS.</p>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and info">
+            {PAGES.map((p) => (
+              <li key={p.href}>
+                <Link href={p.href} className="hover:text-fg">
+                  [ {p.label} ]
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

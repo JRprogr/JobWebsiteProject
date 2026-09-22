@@ -71,3 +71,13 @@ export function ExpandIcon({ size = 14, className }: IconProps) {
     </svg>
   );
 }
+
+export function CoffeeIcon({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth={1.8} className={className} {...base}>
+      <path d="M5 9h12v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z" />
+      <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17" />
+      <path d="M8 6c0-1 .8-1.4.8-2.4S8 2 8 2M12 6c0-1 .8-1.4.8-2.4S12 2 12 2" />
+    </svg>
+  );
+}
