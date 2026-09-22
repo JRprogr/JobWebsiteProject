@@ -72,16 +72,19 @@ export function ExpandIcon({ size = 14, className }: IconProps) {
   );
 }
 
+// The EU flag: a ring of 12 gold stars, fixed regardless of member count — same shape here, in outline.
 export function EuFlagIcon({ size = 16, className }: IconProps) {
-  const stars = Array.from({ length: 8 }, (_, i) => {
-    const a = (i / 8) * Math.PI * 2 - Math.PI / 2;
-    return [12 + 6 * Math.cos(a), 12 + 6 * Math.sin(a)];
+  // Fixed to 2 decimals: an un-rounded float renders as a slightly different string server- vs client-side
+  // (different number of significant digits), which React flags as a hydration mismatch.
+  const stars = Array.from({ length: 12 }, (_, i) => {
+    const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+    return [(12 + 6.5 * Math.cos(a)).toFixed(2), (12 + 6.5 * Math.sin(a)).toFixed(2)];
   });
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth={1.6} className={className} {...base}>
-      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="9.5" />
       {stars.map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="1.1" fill="currentColor" stroke="none" />
+        <circle key={i} cx={x} cy={y} r="0.95" fill="currentColor" stroke="none" />
       ))}
     </svg>
   );

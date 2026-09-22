@@ -18,16 +18,17 @@ const UPSERT = `
 with input as (
   select * from unnest(
     $2::text[], $3::text[], $4::text[], $5::text[], $6::text[], $7::text[], $8::boolean[], $9::text[], $10::text[],
-    $11::int[], $12::int[], $13::text[], $14::text[], $17::int[], $18::int[], $19::text[], $20::boolean[]
+    $11::int[], $12::int[], $13::text[], $14::text[], $17::int[], $18::int[], $19::text[], $20::boolean[], $21::text[]
   ) as t(external_id, title, location_raw, location_country, location_countries, location_city, remote, department, url,
-         salary_min, salary_max, salary_currency, posted_at, experience_min, experience_max, experience_kind, checked)
+         salary_min, salary_max, salary_currency, posted_at, experience_min, experience_max, experience_kind, checked, location_cities)
 )
 insert into jobs (company_id, external_id, title, location_raw, location_country, location_countries, location_city, remote,
                   department, url, salary_min, salary_max, salary_currency, posted_at, source_type, last_seen_at,
-                  experience_min, experience_max, experience_kind, details_checked_at)
+                  experience_min, experience_max, experience_kind, details_checked_at, location_cities)
 select $1::uuid, external_id, title, location_raw, location_country, coalesce(string_to_array(nullif(location_countries, ''), ','), '{}'::text[]),
        location_city, remote, department, url, salary_min, salary_max, salary_currency, posted_at::timestamptz, $15, $16::timestamptz,
-       experience_min, experience_max, experience_kind, case when checked then $16::timestamptz end
+       experience_min, experience_max, experience_kind, case when checked then $16::timestamptz end,
+       coalesce(string_to_array(nullif(location_cities, ''), ','), '{}'::text[])
 from input
 on conflict (company_id, external_id) do update set
   title = excluded.title,
@@ -37,6 +38,7 @@ on conflict (company_id, external_id) do update set
   location_country = coalesce(excluded.location_country, jobs.location_country),
   location_countries = case when excluded.location_countries = '{}' then jobs.location_countries else excluded.location_countries end,
   location_city = coalesce(excluded.location_city, jobs.location_city),
+  location_cities = case when excluded.location_cities = '{}' then jobs.location_cities else excluded.location_cities end,
   remote = excluded.remote,
   department = excluded.department,
   url = excluded.url,
@@ -115,6 +117,7 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
         exp.map((e) => e?.max ?? null),
         exp.map((e) => e?.kind ?? null),
         checked,
+        loc.map((l) => l.cities.join(",")),
       ]),
       db.query(
         "update jobs set removed_at = $2::timestamptz where company_id = $1 and removed_at is null and last_seen_at < $2::timestamptz returning id",

@@ -15,7 +15,7 @@ export function Footer() {
       <div className="border border-line font-mono text-[11px] tracking-[0.08em]">
         <div className="flex flex-col divide-y divide-line border-b border-line sm:flex-row sm:divide-x sm:divide-y-0">
           <p className={`${cell} flex-1 text-dim`}>DATA REFRESHES ON EACH SCRAPE RUN. NO PUSH FEED.</p>
-          <p className={`${cell} flex-1 text-dim`}>SOURCES · GREENHOUSE / LEVER / SITEMAPS</p>
+          <p className={`${cell} flex-1 text-dim`}>SOURCES · GREENHOUSE / LEVER / WORKDAY / SITEMAPS</p>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-[1.3fr_1.2fr_0.5fr_0.7fr]">

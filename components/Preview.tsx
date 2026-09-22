@@ -53,7 +53,8 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h2 className="line-clamp-2 text-lg font-bold leading-tight lg:text-lg" title={job.title}>{job.title}</h2>
           <p className="truncate font-mono text-xs text-dim">
-            {job.company.toUpperCase()} · {job.city ? `${job.city}, ` : ""}
+            {job.company.toUpperCase()} ·{" "}
+            {job.countries.length <= 1 && (job.cities.length > 1 ? "(Multiple Cities), " : job.city ? `${job.city}, ` : "")}
             {job.countries[0] ?? "—"}
             {job.remote ? " · REMOTE" : ""}
           </p>

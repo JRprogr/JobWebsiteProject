@@ -5,10 +5,11 @@ import type { JobView } from "@/lib/jobs";
 import { ArrowUpRightIcon } from "./icons";
 
 export function locationLabel(job: JobView): string {
+  if (job.countries.length > 1) return `[${job.countries.join(".")}]`;
   const code = job.countries[0];
-  const extra = job.countries.length > 1 ? ` +${job.countries.length - 1}` : "";
-  if (code) return `[${countryName(code)}${extra}]${job.city ? ` ${job.city}` : ""}`;
-  return job.locationRaw ?? "Location n/a";
+  if (!code) return job.locationRaw ?? "Location n/a";
+  const place = job.cities.length > 1 ? "(Multiple Cities)" : job.city;
+  return `[${countryName(code)}]${place ? ` ${place}` : ""}`;
 }
 
 type Props = {

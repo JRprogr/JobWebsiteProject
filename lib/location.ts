@@ -2,6 +2,7 @@ export type ParsedLocation = {
   countries: string[];
   country: string | null;
   city: string | null;
+  cities: string[];
   region: string | null;
   remote: boolean;
 };
@@ -138,7 +139,7 @@ function parseSegment(segment: string, hint: string | null, defaultCountry: stri
 }
 
 export function parseLocation(raw: string | null, hint?: string | null, defaultCountry?: string | null): ParsedLocation {
-  const empty: ParsedLocation = { countries: [], country: null, city: null, region: null, remote: false };
+  const empty: ParsedLocation = { countries: [], country: null, city: null, cities: [], region: null, remote: false };
   const hintCode = hint && ISO_CODES.has(hint.toUpperCase()) ? hint.toUpperCase() : null;
   if (!raw || !raw.trim()) return hintCode ? { ...empty, countries: [hintCode], country: hintCode } : empty;
 
@@ -149,16 +150,16 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
     .filter((s) => s && !/^(remote|hybrid|on-?site)$/i.test(s));
 
   const countries: string[] = [];
-  let city: string | null = null;
+  const cities: string[] = [];
   let region: string | null = null;
   for (const seg of segments) {
     const cleaned = clean(seg.replace(REMOTE_RE, ""));
     if (!cleaned) continue;
     const p = parseSegment(cleaned, segments.length === 1 ? hintCode : null, defaultCountry?.toUpperCase() ?? null);
     if (p.country && !countries.includes(p.country)) countries.push(p.country);
-    if (city === null && p.city && !countryFromToken(p.city)) city = p.city;
+    if (p.city && !countryFromToken(p.city) && !cities.includes(p.city)) cities.push(p.city);
     region ??= p.region;
   }
   if (countries.length === 0 && hintCode) countries.push(hintCode);
-  return { countries, country: countries[0] ?? null, city, region, remote };
+  return { countries, country: countries[0] ?? null, city: cities[0] ?? null, cities, region, remote };
 }

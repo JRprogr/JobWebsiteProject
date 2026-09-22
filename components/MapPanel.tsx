@@ -37,30 +37,33 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
       aria-label="Region filter"
       className="glass flex flex-col gap-3 rounded-[22px] p-4 lg:p-5 max-lg:fixed max-lg:inset-x-3 max-lg:top-[104px] md:max-lg:top-20 max-lg:z-40 max-lg:max-h-[calc(100dvh-9.5rem)] md:max-lg:max-h-[calc(100dvh-8rem)] max-lg:overflow-y-auto max-lg:transition-[transform,visibility] max-lg:duration-300 max-lg:data-[open=false]:invisible max-lg:data-[open=false]:-translate-y-[120%]"
     >
-      <div className="-mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 max-lg:pr-14">
-        <h2 className="whitespace-nowrap font-mono text-xs font-bold tracking-[0.12em] text-map">[ <span className="max-lg:hidden">TARGET </span>REGION ]</h2>
-        <p className="flex min-h-5 items-center gap-2 font-mono text-[11px] tracking-[0.1em] text-map" aria-live="polite">
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
-          {readout}
-        </p>
-      </div>
+      <div className="-mt-1 flex items-start justify-between gap-3 max-lg:pr-14">
+        <div className="flex min-w-0 flex-col gap-1">
+          <h2 className="whitespace-nowrap font-mono text-xs font-bold tracking-[0.12em] text-map">[ <span className="max-lg:hidden">TARGET </span>REGION ]</h2>
+          <p className="flex min-h-5 items-center gap-2 truncate font-mono text-[11px] tracking-[0.1em] text-map" aria-live="polite">
+            <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current" />
+            <span className="truncate">{readout}</span>
+          </p>
+        </div>
 
-      <div className="flex flex-col gap-1.5" role="group" aria-label="Region scope">
-        {SCOPES.map((s) => {
-          const Icon = SCOPE_ICON[s.value];
-          return (
-            <button
-              key={s.value}
-              type="button"
-              onClick={() => onScope(s.value)}
-              aria-pressed={scope === s.value}
-              className={`flex items-center gap-2.5 whitespace-nowrap rounded-[9px] border border-current px-3 py-2 font-mono text-[11px] tracking-[0.08em] text-map ${scope === s.value ? "bg-faint font-bold" : "opacity-70"}`}
-            >
-              {Icon ? <Icon size={15} /> : null}
-              {s.label}
-            </button>
-          );
-        })}
+        <div className="flex shrink-0 items-center gap-1.5" role="group" aria-label="Region scope">
+          {SCOPES.map((s) => {
+            const Icon = SCOPE_ICON[s.value];
+            return (
+              <button
+                key={s.value}
+                type="button"
+                onClick={() => onScope(s.value)}
+                aria-pressed={scope === s.value}
+                title={s.label}
+                className={`grid size-10 place-items-center rounded-[9px] border border-current text-map ${scope === s.value ? "bg-faint" : "opacity-70"}`}
+              >
+                {Icon ? <Icon size={21} /> : <span className="font-mono text-[10px] font-bold tracking-[0.04em]">EUR</span>}
+                <span className="sr-only">{s.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="map-frame relative overflow-hidden rounded-[14px] border border-line" style={{ background: "var(--map-panel)" }}>

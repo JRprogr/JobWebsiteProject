@@ -17,16 +17,16 @@ export default function AboutPage() {
 
       <LegalSection title="WHY EUROPE FIRST">
         <p>
-          The filters default to continental Europe &mdash; the EEA, the UK, Switzerland and the Balkans &mdash;
-          because that&apos;s where relocating for one of these roles is most realistic. Defence and space work
-          carries friction a general job board doesn&apos;t: work visas, security clearance requirements, and
-          export-control rules that often favour hiring within a shared economic or defence bloc. Taken as a whole,
-          Europe has real advantages here &mdash; easier cross-border movement for EU/EEA nationals, a growing base
-          of joint defence programmes, and companies, customers and suppliers that increasingly work across borders
-          rather than within just one country. This project&apos;s aim is to match people with roles inside that
-          European context specifically, not to rank Europe above anywhere else. Nothing is hidden: every country a
-          tracked company posts in is still scraped and searchable &mdash; Europe is just the starting lens, not the
-          only one.
+          Defence and space work carries friction a general job board doesn&apos;t: work visas, security clearance
+          requirements, and export-control rules that often favour hiring within a shared economic or defence bloc.
+          Taken as a whole, Europe has real advantages here &mdash; easier cross-border movement for EU/EEA
+          nationals, a growing base of joint defence programmes, and companies, customers and suppliers that
+          increasingly work across borders rather than within just one country. This project&apos;s aim is to match
+          people with roles inside that European context specifically, not to rank Europe above anywhere else.
+          Nothing is hidden: every country a tracked company posts in is still scraped and searchable &mdash; Europe
+          is just the starting lens, not the only one. We also count Russia, Turkey, Ukraine, Belarus and Moldova as
+          part of continental Europe geographically &mdash; they&apos;re on the map and one filter away too, even
+          though the default filters focus on the EEA, UK, Switzerland and the Balkans for visa-ease reasons.
         </p>
       </LegalSection>
 
@@ -45,7 +45,13 @@ export default function AboutPage() {
       </LegalSection>
 
       <LegalSection title="WHO BUILT IT">
-        <p>A solo portfolio project, built end to end by John and Claude &mdash; scraping and diffing pipeline, database, and the interface itself.</p>
+        <p>
+          A solo portfolio project, built end to end by John and{" "}
+          <a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer">
+            Claude
+          </a>{" "}
+          &mdash; scraping and diffing pipeline, database, and the interface itself.
+        </p>
       </LegalSection>
 
       <LegalSection title="WHAT'S NEXT">
