@@ -5,7 +5,7 @@ import type { JobView } from "@/lib/jobs";
 import { ArrowUpRightIcon } from "./icons";
 
 export function locationLabel(job: JobView): string {
-  if (job.countries.length > 1) return `[${job.countries.join("· ")}]`;
+  if (job.countries.length > 1) return `[${job.countries.join("·")}]`;
   const code = job.countries[0];
   if (!code) return job.locationRaw ?? "Location n/a";
   const place = job.cities.length > 1 ? "(Multiple Cities)" : job.city;
