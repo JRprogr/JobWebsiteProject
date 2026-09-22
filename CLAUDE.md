@@ -150,3 +150,21 @@ exhaustive).
 - `jobs.location_region` and `jobs.location_countries text[]` (all countries a posting lists; `location_country` stays the primary).
 - `jobs.experience_min/max/kind` ('explicit' | 'estimated') extracted from listing text during scraping; `jobs.details_checked_at` marks jobs whose text was processed.
 - `job_details(job_id, body, fetched_at)`: on-demand cache of listing text, capped at 20k chars per job. Full descriptions are deliberately NOT stored for every job (Neon free tier is 0.5 GB); re-extracting experience means re-reading sources (`npm run scrape -- --backfill`).
+- `companies.careers_url` and `companies.hq_country`: shown on the Company Register page.
+
+## Workday adapter (`lib/adapters/workday.ts`)
+Pilot company: Airbus Defence and Space (`airbus-defence-and-space`). Airbus runs one Workday tenant (`ag`/`wd3`/site
+`Airbus`) for its whole group, so `source_config.hiring_company_ids` holds the Workday `hiringCompany` facet ids for
+just the Defence and Space legal entities (found via the tenant's own `/wday/cxs/{tenant}/{site}/jobs` facets) —
+without it the adapter would pull in Airbus Commercial, Helicopters, etc. too. Workday's CXS API (what its own
+careers UI calls) caps `limit` at 20 per page, so listing paginates; unlike Greenhouse/Lever/custom, both the
+country and the city-level location only come back from the **per-job detail fetch**, not the cheap list endpoint —
+budget a `--backfill` run after adding a new Workday company so location data isn't mostly empty until it trickles
+in at 30 jobs/run. A posting's stable id is `bulletFields[0]`, not the tail of `externalPath` — Workday appends a
+`-1`/`-2` disambiguator to the path (not the id) when two postings share a title and location.
+
+Because location can be detail-gated like this, `lib/scrape.ts`'s upsert preserves the last-resolved
+`location_country`/`location_countries`/`location_city` when a run doesn't produce a fresh value (mirrors how
+`experience_min/max/kind` already only update when a run actually re-reads the description) — a company whose
+adapter only returns real location on the runs it happens to detail a job must not have that job's location blanked
+out on every other run.

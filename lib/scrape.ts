@@ -32,9 +32,11 @@ from input
 on conflict (company_id, external_id) do update set
   title = excluded.title,
   location_raw = excluded.location_raw,
-  location_country = excluded.location_country,
-  location_countries = excluded.location_countries,
-  location_city = excluded.location_city,
+  -- A source whose country/city only comes from a per-job detail fetch (e.g. Workday) reports none of that for a
+  -- job it didn't re-fetch this run; keep the last resolved value instead of blanking it out.
+  location_country = coalesce(excluded.location_country, jobs.location_country),
+  location_countries = case when excluded.location_countries = '{}' then jobs.location_countries else excluded.location_countries end,
+  location_city = coalesce(excluded.location_city, jobs.location_city),
   remote = excluded.remote,
   department = excluded.department,
   url = excluded.url,

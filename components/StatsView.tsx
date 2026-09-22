@@ -55,7 +55,7 @@ function Timeline({ points }: { points: DayPoint[] }) {
     return <p className="font-mono text-xs leading-7 tracking-[0.06em] text-dim">HISTORY STARTS WITH THE FIRST SCRAPE. THE CHART FILLS IN DAY BY DAY.</p>;
   }
   const max = Math.max(...points.map((p) => p.open));
-  const min = Math.min(...points.map((p) => p.europe));
+  const min = Math.min(...points.map((p) => p.eu));
   const lo = Math.max(0, Math.floor((min * 0.9) / 100) * 100);
   const hi = Math.max(lo + 1, Math.ceil(max / 100) * 100);
   const x = (i: number) => PAD.l + (i / (points.length - 1)) * (W - PAD.l - PAD.r);
@@ -76,11 +76,11 @@ function Timeline({ points }: { points: DayPoint[] }) {
           </g>
         ))}
         <path d={line((p) => p.open)} fill="none" stroke="var(--fg)" strokeWidth="2" strokeLinejoin="round" />
-        <path d={line((p) => p.europe)} fill="none" stroke="var(--map)" strokeWidth="2" strokeLinejoin="round" />
+        <path d={line((p) => p.eu)} fill="none" stroke="var(--map)" strokeWidth="2" strokeLinejoin="round" />
         {points.map((p, i) => (
           <g key={p.day}>
             <circle cx={x(i)} cy={y(p.open)} r="3" fill="var(--fg)" />
-            <circle cx={x(i)} cy={y(p.europe)} r="3" fill="var(--map)" />
+            <circle cx={x(i)} cy={y(p.eu)} r="3" fill="var(--map)" />
             {i === 0 || i === points.length - 1 || i % Math.ceil(points.length / 6) === 0 ? (
               <text x={x(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === points.length - 1 ? "end" : "middle"} fontSize="10" className="font-mono" fill="var(--dim)">
                 {dayLabel(p.day)}

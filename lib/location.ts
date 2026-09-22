@@ -47,9 +47,12 @@ const AMBIGUOUS_CODES = new Set(["DE", "IL", "IN", "MT", "MD", "ME", "AL", "MA",
 const CITIES: Record<string, string> = {
   berlin: "DE", munich: "DE", "münchen": "DE", hamburg: "DE", frankfurt: "DE", cologne: "DE", "köln": "DE", stuttgart: "DE",
   bremen: "DE", dresden: "DE", ottobrunn: "DE", "oberpfaffenhofen": "DE", "weßling": "DE", "göttingen": "DE", bonn: "DE",
+  manching: "DE", "immenstaad am bodensee": "DE", immenstaad: "DE", ulm: "DE", wunstorf: "DE", hanover: "DE",
   paris: "FR", toulouse: "FR", lyon: "FR", bordeaux: "FR", marseille: "FR", "kourou": "GF", london: "GB", bristol: "GB",
   cambridge: "GB", manchester: "GB", edinburgh: "GB", glasgow: "GB", oxford: "GB", farnborough: "GB", rome: "IT", roma: "IT",
   milan: "IT", milano: "IT", turin: "IT", torino: "IT", madrid: "ES", barcelona: "ES", valencia: "ES", lisbon: "PT",
+  getafe: "ES", sevilla: "ES", seville: "ES", albacete: "ES", portsmouth: "GB", stevenage: "GB", chippenham: "GB",
+  newport: "GB", antibes: "FR", elancourt: "FR",
   amsterdam: "NL", noordwijk: "NL", rotterdam: "NL", "the hague": "NL", delft: "NL", brussels: "BE", vienna: "AT",
   wien: "AT", zurich: "CH", "zürich": "CH", geneva: "CH", stockholm: "SE", "linköping": "SE", gothenburg: "SE", kiruna: "SE",
   oslo: "NO", kongsberg: "NO", andenes: "NO", copenhagen: "DK", helsinki: "FI", espoo: "FI", warsaw: "PL", krakow: "PL",
@@ -67,6 +70,14 @@ const CITIES: Record<string, string> = {
 
 const REMOTE_RE = /\bremote\b|\bhome[- ]?office\b|\bwork from home\b/i;
 
+// Some sources (e.g. Workday) append a generic suffix to a bare city name ("Toulouse Area", "Getafe-Area").
+function cityLookup(token: string): string | null {
+  const t = token.trim().toLowerCase();
+  if (CITIES[t]) return CITIES[t];
+  const stripped = t.replace(/[\s-]+(area|region)$/, "").trim();
+  return stripped !== t ? (CITIES[stripped] ?? null) : null;
+}
+
 const clean = (s: string) => s.trim().replace(/\s+/g, " ").replace(/^[-–—]+|[-–—]+$/g, "").trim();
 
 function countryFromToken(token: string): string | null {
@@ -82,7 +93,7 @@ function parseSegment(segment: string, hint: string | null, defaultCountry: stri
   if (parts.length === 0) return { country: hint, city: null, region: null };
 
   const first = parts[0];
-  const cityCountry = CITIES[first.toLowerCase()] ?? null;
+  const cityCountry = cityLookup(first);
   const last = parts[parts.length - 1];
   const lastLower = last.toLowerCase();
   const lastUpper = last.toUpperCase();
@@ -120,8 +131,10 @@ function parseSegment(segment: string, hint: string | null, defaultCountry: stri
   }
 
   const firstIsCountry = parts.length === 1 && (countryFromToken(first) !== null || (first.length === 2 && US_STATES.has(first.toUpperCase())));
+  // Workday's own placeholder for a multi-site posting ("2 Locations") is not a real city name.
+  const isPlaceholder = /^\d+\s+locations?$/i.test(first);
   country ??= cityCountry ?? hint;
-  return { country, city: firstIsCountry ? null : first, region };
+  return { country, city: firstIsCountry || isPlaceholder ? null : first, region };
 }
 
 export function parseLocation(raw: string | null, hint?: string | null, defaultCountry?: string | null): ParsedLocation {

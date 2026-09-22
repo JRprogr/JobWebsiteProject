@@ -78,5 +78,26 @@
     "active": true,
     "careers_url": "https://recrutement.cnes.fr",
     "hq_country": "FR"
+  },
+  {
+    "name": "Airbus Defence and Space",
+    "slug": "airbus-defence-and-space",
+    "sector": "prime",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "ag",
+      "host": "wd3",
+      "site": "Airbus",
+      "hiring_company_ids": [
+        "f5811cef9cb501869ae759134e0a225f",
+        "f5811cef9cb501060f750c134e0aa55d",
+        "f5811cef9cb5012009b35b134e0a2d5f",
+        "f5811cef9cb5011710494e134e0ae55e",
+        "f5811cef9cb501d030d457134e0a185f"
+      ]
+    },
+    "active": true,
+    "careers_url": "https://ag.wd3.myworkdayjobs.com/Airbus",
+    "hq_country": "DE"
   }
 ]

@@ -21,7 +21,7 @@ export type Overview = { open: number; europe: number; eu: number; companies: nu
 
 export type CompanyStat = { slug: string; name: string; sector: string | null; open: number; europe: number; added: number; removed: number };
 
-export type DayPoint = { day: string; open: number; europe: number; added: number; removed: number };
+export type DayPoint = { day: string; open: number; eu: number; added: number; removed: number };
 
 export type Bar = { key: string; label: string; n: number };
 
@@ -73,12 +73,12 @@ export async function loadStats(range: Range): Promise<Stats> {
        select to_char(days.day, 'YYYY-MM-DD') as day,
          count(*) filter (where j.first_seen_at < days.day + 1 and (j.removed_at is null or j.removed_at >= days.day + 1))::int as open,
          count(*) filter (where j.first_seen_at < days.day + 1 and (j.removed_at is null or j.removed_at >= days.day + 1)
-                            and j.location_countries && $1::text[])::int as europe,
+                            and j.location_countries && $1::text[])::int as eu,
          count(*) filter (where ${ADDED} and j.first_seen_at::date = days.day)::int as added,
          count(*) filter (where j.removed_at::date = days.day)::int as removed
        from days cross join jobs j left join ${BASELINE} b on b.company_id = j.company_id
        group by days.day order by days.day`,
-      [europe],
+      [eu],
     ),
     db.query(
       `select cc as key, count(*)::int as n from jobs j join companies c on c.id = j.company_id and c.active, unnest(j.location_countries) cc
@@ -119,7 +119,7 @@ export async function loadStats(range: Range): Promise<Stats> {
     companies: (perCompany as Row[])
       .map((r) => ({ slug: String(r.slug), name: String(r.name), sector: (r.sector as string | null) ?? null, open: num(r.open), europe: num(r.europe), added: num(r.added), removed: num(r.removed) }))
       .sort((a, b) => b.open - a.open),
-    timeline: (timeline as Row[]).map((r) => ({ day: String(r.day), open: num(r.open), europe: num(r.europe), added: num(r.added), removed: num(r.removed) })),
+    timeline: (timeline as Row[]).map((r) => ({ day: String(r.day), open: num(r.open), eu: num(r.eu), added: num(r.added), removed: num(r.removed) })),
     countries: (countries as Row[]).map((r) => ({ key: String(r.key), label: String(r.key), n: num(r.n) })),
     experience: expOrder.map((k) => ({ key: k, label: expLabel[k], n: num((experience as Row[]).find((r) => r.key === k)?.n) })),
     sectors: (sectors as Row[]).map((r) => ({ key: String(r.key), label: String(r.key).toUpperCase(), n: num(r.n) })),
