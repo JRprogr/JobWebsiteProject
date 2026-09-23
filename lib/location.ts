@@ -153,7 +153,8 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
   const cities: string[] = [];
   let region: string | null = null;
   for (const seg of segments) {
-    const cleaned = clean(seg.replace(REMOTE_RE, ""));
+    // "Remote (United States)" leaves "(United States)" once the remote marker is gone
+    const cleaned = clean(clean(seg.replace(REMOTE_RE, "")).replace(/^\((.*)\)$/, "$1"));
     if (!cleaned) continue;
     const p = parseSegment(cleaned, segments.length === 1 ? hintCode : null, defaultCountry?.toUpperCase() ?? null);
     if (p.country && !countries.includes(p.country)) countries.push(p.country);

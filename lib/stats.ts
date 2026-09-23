@@ -2,6 +2,7 @@ import { sql } from "./db.ts";
 import { EXPERIENCE_BUCKETS } from "./experience.ts";
 import { timeAgo } from "./format.ts";
 import { EU_COUNTRIES, EUROPE_COUNTRIES } from "./geo.ts";
+import { sectorLabel } from "./sectors.ts";
 
 type Row = Record<string, unknown>;
 const num = (v: unknown) => Number(v ?? 0);
@@ -122,7 +123,7 @@ export async function loadStats(range: Range): Promise<Stats> {
     timeline: (timeline as Row[]).map((r) => ({ day: String(r.day), open: num(r.open), eu: num(r.eu), added: num(r.added), removed: num(r.removed) })),
     countries: (countries as Row[]).map((r) => ({ key: String(r.key), label: String(r.key), n: num(r.n) })),
     experience: expOrder.map((k) => ({ key: k, label: expLabel[k], n: num((experience as Row[]).find((r) => r.key === k)?.n) })),
-    sectors: (sectors as Row[]).map((r) => ({ key: String(r.key), label: String(r.key).toUpperCase(), n: num(r.n) })),
+    sectors: (sectors as Row[]).map((r) => ({ key: String(r.key), label: sectorLabel(String(r.key)), n: num(r.n) })),
   };
 }
 

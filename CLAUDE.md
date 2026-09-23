@@ -31,7 +31,7 @@ companies (
   name          text not null,
   slug          text unique not null,
   logo_url      text,
-  sector        text,        -- e.g. 'launch', 'prime', 'satellite', 'dual-use'
+  sector        text,        -- one of the 10 keys in lib/sectors.ts: prime, defence, launch, propulsion, satellites, components, earth-observation, space-ops, services, institutions
   source_type   text not null, -- 'greenhouse' | 'lever' | 'workday' | 'custom'
   source_config jsonb not null, -- board token, tenant id, base url, whatever the adapter needs
   active        boolean default true,
@@ -168,3 +168,14 @@ Because location can be detail-gated like this, `lib/scrape.ts`'s upsert preserv
 `experience_min/max/kind` already only update when a run actually re-reads the description) — a company whose
 adapter only returns real location on the runs it happens to detail a job must not have that job's location blanked
 out on every other run.
+
+Scoping options in `source_config` (all optional, tried in this order of preference):
+- `hiring_company_ids`: Workday `hiringCompany` facet ids — when the tenant has that facet (Airbus, Leonardo).
+- `search_text` + `bullet_match_regex`: for a shared tenant with no company facet (Thales): the CXS keyword search narrows the list, then any `bulletFields` entry must match the regex (Thales puts the legal entity there, e.g. "Thales Alenia Space France Sas").
+- `exclude_locations_regex`: for a tenant with thousands of postings (RTX, ~4,800): the adapter reads the tenant's own `locations` facet on the first request and applies every location id whose descriptor does NOT match the regex, so paging never touches the excluded postings. RTX excludes non-European site prefixes, which keeps it at ~320 roles.
+- `default_country`: resolves bare US state codes ("Huntsville, AL") for US-based tenants (Blue Origin, Vantor).
+
+The requisition id is the first `bulletFields` entry that looks like an id (`^[A-Za-z]{0,4}-?\d{4,}$`), else the tail of `externalPath`; some tenants (Thales, RTX) put other fields first.
+
+## Sector taxonomy
+`lib/sectors.ts` is the single source for the 10 sector keys, their display labels and their display order. Every UI spot goes through `sectorLabel()`/`sortSectors()` — never `.toUpperCase()` a raw key.

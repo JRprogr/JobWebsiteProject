@@ -18,7 +18,7 @@
   {
     "name": "Palantir",
     "slug": "palantir",
-    "sector": "dual-use",
+    "sector": "defence",
     "source_type": "lever",
     "source_config": {
       "site": "palantir"
@@ -30,7 +30,7 @@
   {
     "name": "Helsing",
     "slug": "helsing",
-    "sector": "dual-use",
+    "sector": "defence",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "helsing"
@@ -54,7 +54,7 @@
   {
     "name": "DLR",
     "slug": "dlr",
-    "sector": "research",
+    "sector": "institutions",
     "source_type": "custom",
     "source_config": {
       "kind": "sitemap-dlr",
@@ -68,7 +68,7 @@
   {
     "name": "CNES",
     "slug": "cnes",
-    "sector": "research",
+    "sector": "institutions",
     "source_type": "custom",
     "source_config": {
       "kind": "sitemap-cnes",
@@ -99,5 +99,218 @@
     "active": true,
     "careers_url": "https://ag.wd3.myworkdayjobs.com/Airbus",
     "hq_country": "DE"
+  },
+  {
+    "name": "Rocket Lab",
+    "slug": "rocket-lab",
+    "sector": "launch",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "rocketlab",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": null,
+    "hq_country": "US"
+  },
+  {
+    "name": "constellr",
+    "slug": "constellr",
+    "sector": "earth-observation",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "constellrgmbh"
+    },
+    "active": true,
+    "careers_url": "https://job-boards.eu.greenhouse.io/constellrgmbh",
+    "hq_country": "DE"
+  },
+  {
+    "name": "Dawn Aerospace",
+    "slug": "dawn-aerospace",
+    "sector": "launch",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "dawnaerospace"
+    },
+    "active": true,
+    "careers_url": "https://job-boards.anz.greenhouse.io/dawnaerospace",
+    "hq_country": "NL"
+  },
+  {
+    "name": "Rocket Factory Augsburg",
+    "slug": "rocket-factory-augsburg",
+    "sector": "launch",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "rocketfactoryaugsburgag"
+    },
+    "active": true,
+    "careers_url": "https://job-boards.eu.greenhouse.io/rocketfactoryaugsburgag",
+    "hq_country": "DE"
+  },
+  {
+    "name": "Planet",
+    "slug": "planet",
+    "sector": "earth-observation",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "planetlabs",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": "https://job-boards.greenhouse.io/planetlabs",
+    "hq_country": "US"
+  },
+  {
+    "name": "AST SpaceMobile",
+    "slug": "ast-spacemobile",
+    "sector": "satellites",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "astspacemobile",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": "https://ast-science.com/company/careers/",
+    "hq_country": "US"
+  },
+  {
+    "name": "BlackSky",
+    "slug": "blacksky",
+    "sector": "earth-observation",
+    "source_type": "greenhouse",
+    "source_config": {
+      "board_token": "blacksky",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": "https://blacksky.com/company/careers/",
+    "hq_country": "US"
+  },
+  {
+    "name": "ispace",
+    "slug": "ispace",
+    "sector": "satellites",
+    "source_type": "lever",
+    "source_config": {
+      "site": "ispace-inc"
+    },
+    "active": true,
+    "careers_url": "https://jobs.lever.co/ispace-inc",
+    "hq_country": "JP"
+  },
+  {
+    "name": "Novaspace",
+    "slug": "novaspace",
+    "sector": "services",
+    "source_type": "lever",
+    "source_config": {
+      "site": "novaspace"
+    },
+    "active": true,
+    "careers_url": "https://jobs.lever.co/novaspace",
+    "hq_country": "FR"
+  },
+  {
+    "name": "Loft Orbital",
+    "slug": "loft-orbital",
+    "sector": "satellites",
+    "source_type": "lever",
+    "source_config": {
+      "site": "loftorbital"
+    },
+    "active": true,
+    "careers_url": "https://jobs.lever.co/loftorbital/",
+    "hq_country": "US"
+  },
+  {
+    "name": "ArianeGroup",
+    "slug": "arianegroup",
+    "sector": "launch",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "arianegroup",
+      "host": "wd3",
+      "site": "EXTERNALALL"
+    },
+    "active": true,
+    "careers_url": "https://arianegroup.wd3.myworkdayjobs.com/de-DE/EXTERNALALL",
+    "hq_country": "FR"
+  },
+  {
+    "name": "Blue Origin",
+    "slug": "blue-origin",
+    "sector": "launch",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "blueorigin",
+      "host": "wd5",
+      "site": "BlueOrigin",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": "https://blueorigin.wd5.myworkdayjobs.com/en-US/BlueOrigin",
+    "hq_country": "US"
+  },
+  {
+    "name": "Leonardo",
+    "slug": "leonardo",
+    "sector": "prime",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "leonardocompany",
+      "host": "wd3",
+      "site": "LeonardoCareerSite"
+    },
+    "active": true,
+    "careers_url": "https://leonardocompany.wd3.myworkdayjobs.com/de-DE/LeonardoCareerSite",
+    "hq_country": "IT"
+  },
+  {
+    "name": "Thales Alenia Space",
+    "slug": "thales-alenia-space",
+    "sector": "prime",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "thales",
+      "host": "wd3",
+      "site": "Careers",
+      "search_text": "Thales Alenia Space",
+      "bullet_match_regex": "^Thales Alenia Space"
+    },
+    "active": true,
+    "careers_url": "https://thales.wd3.myworkdayjobs.com/en-US/Careers/jobs?q=thales+alenia+space",
+    "hq_country": "FR"
+  },
+  {
+    "name": "RTX",
+    "slug": "rtx",
+    "sector": "prime",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "globalhr",
+      "host": "wd5",
+      "site": "REC_RTX_Ext_Gateway",
+      "exclude_locations_regex": "^(AE|AU|CA|CL|CN|CO|HK|IN|JO|JP|KR|KW|MX|MY|NZ|PH|QA|SA|SG|TW|US|VN|XX)-|Bangalore"
+    },
+    "active": true,
+    "careers_url": "https://globalhr.wd5.myworkdayjobs.com/de-DE/REC_RTX_Ext_Gateway",
+    "hq_country": "US"
+  },
+  {
+    "name": "Vantor",
+    "slug": "vantor",
+    "sector": "earth-observation",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "maxar",
+      "host": "wd1",
+      "site": "Vantor",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": "https://maxar.wd1.myworkdayjobs.com/Vantor",
+    "hq_country": "US"
   }
 ]

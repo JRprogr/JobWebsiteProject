@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { EXPERIENCE_BUCKETS, type ExperienceBucket } from "@/lib/experience";
+import { sectorLabel } from "@/lib/sectors";
 import { countryName } from "@/lib/geo";
 import type { CompanyFacet } from "@/lib/jobs";
 import { ChevronIcon } from "./icons";
@@ -113,7 +114,7 @@ export function AdvancedFilters({ countries, countryFacets, companies, companyFa
     {
       id: "sector",
       title: "SECTOR",
-      badge: sector ? sector.toUpperCase() : null,
+      badge: sector ? sectorLabel(sector) : null,
       body: (
         <div className="flex flex-wrap gap-2">
           <button type="button" aria-pressed={!sector} onClick={() => onChange({ sector: null })} className={`${chip} ${!sector ? "border-fg bg-faint" : "border-line"}`}>
@@ -127,7 +128,7 @@ export function AdvancedFilters({ countries, countryFacets, companies, companyFa
               onClick={() => onChange({ sector: sector === s ? null : s })}
               className={`${chip} ${sector === s ? "border-fg bg-faint" : "border-line"}`}
             >
-              {s.toUpperCase()}
+              {sectorLabel(s)}
             </button>
           ))}
         </div>

@@ -2,6 +2,7 @@ import { sql } from "./db.ts";
 import { EXPERIENCE_BUCKETS, type ExperienceBucket } from "./experience.ts";
 import { timeAgo } from "./format.ts";
 import { EU_COUNTRIES, EUROPE_COUNTRIES, type Scope } from "./geo.ts";
+import { sortSectors } from "./sectors.ts";
 
 export type Sort = "latest" | "oldest" | "az" | "za";
 
@@ -165,7 +166,7 @@ export async function companyFacets(f: Filters): Promise<CompanyFacet[]> {
 
 export async function sectors(): Promise<string[]> {
   const rows = await sql().query("select distinct sector from companies where active and sector is not null order by 1");
-  return (rows as Row[]).map((r) => String(r.sector));
+  return sortSectors((rows as Row[]).map((r) => String(r.sector)));
 }
 
 export async function headline() {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { sectorLabel } from "@/lib/sectors";
 import { countryName } from "@/lib/geo";
 import type { Register } from "@/lib/stats";
 import { ArrowUpRightIcon } from "./icons";
@@ -23,7 +24,7 @@ export function RegisterView({ companies, sectors, sector }: Props) {
             aria-current={sector === s ? "true" : undefined}
             className={`rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.08em] ${sector === s ? "border-fg bg-faint font-bold" : "border-line"}`}
           >
-            {s ? s.toUpperCase() : "ALL"}
+            {s ? sectorLabel(s) : "ALL"}
           </Link>
         ))}
         <span className="ml-auto font-mono text-[11px] tracking-[0.08em] text-dim">
@@ -41,7 +42,7 @@ export function RegisterView({ companies, sectors, sector }: Props) {
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <h2 className="truncate text-xl font-bold leading-tight">{c.name}</h2>
                 <p className="truncate font-mono text-[11px] tracking-[0.06em] text-dim">
-                  {c.sector ? c.sector.toUpperCase() : "—"}
+                  {c.sector ? sectorLabel(c.sector) : "—"}
                   {c.hq ? ` · HQ ${countryName(c.hq).toUpperCase()}` : ""}
                 </p>
               </div>

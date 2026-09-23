@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { EXPERIENCE_BUCKETS } from "@/lib/experience";
 import { countryName, type Scope } from "@/lib/geo";
+import { sectorLabel } from "@/lib/sectors";
 import type { CompanyFacet, Filters, JobView } from "@/lib/jobs";
 import { AdvancedFilters } from "./AdvancedFilters";
 import { ChevronIcon, CloseIcon, GlobeIcon } from "./icons";
@@ -80,7 +81,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
         update({ co: next.length ? next.join(",") : null });
       },
     })),
-    ...(filters.sector ? [{ key: "sector", label: filters.sector.toUpperCase(), clear: () => update({ sector: null }) }] : []),
+    ...(filters.sector ? [{ key: "sector", label: sectorLabel(filters.sector), clear: () => update({ sector: null }) }] : []),
     ...(filters.experience ? [{ key: "exp", label: EXPERIENCE_BUCKETS[filters.experience].label, clear: () => update({ exp: null }) }] : []),
   ];
 
