@@ -179,3 +179,6 @@ The requisition id is the first `bulletFields` entry that looks like an id (`^[A
 
 ## Sector taxonomy
 `lib/sectors.ts` is the single source for the 10 sector keys, their display labels and their display order. Every UI spot goes through `sectorLabel()`/`sortSectors()` — never `.toUpperCase()` a raw key.
+
+## Company logos
+`companies.logo_url` points at `public/logos/<slug>.png` (128x128, transparent). `npm run logos [slug ...]` downloads them (site apple-touch/svg icon first, gstatic favicon as fallback), using the domain in `db/seed/websites.json`, then writes `logo_url` into `db/seed/companies.json`; run `npm run db:seed` afterwards. Add every new company's domain to `websites.json`. `CompanyLogo` renders them on a white disc in both themes and falls back to the initial letter.

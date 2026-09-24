@@ -2,6 +2,7 @@ import Link from "next/link";
 import { sectorLabel } from "@/lib/sectors";
 import { countryName } from "@/lib/geo";
 import type { Register } from "@/lib/stats";
+import { CompanyLogo } from "./CompanyLogo";
 import { ArrowUpRightIcon } from "./icons";
 
 const label = "font-mono text-[10px] tracking-[0.1em] text-dim";
@@ -36,9 +37,7 @@ export function RegisterView({ companies, sectors, sector }: Props) {
         {shown.map((c) => (
           <li key={c.slug} className="glass flex min-w-0 flex-col gap-5 rounded-[22px] p-5">
             <div className="flex items-start gap-3.5">
-              <span aria-hidden="true" className="grid size-12 shrink-0 place-items-center rounded-full border border-line bg-faint font-mono text-lg font-bold">
-                {c.name.charAt(0)}
-              </span>
+              <CompanyLogo name={c.name} logo={c.logo} className="size-12 text-lg" />
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <h2 className="truncate text-xl font-bold leading-tight">{c.name}</h2>
                 <p className="truncate font-mono text-[11px] tracking-[0.06em] text-dim">

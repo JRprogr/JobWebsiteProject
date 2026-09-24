@@ -1,6 +1,6 @@
 import { LegalSection } from "@/components/LegalSection";
 import { PageShell } from "@/components/PageShell";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { ContactEmail } from "@/components/ContactEmail";
 
 export const metadata = { title: "About" };
 
@@ -58,7 +58,7 @@ export default function AboutPage() {
         <p>
           Maybe more companies, other industries, and coverage for career sites beyond the current sources &mdash;
           plus a closer look at region-level filtering on the map. The Company Register and Statistics pages will
-          grow alongside the list of companies tracked. Ideas welcome, just shoot {CONTACT_EMAIL}.
+          grow alongside the list of companies tracked. Ideas welcome, just shoot <ContactEmail />.
         </p>
       </LegalSection>
     </PageShell>

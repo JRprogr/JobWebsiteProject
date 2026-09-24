@@ -13,7 +13,8 @@
     },
     "active": true,
     "careers_url": "https://www.spacex.com/careers/jobs",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/spacex.png"
   },
   {
     "name": "Palantir",
@@ -25,7 +26,8 @@
     },
     "active": true,
     "careers_url": "https://www.palantir.com/careers/",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/palantir.png"
   },
   {
     "name": "Helsing",
@@ -37,7 +39,8 @@
     },
     "active": true,
     "careers_url": "https://helsing.ai/careers",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/helsing.png"
   },
   {
     "name": "Isar Aerospace",
@@ -49,7 +52,8 @@
     },
     "active": true,
     "careers_url": "https://www.isaraerospace.com/careers",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/isar-aerospace.png"
   },
   {
     "name": "DLR",
@@ -63,7 +67,8 @@
     },
     "active": true,
     "careers_url": "https://jobs.dlr.de",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/dlr.png"
   },
   {
     "name": "CNES",
@@ -77,7 +82,8 @@
     },
     "active": true,
     "careers_url": "https://recrutement.cnes.fr",
-    "hq_country": "FR"
+    "hq_country": "FR",
+    "logo_url": "/logos/cnes.png"
   },
   {
     "name": "Airbus Defence and Space",
@@ -98,7 +104,8 @@
     },
     "active": true,
     "careers_url": "https://ag.wd3.myworkdayjobs.com/Airbus",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/airbus-defence-and-space.png"
   },
   {
     "name": "Rocket Lab",
@@ -110,8 +117,9 @@
       "default_country": "US"
     },
     "active": true,
-    "careers_url": null,
-    "hq_country": "US"
+    "careers_url": "https://job-boards.greenhouse.io/rocketlab",
+    "hq_country": "US",
+    "logo_url": "/logos/rocket-lab.png"
   },
   {
     "name": "constellr",
@@ -123,7 +131,8 @@
     },
     "active": true,
     "careers_url": "https://job-boards.eu.greenhouse.io/constellrgmbh",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/constellr.png"
   },
   {
     "name": "Dawn Aerospace",
@@ -135,7 +144,8 @@
     },
     "active": true,
     "careers_url": "https://job-boards.anz.greenhouse.io/dawnaerospace",
-    "hq_country": "NL"
+    "hq_country": "NL",
+    "logo_url": "/logos/dawn-aerospace.png"
   },
   {
     "name": "Rocket Factory Augsburg",
@@ -147,7 +157,8 @@
     },
     "active": true,
     "careers_url": "https://job-boards.eu.greenhouse.io/rocketfactoryaugsburgag",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/rocket-factory-augsburg.png"
   },
   {
     "name": "Planet",
@@ -160,7 +171,8 @@
     },
     "active": true,
     "careers_url": "https://job-boards.greenhouse.io/planetlabs",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/planet.png"
   },
   {
     "name": "AST SpaceMobile",
@@ -173,7 +185,8 @@
     },
     "active": true,
     "careers_url": "https://ast-science.com/company/careers/",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/ast-spacemobile.png"
   },
   {
     "name": "BlackSky",
@@ -186,7 +199,8 @@
     },
     "active": true,
     "careers_url": "https://blacksky.com/company/careers/",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/blacksky.png"
   },
   {
     "name": "ispace",
@@ -198,7 +212,8 @@
     },
     "active": true,
     "careers_url": "https://jobs.lever.co/ispace-inc",
-    "hq_country": "JP"
+    "hq_country": "JP",
+    "logo_url": "/logos/ispace.png"
   },
   {
     "name": "Novaspace",
@@ -210,7 +225,8 @@
     },
     "active": true,
     "careers_url": "https://jobs.lever.co/novaspace",
-    "hq_country": "FR"
+    "hq_country": "FR",
+    "logo_url": "/logos/novaspace.png"
   },
   {
     "name": "Loft Orbital",
@@ -222,7 +238,8 @@
     },
     "active": true,
     "careers_url": "https://jobs.lever.co/loftorbital/",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/loft-orbital.png"
   },
   {
     "name": "ArianeGroup",
@@ -236,7 +253,8 @@
     },
     "active": true,
     "careers_url": "https://arianegroup.wd3.myworkdayjobs.com/de-DE/EXTERNALALL",
-    "hq_country": "FR"
+    "hq_country": "FR",
+    "logo_url": "/logos/arianegroup.png"
   },
   {
     "name": "Blue Origin",
@@ -251,7 +269,8 @@
     },
     "active": true,
     "careers_url": "https://blueorigin.wd5.myworkdayjobs.com/en-US/BlueOrigin",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/blue-origin.png"
   },
   {
     "name": "Leonardo",
@@ -265,7 +284,8 @@
     },
     "active": true,
     "careers_url": "https://leonardocompany.wd3.myworkdayjobs.com/de-DE/LeonardoCareerSite",
-    "hq_country": "IT"
+    "hq_country": "IT",
+    "logo_url": "/logos/leonardo.png"
   },
   {
     "name": "Thales Alenia Space",
@@ -281,7 +301,8 @@
     },
     "active": true,
     "careers_url": "https://thales.wd3.myworkdayjobs.com/en-US/Careers/jobs?q=thales+alenia+space",
-    "hq_country": "FR"
+    "hq_country": "FR",
+    "logo_url": "/logos/thales-alenia-space.png"
   },
   {
     "name": "RTX",
@@ -296,7 +317,8 @@
     },
     "active": true,
     "careers_url": "https://globalhr.wd5.myworkdayjobs.com/de-DE/REC_RTX_Ext_Gateway",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/rtx.png"
   },
   {
     "name": "Vantor",
@@ -311,6 +333,7 @@
     },
     "active": true,
     "careers_url": "https://maxar.wd1.myworkdayjobs.com/Vantor",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/vantor.png"
   }
 ]

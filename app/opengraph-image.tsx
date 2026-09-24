@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "DS[Careers] — Defence & Space jobs in Europe";
+export const alt = "DS[Careers] — Space & Defence jobs in Europe";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -29,10 +29,10 @@ export default function OpengraphImage() {
           }}
         />
         <div style={{ display: "flex", flexDirection: "column", gap: 22, position: "relative" }}>
-          <div style={{ display: "flex", fontSize: 26, color: "#FFCC00", letterSpacing: 3 }}>[ DEFENCE &amp; SPACE JOBS · EUROPE FIRST ]</div>
+          <div style={{ display: "flex", fontSize: 26, color: "#FFCC00", letterSpacing: 3 }}>[ SPACE &amp; DEFENCE JOBS · EUROPE FIRST ]</div>
           <div style={{ display: "flex", fontSize: 128, fontWeight: 800, color: "#FFCC00", lineHeight: 1 }}>DS[Careers]</div>
           <div style={{ display: "flex", fontSize: 34, color: "#e7e7e7", maxWidth: 920, lineHeight: 1.4 }}>
-            Open roles at defence and space companies, refreshed on every scrape.
+            Open roles at space and defence companies, refreshed on every scrape.
           </div>
         </div>
       </div>

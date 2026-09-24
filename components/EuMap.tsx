@@ -17,9 +17,12 @@ type MapCountry = {
 
 const map = mapJson as unknown as { w: number; h: number; graticule: string; countries: MapCountry[] };
 
-// EU only lights the 27 members; Europe and Global light the whole map (each country then shows whether it has openings)
+// EU only lights the 27 members, Europe adds the rest of the EEA, UK, Switzerland and the Balkans (Russia, Turkey, Ukraine,
+// Belarus and Moldova stay grey), Global lights everything (each country then shows whether it has openings)
 function isLit(tier: Tier, scope: Scope): boolean {
-  return scope === "eu" ? tier === "eu" : true;
+  if (scope === "eu") return tier === "eu";
+  if (scope === "europe") return tier !== "near";
+  return true;
 }
 
 type Props = {

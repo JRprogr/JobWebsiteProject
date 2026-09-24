@@ -1,6 +1,6 @@
 import { LegalSection } from "@/components/LegalSection";
 import { PageShell } from "@/components/PageShell";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { ContactEmail } from "@/components/ContactEmail";
 
 export const metadata = { title: "Terms" };
 
@@ -54,7 +54,7 @@ export default function TermsPage() {
       <LegalSection title="TAKEDOWN & CORRECTIONS">
         <p>
           If you represent a listed employer, hold rights to something shown here, or spot a listing that should be
-          corrected or removed, contact <b>{CONTACT_EMAIL}</b> and we&apos;ll act on it promptly.
+          corrected or removed, contact <b><ContactEmail /></b> and we&apos;ll act on it promptly.
         </p>
       </LegalSection>
 
@@ -63,7 +63,7 @@ export default function TermsPage() {
       </LegalSection>
 
       <LegalSection title="CONTACT">
-        <p>{CONTACT_EMAIL}</p>
+        <p><ContactEmail /></p>
       </LegalSection>
     </PageShell>
   );

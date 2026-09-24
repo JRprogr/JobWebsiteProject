@@ -10,7 +10,8 @@
     "db:migrate": "node --env-file=.env.local scripts/migrate.mts",
     "check:experience": "node scripts/check-experience.mts",
     "db:seed": "node --env-file=.env.local scripts/seed.mts",
-    "scrape": "node --env-file=.env.local scripts/scrape.mts"
+    "scrape": "node --env-file=.env.local scripts/scrape.mts",
+    "logos": "node scripts/fetch-logos.mts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -30,6 +31,7 @@
     "d3-geo": "^3.1.1",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "topojson-client": "^3.1.0",
     "typescript": "^5",

@@ -16,8 +16,9 @@ const NUMERIC: Record<string, [string, Tier]> = {
   "643": ["RU", "near"], "804": ["UA", "near"], "498": ["MD", "near"], "792": ["TR", "near"], "112": ["BY", "near"],
 };
 
-const W = 440, H = 380, STEP = 5;
-const proj = geoConicConformal().parallels([40, 62]).rotate([-14, 0]).center([0, 53]).scale(640).translate([W / 2 + 6, H / 2 + 6]).clipExtent([[0, 0], [W, H]]);
+// H reaches far enough south for Malta (~y 385) and Crete; the projection stays anchored to the original 380px frame so nothing else moves.
+const W = 440, H = 400, STEP = 5, CY = 196;
+const proj = geoConicConformal().parallels([40, 62]).rotate([-14, 0]).center([0, 53]).scale(640).translate([W / 2 + 6, CY]).clipExtent([[0, 0], [W, H]]);
 const path = geoPath(proj).digits(1);
 const hitPath = geoPath(proj).digits(0);
 

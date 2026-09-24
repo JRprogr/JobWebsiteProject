@@ -91,6 +91,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
 
   return (
     <div className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-8 md:px-12 md:pt-10">
+      {pending ? <div className="pending-bar" role="status" aria-label="Updating roles" /> : null}
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_470px]">
         <section aria-label="Open roles" className={`flex min-w-0 flex-col gap-5 ${selectedJob ? "max-lg:pb-44" : ""}`}>
           <div className="flex flex-col gap-3.5">
@@ -101,7 +102,7 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
             <h1 className="font-display text-[clamp(44px,9vw,84px)] font-extrabold uppercase leading-[0.92] tracking-[0.01em]">
               Find open roles.
               <br />
-              Defence &amp; space.
+              Space &amp; defence.
             </h1>
           </div>
 

@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { LegalSection } from "@/components/LegalSection";
 import { PageShell } from "@/components/PageShell";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { ContactEmail } from "@/components/ContactEmail";
 
 export const metadata = { title: "Q&A" };
 
@@ -11,7 +12,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Why the focus on Europe?",
-    a: "“Europe” here means the EEA, the UK, Switzerland and the Balkans — roughly where a work visa is easier to get and continental relocation is realistic. Every country is still scraped and shown; the region filters just make Europe the default lens.",
+    a: "Company-wise, “Europe” here means companies primarily active in the EEA, the UK, Switzerland and the Balkans — roughly where a work visa is easier to get and continental relocation is realistic. Some international companies and countries are still scraped and stay available under the Global filter, but the focus, and the default view, is Europe.",
   },
   {
     q: "Where does the data come from?",
@@ -39,11 +40,11 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "I found an outdated or incorrect listing — who do I tell?",
-    a: <>Email {CONTACT_EMAIL} with a link to the listing.</>,
+    a: <>Email <ContactEmail /> with a link to the listing.</>,
   },
   {
     q: "Do you track visitors or require an account?",
-    a: "No accounts, no logins, and no analytics or ad tracking. Your browser may keep small, local preferences like your theme choice, which never leave your device.",
+    a: <>No accounts, no logins, no cookies, and no analytics or ad tracking. Your browser may keep small, local preferences like your theme choice, which never leave your device. Details on the <Link href="/privacy">Privacy page</Link>.</>,
   },
   {
     q: "Is this free?",
@@ -51,7 +52,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Can I suggest a company to add?",
-    a: <>Yes — send it to {CONTACT_EMAIL}.</>,
+    a: <>Yes — send it to <ContactEmail />.</>,
   },
 ];
 

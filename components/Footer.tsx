@@ -7,6 +7,7 @@ const PAGES = [
   { href: "/terms", label: "TERMS" },
   { href: "/faq", label: "Q&A" },
   { href: "/about", label: "ABOUT" },
+  { href: "/privacy", label: "PRIVACY" },
 ];
 
 export function Footer() {

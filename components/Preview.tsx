@@ -6,6 +6,7 @@ import { countryName } from "@/lib/geo";
 import { sectorLabel } from "@/lib/sectors";
 import type { JobView } from "@/lib/jobs";
 import { DetailsModal } from "./DetailsModal";
+import { CompanyLogo } from "./CompanyLogo";
 import { ArrowUpRightIcon, CloseIcon, ExpandIcon } from "./icons";
 
 function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
@@ -48,9 +49,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
   return (
     <section aria-label="Role preview" className={`glass flex flex-col gap-3 rounded-[22px] p-5 lg:gap-3 lg:p-4 ${wrapper}`}>
       <div className="flex items-start gap-3.5">
-        <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full border border-line bg-faint font-mono text-xl font-bold">
-          {job.company.charAt(0)}
-        </span>
+        <CompanyLogo name={job.company} logo={job.logo} className="size-11 text-xl" />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h2 className="line-clamp-2 text-lg font-bold leading-tight lg:text-lg" title={job.title}>{job.title}</h2>
           <p className="truncate font-mono text-xs text-dim">

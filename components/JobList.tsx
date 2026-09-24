@@ -2,6 +2,7 @@
 
 import { countryName } from "@/lib/geo";
 import type { JobView } from "@/lib/jobs";
+import { CompanyLogo } from "./CompanyLogo";
 import { ArrowUpRightIcon } from "./icons";
 
 export function locationLabel(job: JobView): string {
@@ -22,7 +23,7 @@ type Props = {
 export function JobList({ jobs, selectedId, pending, onSelect }: Props) {
   return (
     <ul
-      className="job-list flex flex-col gap-3 transition-opacity data-[pending=true]:opacity-60"
+      className="job-list flex flex-col gap-3 data-[pending=true]:cursor-progress"
       data-has-selection={selectedId !== null}
       data-pending={pending}
       aria-busy={pending}
@@ -37,12 +38,7 @@ export function JobList({ jobs, selectedId, pending, onSelect }: Props) {
               onClick={() => onSelect(selected ? null : job.id)}
               className="flex w-full items-center gap-3 rounded-[16px] py-3 pl-4 pr-16 text-left sm:gap-4 sm:pl-5 sm:pr-[76px]"
             >
-              <span
-                aria-hidden="true"
-                className="grid size-11 shrink-0 place-items-center rounded-full border border-line bg-faint font-mono text-base font-bold"
-              >
-                {job.company.charAt(0)}
-              </span>
+              <CompanyLogo name={job.company} logo={job.logo} className="size-11 text-base" />
               <span className="flex min-w-0 flex-1 flex-col gap-1">
                 <span className="truncate text-[17px] font-semibold leading-tight">{job.title}</span>
                 <span className="truncate font-mono text-xs leading-tight text-dim">

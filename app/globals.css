@@ -175,6 +175,42 @@ body {
   clip-path: inset(-80px -3px -80px -60px);
 }
 
+/* Dimming the list itself (opacity on the parent) would make every glass row lose its backdrop blur while a filter loads,
+   which read as a lighting flash. A thin bar signals loading instead and leaves the rows untouched. */
+.pending-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pending-bar::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 35%;
+  background: var(--accent);
+  animation: pending-slide 900ms ease-in-out infinite;
+}
+
+@keyframes pending-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pending-bar::after {
+    width: 100%;
+    animation: none;
+  }
+}
+
 .job-row {
   border-radius: 16px;
   transform: translateZ(0);
@@ -223,8 +259,8 @@ body {
 /* Sized from width only (never an independent max-height), so it can never mismatch its aspect ratio and letterbox. */
 .map-frame {
   --map-h-budget: 38dvh;
-  width: min(100%, calc(var(--map-h-budget) * 440 / 380));
-  aspect-ratio: 440 / 380;
+  width: min(100%, calc(var(--map-h-budget) * 440 / 400));
+  aspect-ratio: 440 / 400;
   margin-inline: auto;
 }
 

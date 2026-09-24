@@ -45,6 +45,7 @@ export type JobView = {
   url: string;
   company: string;
   companySlug: string;
+  logo: string | null;
   sector: string | null;
   city: string | null;
   cities: string[];
@@ -102,7 +103,7 @@ export async function listJobs(f: Filters, limit: number): Promise<{ jobs: JobVi
   const w = where(f);
   const [rows, totals] = await Promise.all([
     sql().query(
-      `select j.id, j.title, j.url, c.name as company, c.slug as company_slug, c.sector, j.location_city, j.location_cities, j.location_countries,
+      `select j.id, j.title, j.url, c.name as company, c.slug as company_slug, c.logo_url, c.sector, j.location_city, j.location_cities, j.location_countries,
               j.location_raw, j.remote, j.department, j.salary_min, j.salary_max, j.salary_currency,
               j.experience_min, j.experience_max, j.experience_kind,
               j.first_seen_at
@@ -121,6 +122,7 @@ export async function listJobs(f: Filters, limit: number): Promise<{ jobs: JobVi
     url: String(r.url),
     company: String(r.company),
     companySlug: String(r.company_slug),
+    logo: (r.logo_url as string | null) ?? null,
     sector: (r.sector as string | null) ?? null,
     city: (r.location_city as string | null) ?? null,
     cities: (r.location_cities as string[] | null) ?? [],

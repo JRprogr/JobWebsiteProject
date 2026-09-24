@@ -6,6 +6,8 @@ import { EuMap } from "./EuMap";
 import { CloseIcon, EuFlagIcon, GlobeIcon } from "./icons";
 
 const SCOPE_ICON: Partial<Record<Scope, typeof GlobeIcon>> = { eu: EuFlagIcon, all: GlobeIcon };
+// "EUR" read as the currency, so the buttons spell out what they are
+const SCOPE_TEXT: Record<Scope, string> = { europe: "EUROPE", eu: "EU", all: "GLOBAL" };
 
 type Props = {
   open: boolean;
@@ -37,7 +39,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
       aria-label="Region filter"
       className="glass flex flex-col gap-3 rounded-[22px] p-4 lg:p-5 max-lg:fixed max-lg:inset-x-3 max-lg:top-[104px] md:max-lg:top-20 max-lg:z-40 max-lg:max-h-[calc(100dvh-9.5rem)] md:max-lg:max-h-[calc(100dvh-8rem)] max-lg:overflow-y-auto max-lg:transition-[transform,visibility] max-lg:duration-300 max-lg:data-[open=false]:invisible max-lg:data-[open=false]:-translate-y-[120%]"
     >
-      <div className="-mt-1 flex items-start justify-between gap-3 max-lg:pr-14">
+      <div className="-mt-1 flex flex-wrap items-start justify-between gap-x-3 gap-y-2 max-lg:pr-14">
         <div className="flex min-w-0 flex-col gap-1">
           <h2 className="whitespace-nowrap font-mono text-xs font-bold tracking-[0.12em] text-map">[ <span className="max-lg:hidden">TARGET </span>REGION ]</h2>
           <p className="flex min-h-5 items-center gap-2 truncate font-mono text-[11px] tracking-[0.1em] text-map" aria-live="polite">
@@ -56,10 +58,10 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
                 onClick={() => onScope(s.value)}
                 aria-pressed={scope === s.value}
                 title={s.label}
-                className={`grid size-10 place-items-center rounded-[9px] border border-current text-map ${scope === s.value ? "bg-faint" : "opacity-70"}`}
+                className={`flex h-10 items-center gap-1.5 rounded-[9px] border border-current px-2.5 font-mono text-[11px] font-bold tracking-[0.06em] text-map ${scope === s.value ? "bg-faint" : "opacity-70"}`}
               >
-                {Icon ? <Icon size={21} /> : <span className="font-mono text-[10px] font-bold tracking-[0.04em]">EUR</span>}
-                <span className="sr-only">{s.label}</span>
+                {Icon ? <Icon size={18} /> : null}
+                {SCOPE_TEXT[s.value]}
               </button>
             );
           })}

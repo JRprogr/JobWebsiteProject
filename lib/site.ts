@@ -1,9 +1,11 @@
 // Set NEXT_PUBLIC_SITE_URL in the deploy environment once the domain is known; falls back to localhost for dev.
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-// Placeholders pending real accounts; swap the values below once they exist.
-export const CONTACT_EMAIL = "[@Placeholder]";
+export const CONTACT_EMAIL = "info.dscareers@proton.me";
 
-// TODO: replace with the real Ko-fi/Stripe tip link once the account is set up.
-export const TIP_URL = "#";
+export const TIP_URL = "https://ko-fi.com/johndscareers";
 export const TIP_LABEL = "TIP";
+
+// Placeholders: the privacy policy (and any future imprint) must name the person responsible. Swap in the real values.
+export const CONTROLLER_NAME = "[Full name — to be added]";
+export const CONTROLLER_ADDRESS = "[Postal address — to be added]";

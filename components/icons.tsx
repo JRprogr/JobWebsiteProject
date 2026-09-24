@@ -16,8 +16,8 @@ export function GlobeIcon({ size = 18, className }: IconProps) {
     <svg width={size} height={size} viewBox="0 0 24 24" strokeWidth={1.6} className={className} {...base}>
       <circle cx="12" cy="12" r="9" />
       <path d="M3 12h18" />
-      <path d="M12 3c2.8 3 2.8 15 0 18" />
-      <path d="M12 3c-2.8 3-2.8 15 0 18" />
+      <path d="M12 3c4.6 3 4.6 15 0 18" />
+      <path d="M12 3c-4.6 3-4.6 15 0 18" />
     </svg>
   );
 }

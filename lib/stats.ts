@@ -130,6 +130,7 @@ export async function loadStats(range: Range): Promise<Stats> {
 export type Register = {
   slug: string;
   name: string;
+  logo: string | null;
   sector: string | null;
   hq: string | null;
   careersUrl: string | null;
@@ -142,7 +143,7 @@ export type Register = {
 
 export async function loadRegister(): Promise<Register[]> {
   const rows = (await sql().query(
-    `select c.slug, c.name, c.sector, c.hq_country, c.careers_url, c.source_type,
+    `select c.slug, c.name, c.logo_url, c.sector, c.hq_country, c.careers_url, c.source_type,
        count(j.id) filter (where j.removed_at is null)::int as open,
        count(j.id) filter (where j.removed_at is null and j.location_countries && $1::text[])::int as europe,
        count(j.id) filter (where j.removed_at is null and j.location_countries && $2::text[])::int as eu,
@@ -154,6 +155,7 @@ export async function loadRegister(): Promise<Register[]> {
   return rows.map((r) => ({
     slug: String(r.slug),
     name: String(r.name),
+    logo: (r.logo_url as string | null) ?? null,
     sector: (r.sector as string | null) ?? null,
     hq: (r.hq_country as string | null) ?? null,
     careersUrl: (r.careers_url as string | null) ?? null,
