@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DS[Careers]
 
-## Getting Started
+A job board for the European space and defence industry. It reads the public career pages of 100+ employers (primes,
+launch and satellite companies, component makers, institutions), normalises the listings and keeps them in one
+searchable, filterable feed with a country map, a company register and statistics on how the market moves.
 
-First, run the development server:
+It is a **non-commercial portfolio project**: no accounts, no ads, no employer tools. Every listing links back to the
+employer's own application page.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## How it works
+
+```
+career pages / ATS feeds ──► adapters (lib/adapters) ──► diff + upsert (lib/scrape.ts) ──► Neon Postgres ──► Next.js pages
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Adapters** turn one source type into a list of `NormalizedJob`s (contract in `lib/types.ts`). There is one file per
+  ATS (Greenhouse, Lever, Workday, Personio, Teamtailor, SuccessFactors, …) plus one config-driven `link-list` adapter
+  for small career pages without an ATS. Which adapter a company uses, and how it is configured, lives in
+  `db/seed/companies.json` (`source_type`, `source_config`).
+- **Diffing** happens once, outside the adapters: a run upserts what it sees, marks what it no longer sees as removed and
+  writes one `scrape_runs` row. Statistics are plain queries over `jobs` and `scrape_runs`.
+- **Experience and location** are extracted from the listing text while scraping (`lib/experience.ts`,
+  `lib/location.ts`). Every listing links to the employer's own application page.
+- **The site** is Next.js (App Router, server components) reading Postgres directly; filters live in the URL.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Deeper notes on every adapter, the data model and the conventions are in [CLAUDE.md](CLAUDE.md).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
+Next.js 16 (App Router, TypeScript strict) · Tailwind CSS 4 · Postgres on Neon (`@neondatabase/serverless`) · Vercel
 
-To learn more about Next.js, take a look at the following resources:
+## Running locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Requires Node 24 and a Postgres database (a free Neon branch is enough).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm install
+cp .env.example .env.local      # fill in DATABASE_URL
+npm run db:migrate              # create / update the schema
+npm run db:seed                 # load the company list
+npm run scrape                  # first scrape of every active company (or: npm run scrape -- <slug>)
+npm run dev
+```
 
-## Deploy on Vercel
+| Script | What it does |
+| --- | --- |
+| `npm run db:migrate` | Applies `db/migrations/*.sql` in order (tracked in `_migrations`) |
+| `npm run db:seed` | Upserts `db/seed/companies.json` into `companies` |
+| `npm run scrape -- [slug…] [--backfill]` | Scrapes the given companies (all if none); `--backfill` reads many more listing texts |
+| `npm run logos -- [slug…]` | Rebuilds `public/logos/*.png`, see CLAUDE.md |
+| `npm run build` | On a Vercel production deploy: migrate + seed, then `next build`. Elsewhere just `next build` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Adding a company
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Add an entry to `db/seed/companies.json` (and the domain to `db/seed/websites.json`).
+2. `npm run db:seed`, then `npm run scrape -- <slug> --backfill` and check the result.
+3. `npm run logos -- <slug>` and `npm run db:seed` again for the logo.
+
+## Deploying
+
+Environment variables (see `.env.example`):
+
+| Variable | Where | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | Vercel (Production), GitHub secret | Neon connection string of the **production** branch |
+| `NEXT_PUBLIC_SITE_URL` | Vercel, optional | Canonical URL; defaults to the Vercel production URL |
+
+Pushing to `main` deploys on Vercel (region `fra1`, see `vercel.json`). The production build first runs
+`scripts/predeploy.mts`, which applies pending migrations and syncs the company list, so a failing migration stops the
+deploy before it goes live. Preview and local builds never touch a database.
+
+## Contact
+
+Questions, corrections or requests to remove an employer: info.dscareers@proton.me

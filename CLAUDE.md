@@ -232,6 +232,13 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 - The location parser (`lib/location.ts`) also knows Morocco, Tunisia, Puerto Rico and a few other non-European countries; `decodeEntities` knows the accented Latin entities.
 - Footer stamp: the panel in the footer shows the id `JWEU0001-V8`, the last successful scrape (UTC) and the number of live employers (`footerStamp()`); static pages have `revalidate = 600` so it refreshes.
 
+## Deployment (Batch 1 of the pre-deploy plan)
+- `npm run build` = `node scripts/predeploy.mts && next build`. `scripts/predeploy.mts` runs `migrate.mts` and `seed.mts` only when `VERCEL_ENV === "production"`, so a push to main ships code and database together and a failing migration stops the deploy; preview and local builds never touch a database. Consequence: `db/seed/companies.json` is the source of truth for the company list in production too (the seed does not delete companies, remove those by hand).
+- `vercel.json` pins the function region to `fra1` (next to Neon in Frankfurt). `package.json` `engines.node` is `24.x` (the scripts rely on Node's built-in TypeScript stripping).
+- `SITE_URL` (`lib/site.ts`): `NEXT_PUBLIC_SITE_URL`, else `https://$VERCEL_PROJECT_PRODUCTION_URL`, else localhost. There is no own domain yet.
+- Environment: `DATABASE_URL` (Vercel Production + GitHub secret, production Neon branch; local `.env.local` should point at a dev branch), `NEXT_PUBLIC_SITE_URL` (optional), `CRON_SECRET` (only while `/api/cron/scrape` exists). `.env.example` documents them; every other `.env*` file is gitignored.
+- Commits use the GitHub noreply address (repo-local git config), never a personal mailbox.
+
 ## Bug log 8 notes
 - **Search** (`where()` in `lib/jobs.ts`): every word of the query must match the job title or one of its cities (`location_city`, `location_cities`), so "embedded engineer munich" works.
 - **Classification** (renamed from "sector" everywhere, bug log 8): UI wording (overview filters and preview, register, Statistics), URL parameter `classification`, code (`lib/classifications.ts`, `classificationLabel`, `Filters.classification`), seed key and the database column (`companies.classification`, migration 006). Only the industry-sense word "sector" in About prose is untouched.
