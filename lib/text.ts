@@ -53,3 +53,13 @@ export function extractElement(html: string, marker: string): string | null {
   }
   return null;
 }
+
+// Some ATS description fields arrive polluted with the vendor widget's own stylesheet (".wm-ab-launcher-spinner { ... }", "@keyframes ...");
+// drop CSS rule blocks so only the words remain
+export function stripCss(text: string): string {
+  return text
+    .replace(/@keyframes\s+[\w-]+\s*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, " ")
+    .replace(/[.#][\w:>. #-]+\{[^{}]*\}/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}

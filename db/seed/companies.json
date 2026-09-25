@@ -891,5 +891,164 @@
     "careers_url": "https://arkadia-space.odoo.com/jobs",
     "hq_country": "ES",
     "logo_url": "/logos/arkadia-space.png"
+  },
+  {
+    "name": "Lockheed Martin",
+    "slug": "lockheed-martin",
+    "sector": "prime",
+    "source_type": "eightfold",
+    "source_config": {
+      "base": "https://lockheedmartin.eightfold.ai",
+      "domain": "lockheedmartin.com",
+      "locations": [
+        "United Kingdom",
+        "Italy",
+        "Poland",
+        "Germany",
+        "Norway",
+        "Netherlands",
+        "Spain",
+        "France",
+        "Belgium",
+        "Romania",
+        "Denmark",
+        "Sweden",
+        "Finland",
+        "Turkey",
+        "Greece",
+        "Czech Republic",
+        "Portugal",
+        "Switzerland",
+        "Austria",
+        "Ireland"
+      ]
+    },
+    "active": true,
+    "careers_url": "https://lockheedmartin.eightfold.ai/careers?start=0&location=England&pid=996476677863&sort_by=distance&filter_include_remote=1&filter_include_relocation=0",
+    "hq_country": "US"
+  },
+  {
+    "name": "OHB",
+    "slug": "ohb",
+    "sector": "prime",
+    "source_type": "cornerstone",
+    "source_config": {
+      "host": "career-ohb.csod.com",
+      "corp": "career-ohb"
+    },
+    "active": true,
+    "careers_url": "https://career-ohb.csod.com/ux/ats/careersite/4/home?c=career-ohb&lang=de-DE",
+    "hq_country": "DE",
+    "logo_url": "/logos/ohb.png"
+  },
+  {
+    "name": "GMV",
+    "slug": "gmv",
+    "sector": "services",
+    "source_type": "cornerstone",
+    "source_config": {
+      "host": "gmv.csod.com",
+      "corp": "gmv"
+    },
+    "active": true,
+    "careers_url": "https://gmv.csod.com/ux/ats/careersite/4/home?c=gmv&lang=en-US",
+    "hq_country": "ES"
+  },
+  {
+    "name": "SatVu",
+    "slug": "satvu",
+    "sector": "earth-observation",
+    "source_type": "workable",
+    "source_config": {
+      "account": "satellitevu"
+    },
+    "active": true,
+    "careers_url": "https://apply.workable.com/satellitevu/",
+    "hq_country": "GB",
+    "logo_url": "/logos/satvu.png"
+  },
+  {
+    "name": "MDA Space",
+    "slug": "mda-space",
+    "sector": "satellites",
+    "source_type": "ultipro",
+    "source_config": {
+      "board": "https://recruiting.ultipro.ca/MAC5000MCDW/JobBoard/4f9bafdd-9002-4e06-975a-bcaae5edaf84"
+    },
+    "active": true,
+    "careers_url": "https://recruiting.ultipro.ca/MAC5000MCDW/JobBoard/4f9bafdd-9002-4e06-975a-bcaae5edaf84/?o=postedDateDesc",
+    "hq_country": "CA",
+    "logo_url": "/logos/mda-space.png"
+  },
+  {
+    "name": "Boeing Space",
+    "slug": "boeing-space",
+    "sector": "prime",
+    "source_type": "talentbrew",
+    "source_config": {
+      "base": "https://jobs.boeing.com",
+      "keywords": "Defence, Space, Security",
+      "organization_ids": "185",
+      "default_country": "US"
+    },
+    "active": true,
+    "careers_url": "https://jobs.boeing.com/search-jobs?k=Defence%2C+Space%2C+Security&orgIds=185",
+    "hq_country": "US"
+  },
+  {
+    "name": "Dassault Aviation",
+    "slug": "dassault-aviation",
+    "sector": "defence",
+    "source_type": "talentsoft",
+    "source_config": {
+      "base": "https://carriere.dassault-aviation.com",
+      "default_country": "FR"
+    },
+    "active": true,
+    "careers_url": "https://www.dassault-aviation.com/en/group/careers/",
+    "hq_country": "FR",
+    "logo_url": "/logos/dassault-aviation.png"
+  },
+  {
+    "name": "Kongsberg",
+    "slug": "kongsberg",
+    "sector": "defence",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "kongsberg-web",
+      "list_url": "https://www.kongsberg.com/careers/vacancies/?department=79388%2C79389%2C79387%2C30535%2C82945%2C245139%2C245137%2C243565%2C245057%2C79383%2C211567%2C245141%2C51653",
+      "default_country": "NO"
+    },
+    "active": true,
+    "careers_url": "https://www.kongsberg.com/careers/vacancies/?department=79388%2C79389%2C79387%2C30535%2C82945%2C245139%2C245137%2C243565%2C245057%2C79383%2C211567%2C245141%2C51653",
+    "hq_country": "NO",
+    "logo_url": "/logos/kongsberg.png"
+  },
+  {
+    "name": "Viasat",
+    "slug": "viasat",
+    "sector": "satellites",
+    "source_type": "jibe",
+    "source_config": {
+      "base": "https://careers.viasat.com"
+    },
+    "active": true,
+    "careers_url": "https://careers.viasat.com/jobs",
+    "hq_country": "US",
+    "logo_url": "/logos/viasat.png"
+  },
+  {
+    "name": "Redwire",
+    "slug": "redwire",
+    "sector": "components",
+    "source_type": "clinch",
+    "source_config": {
+      "base": "https://careers.rdw.com",
+      "default_country": "US"
+    },
+    "active": false,
+    "careers_url": "https://careers.rdw.com/jobs/search",
+    "hq_country": "US",
+    "logo_url": "/logos/redwire.png"
   }
 ]
