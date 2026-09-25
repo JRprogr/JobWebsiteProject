@@ -4,6 +4,10 @@
 if (process.env.VERCEL_ENV !== "production") {
   console.log(`predeploy: skipped (VERCEL_ENV=${process.env.VERCEL_ENV ?? "unset"})`);
 } else {
+  // The Impressum is a legal requirement and its data lives only in the environment (lib/site.ts), never in the repository.
+  const missing = ["OPERATOR_NAME", "OPERATOR_ADDRESS"].filter((key) => !process.env[key]?.trim());
+  if (missing.length > 0) throw new Error(`predeploy: ${missing.join(" and ")} must be set, the Impressum needs them`);
+
   await import("./migrate.mts");
   await import("./seed.mts");
 }

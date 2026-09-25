@@ -234,9 +234,10 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 
 ## Deployment (Batch 1 of the pre-deploy plan)
 - `npm run build` = `node scripts/predeploy.mts && next build`. `scripts/predeploy.mts` runs `migrate.mts` and `seed.mts` only when `VERCEL_ENV === "production"`, so a push to main ships code and database together and a failing migration stops the deploy; preview and local builds never touch a database. Consequence: `db/seed/companies.json` is the source of truth for the company list in production too (the seed does not delete companies, remove those by hand).
-- `vercel.json` pins the function region to `fra1` (next to Neon in Frankfurt). `package.json` `engines.node` is `24.x` (the scripts rely on Node's built-in TypeScript stripping).
-- `SITE_URL` (`lib/site.ts`): `NEXT_PUBLIC_SITE_URL`, else `https://$VERCEL_PROJECT_PRODUCTION_URL`, else localhost. There is no own domain yet.
-- Environment: `DATABASE_URL` (Vercel Production + GitHub secret, production Neon branch; local `.env.local` should point at a dev branch), `NEXT_PUBLIC_SITE_URL` (optional), `CRON_SECRET` (only while `/api/cron/scrape` exists). `.env.example` documents them; every other `.env*` file is gitignored.
+- `vercel.json` pins the function region to `fra1` (next to Neon in Frankfurt) and has no crons: scraping must not run on Vercel (its fair-use page lists scrapers under "Never fair use"), it moves to GitHub Actions in batch 2. `.github/workflows/scrape.yml` is `workflow_dispatch` only until then. `package.json` `engines.node` is `24.x` (the scripts rely on Node's built-in TypeScript stripping).
+- `SITE_URL` (`lib/site.ts`): `NEXT_PUBLIC_SITE_URL`, else `https://$VERCEL_PROJECT_PRODUCTION_URL`, else localhost. Trial domain: `jw-project-eight.vercel.app` (temporary, no own domain yet).
+- Environment: `DATABASE_URL` (Vercel Production + GitHub secret = the production Neon branch; local `.env.local` points at the Neon `dev` branch), `OPERATOR_NAME` and `OPERATOR_ADDRESS` (Impressum; address lines separated by `|`), `NEXT_PUBLIC_SITE_URL` (optional), `CRON_SECRET` (only while `/api/cron/scrape` exists). `.env.example` documents them; every other `.env*` file is gitignored.
+- The operator's name and address are deliberately NOT in the repository: `lib/site.ts` reads them from the environment (placeholder text when unset), `scripts/predeploy.mts` fails a production build without them, and they were scrubbed from the git history before the repo went public. Never write them into a file, a commit message or a memory note.
 - Commits use the GitHub noreply address (repo-local git config), never a personal mailbox.
 
 ## Bug log 8 notes

@@ -1,8 +1,8 @@
 name: scrape
 
+# The hourly schedule is switched off until scraping moves into this workflow (batch 2): the endpoint it used to call
+# is going away, so a schedule would only fail every hour.
 on:
-  schedule:
-    - cron: "17 * * * *"
   workflow_dispatch:
 
 jobs:

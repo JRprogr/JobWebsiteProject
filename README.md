@@ -7,6 +7,8 @@ searchable, filterable feed with a country map, a company register and statistic
 It is a **non-commercial portfolio project**: no accounts, no ads, no employer tools. Every listing links back to the
 employer's own application page.
 
+Trial deployment: https://jw-project-eight.vercel.app (temporary address, will change with a proper domain).
+
 ## How it works
 
 ```
@@ -63,6 +65,7 @@ Environment variables (see `.env.example`):
 | Variable | Where | Purpose |
 | --- | --- | --- |
 | `DATABASE_URL` | Vercel (Production), GitHub secret | Neon connection string of the **production** branch |
+| `OPERATOR_NAME`, `OPERATOR_ADDRESS` | Vercel, `.env.local` | Person responsible for the site (Impressum, Privacy page); address lines separated by `\|`. Kept out of the repository, and a production build fails without them |
 | `NEXT_PUBLIC_SITE_URL` | Vercel, optional | Canonical URL; defaults to the Vercel production URL |
 
 Pushing to `main` deploys on Vercel (region `fra1`, see `vercel.json`). The production build first runs
