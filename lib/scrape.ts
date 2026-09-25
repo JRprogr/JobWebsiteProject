@@ -68,15 +68,26 @@ function dedupe(jobs: NormalizedJob[]): NormalizedJob[] {
   return [...new Map(jobs.map((j) => [j.external_id, j])).values()];
 }
 
-// True when the previous finished run was held back by the guard and saw about as many jobs as this one does
+// A drop is confirmed when the runs just before this one were all held back by the guard and saw about as many jobs as this
+// one does. Nothing at all is far more often a blocked source than a company that closed every role, so an empty result
+// only counts as confirmed once the empty streak is a day old; any other drop needs just the one earlier run.
+const EMPTY_CONFIRM_MS = 24 * 60 * 60 * 1000;
+
 async function dropConfirmed(companyId: string, runId: string, found: number): Promise<boolean> {
-  const [prev] = await retryDb(() =>
+  const runs = await retryDb(() =>
     sql().query(
-      "select status, jobs_found from scrape_runs where company_id = $1 and id <> $2 and finished_at is not null order by started_at desc limit 1",
+      "select status, jobs_found, started_at from scrape_runs where company_id = $1 and id <> $2 and finished_at is not null order by started_at desc limit 60",
       [companyId, runId],
     ),
   );
-  return prev?.status === "partial" && Math.abs(Number(prev.jobs_found) - found) <= Math.max(2, Math.round(found * 0.05));
+  const similar = (n: number) => Math.abs(n - found) <= Math.max(2, Math.round(found * 0.05));
+  let oldest: string | null = null;
+  for (const r of runs) {
+    if (r.status !== "partial" || !similar(Number(r.jobs_found))) break;
+    oldest = String(r.started_at);
+  }
+  if (oldest === null) return false;
+  return found > 0 || Date.now() - new Date(oldest).getTime() >= EMPTY_CONFIRM_MS;
 }
 
 // `force` skips the guard, for a deliberate change such as a rewritten adapter that legitimately finds far fewer jobs

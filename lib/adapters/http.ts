@@ -11,6 +11,13 @@ const RETRY_STATUS = new Set([429, 502, 503, 504]);
 const ATTEMPTS = 3;
 const MAX_WAIT_MS = 20_000;
 
+// "fetch failed" says nothing; the reason (ECONNRESET, ENOTFOUND, a certificate error, a timeout…) sits in the cause
+function networkError(err: unknown, url: string): Error {
+  const cause = err instanceof Error ? (err.cause as { code?: string; message?: string } | undefined) : undefined;
+  const reason = err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError") ? "timed out" : (cause?.code ?? cause?.message ?? String(err));
+  return new Error(`${reason} for ${url}`, { cause: err });
+}
+
 function waitMs(res: Response, attempt: number): number {
   const header = res.headers.get("retry-after");
   const seconds = header === null ? NaN : /^\d+$/.test(header) ? Number(header) : (Date.parse(header) - Date.now()) / 1000;
@@ -22,13 +29,16 @@ function waitMs(res: Response, attempt: number): number {
 export async function politeFetch(url: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
   if (!headers.has("user-agent")) headers.set("user-agent", USER_AGENT);
+  let lastError: unknown;
   for (let attempt = 1; ; attempt++) {
     let res: Response;
     try {
       res = await fetch(url, { ...init, headers });
     } catch (err) {
       const timedOut = err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
-      if (timedOut || attempt === ATTEMPTS) throw err;
+      // a timeout that follows a dropped connection is reported as that dropped connection, which is the real reason
+      if (timedOut || attempt === ATTEMPTS) throw networkError(timedOut && lastError ? lastError : err, url);
+      lastError = err;
       await sleep(attempt * 2_000); // dropped connection
       continue;
     }
