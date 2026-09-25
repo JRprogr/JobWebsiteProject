@@ -17,16 +17,17 @@ export default function AboutPage() {
 
       <LegalSection title="WHY EUROPE FIRST">
         <p>
-          Defence and space work carries friction a general job board doesn&apos;t: work visas, security clearance
-          requirements, and export-control rules that often favour hiring within a shared economic or defence bloc.
-          Taken as a whole, Europe has real advantages here &mdash; easier cross-border movement for EU/EEA
+          As a European citizen myself, I am ofcourse strongly interested in our joint development. The continent, especially the EU has a unique position in the defence and space sectors. Work visas, security clearance
+          requirements, and export-control rules often favour hiring within a shared economic or defence bloc.
+          Taken as a whole, Europe has real advantages here: easier cross-border movement for EU/EEA
           nationals, a growing base of joint defence programmes, and companies, customers and suppliers that
-          increasingly work across borders rather than within just one country. This project&apos;s aim is to match
-          people with roles inside that European context specifically, not to rank Europe above anywhere else.
-          Nothing is hidden: every country a tracked company posts in is still scraped and searchable &mdash; Europe
-          is just the starting lens, not the only one. We also count Russia, Turkey, Ukraine, Belarus and Moldova as
-          part of continental Europe geographically &mdash; they&apos;re on the map and one filter away too, even
-          though the default filters focus on the EEA, UK, Switzerland and the Balkans for visa-ease reasons.
+          increasingly work across borders rather than within just one country and a growing demand for sovereignty faciliting innovation. This project&apos;s aim is to match
+          talent with roles inside that European context specifically, not to rank Europe above anywhere else.
+          Nothing is hidden: every country a tracked company publishes listings for is still scraped and searchable; Europe
+          is just the starting lens, not the only one. Ofcourse we acknowledge Russia, Turkey, Ukraine, Belarus and Moldova as
+          part of continental Europe geographically &mdash; they&apos;re on the map and one filter away too, yet still we have
+          to consider the current geopolitical situation and the fact that many of the companies tracked here are not allowed to do business with those countries.
+          The project is open to expanding coverage to other regions in the future, but for now, this part of Europe is the focus.
         </p>
       </LegalSection>
 
@@ -50,7 +51,7 @@ export default function AboutPage() {
           <a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer">
             Claude
           </a>{" "}
-          &mdash; scraping and diffing pipeline, database, and the interface itself.
+          . That includes everything regarding scraping and diffing pipeline, database and the UI design itself.
         </p>
       </LegalSection>
 
@@ -64,7 +65,7 @@ export default function AboutPage() {
           <a href="https://europeanspaceflight.com" target="_blank" rel="noopener noreferrer">
             European Spaceflight
           </a>
-          . Thank you for mapping the European space sector so thoroughly and making it easy to explore!
+          . Thank you for mapping the European space sector so thoroughly and always keeping us up to date with all the latest developments in the industry!
         </p>
       </LegalSection>
 
