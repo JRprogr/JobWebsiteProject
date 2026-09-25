@@ -113,12 +113,12 @@ export function AdvancedFilters({ countries, countryFacets, companies, companyFa
     },
     {
       id: "sector",
-      title: "SECTOR",
+      title: "CLASSIFICATION",
       badge: sector ? sectorLabel(sector) : null,
       body: (
         <div className="flex flex-wrap gap-2">
           <button type="button" aria-pressed={!sector} onClick={() => onChange({ sector: null })} className={`${chip} ${!sector ? "border-fg bg-faint" : "border-line"}`}>
-            ALL SECTORS
+            ALL CLASSIFICATIONS
           </button>
           {sectors.map((s) => (
             <button

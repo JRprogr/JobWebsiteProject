@@ -18,8 +18,8 @@ export function RegisterView({ companies, sectors, sector }: Props) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Sector">
-        <span className={label}>SECTOR</span>
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Classification">
+        <span className={label}>CLASSIFICATION</span>
         {[null, ...sectors].map((s) => (
           <Link
             key={s ?? "all"}

@@ -74,7 +74,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
         />
         <Fact label="LOCATION" value={where} />
         <Fact label="DEPARTMENT" value={job.department ?? "—"} />
-        <Fact label="SECTOR" value={job.sector ? sectorLabel(job.sector) : "—"} />
+        <Fact label="CLASSIFICATION" value={job.sector ? sectorLabel(job.sector) : "—"} />
       </dl>
 
       <div className="flex gap-2.5">

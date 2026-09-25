@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { countryName, SCOPES, type Scope } from "@/lib/geo";
 import { EuMap } from "./EuMap";
-import { CloseIcon, EuFlagIcon, GlobeIcon } from "./icons";
+import { EuFlagIcon, GlobeIcon } from "./icons";
 
 const SCOPE_ICON: Partial<Record<Scope, typeof GlobeIcon>> = { eu: EuFlagIcon, all: GlobeIcon };
 // "EUR" read as the currency, so the buttons spell out what they are
@@ -89,9 +89,11 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
           SELECT MULTIPLE
         </button>
         <button type="button" onClick={onClear} disabled={selected.length === 0} className="flex items-center gap-2 text-map-ui disabled:opacity-40">
-          <span className="grid size-[22px] place-items-center rounded-full bg-map-ui text-map-ui-on">
-            <CloseIcon size={11} />
-          </span>
+          {/* Circle and cross share one 22x22 drawing, so the cross sits exactly on the centre (11, 11) whatever the layout does around it */}
+          <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" className="block shrink-0">
+            <circle cx="11" cy="11" r="11" className="fill-map-ui" />
+            <path d="M8 8l6 6M14 8l-6 6" className="stroke-map-ui-on" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+          </svg>
           DE-SELECT ALL
         </button>
       </div>

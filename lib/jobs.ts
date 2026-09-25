@@ -66,9 +66,10 @@ function where(f: Filters, skip: Skip = {}) {
   const add = (value: unknown) => `$${params.push(value)}`;
   const clauses = ["j.removed_at is null", "c.active"];
 
-  if (f.q) {
-    const escaped = f.q.replace(/[%_\\]/g, (ch) => `\\${ch}`);
-    clauses.push(`j.title ilike ${add(`%${escaped}%`)}`);
+  // every word of the search must match the title or a city of the listing ("systems engineer munich")
+  for (const word of f.q.split(/\s+/).filter(Boolean).slice(0, 6)) {
+    const like = add(`%${word.replace(/[%_\\]/g, (ch) => `\\${ch}`)}%`);
+    clauses.push(`(j.title ilike ${like} or j.location_city ilike ${like} or exists (select 1 from unnest(j.location_cities) city where city ilike ${like}))`);
   }
   if (f.sector) clauses.push(`c.sector = ${add(f.sector)}`);
   if (f.remote) clauses.push("j.remote");

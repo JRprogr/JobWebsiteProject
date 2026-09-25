@@ -27,8 +27,8 @@ export function SearchBar({ query }: { query: string }) {
         type="search"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Search job titles"
-        aria-label="Search job titles"
+        placeholder="Search job titles or cities"
+        aria-label="Search job titles or cities"
         className="min-w-0 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-dim"
       />
     </label>

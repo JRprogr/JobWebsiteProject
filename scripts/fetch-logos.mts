@@ -127,6 +127,11 @@ const LOCAL: Record<string, Local> = {
   isptech: { bg: "#000000", size: 128 },
   amphinicy: { key: true, size: 92 },
   isispace: { key: true, size: 116 },
+  honeywell: { crop: { left: 0, top: 0, width: 59, height: 40 }, key: true, size: 108 },
+  safran: { key: true, size: 108 },
+  "odysseus-space": { crop: { left: 0, top: 0, width: 41, height: 48 }, key: true, size: 90 },
+  "lookup-space": { bg: "#0f1012", size: 100 },
+  "arx-robotics": { bg: "#000000", size: 128 },
   // the brand-centre logotype (blue): only the roundel and "esa", not the line of text below them
   esa: { crop: { left: 1150, top: 1150, width: 3700, height: 1450 }, size: 116 },
 };

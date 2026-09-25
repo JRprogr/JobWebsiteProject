@@ -1,6 +1,6 @@
 import { pdfText } from "../pdf.ts";
 import { decodeEntities, extractElement, htmlToText } from "../text.ts";
-import type { Adapter, Company, DetailFetcher } from "../types.ts";
+import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
 import { configString, getText } from "./http.ts";
 import { runBoard, strip, type Row } from "./board.ts";
 
@@ -13,7 +13,7 @@ import { runBoard, strip, type Row } from "./board.ts";
 //    match and the next one; the last job ends at the `item_end` marker (else 8,000 characters on).
 // Common keys: list_url (+ page_template with "{n}" and max_pages for a paged list), body_marker (opening-tag fragment of the element
 // with the listing text; default <main>, <article> or the whole page), id_regex (group 1 on the link; default last path segment),
-// location_regex (group 1 on the job page or the item block), title_skip and location_strip (regexes), fetch_text (item mode: read the text from each item url), default_country (ISO-2).
+// location_regex (group 1 on the job page or the item block), title_skip, location_strip and text_location_regex (regexes), fetch_text (item mode: read the text from each item url), default_country (ISO-2).
 function cfg(company: Pick<Company, "slug" | "source_config">) {
   const c = company.source_config;
   const re = (key: string, flags = "") => (typeof c[key] === "string" ? new RegExp(c[key] as string, flags) : null);
@@ -195,7 +195,16 @@ export const linkList: Adapter = async (company, ctx) => {
       .filter((r) => r.title && !skip?.test(r.title))
       .map((r) => (strippedPlace && r.location ? { ...r, location: r.location.replace(strippedPlace, "").trim() || null } : r))
       .map((r) => (r.location && placeCountries[r.location] ? { ...r, country: placeCountries[r.location] } : r));
-  if (k.item) return runBoard(company, ctx, tidy(await fromItems(k)), (r) => readUrl(r.url, k.body));
-  if (k.link) return runBoard(company, ctx, tidy(await fromPages(k, ctx)), async () => null);
-  return runBoard(company, ctx, tidy(await fromJson(k, c)), async (r) => (r.url === k.list ? null : readUrl(r.url, k.body)));
+  // text_location_regex: the place is stated inside the listing text ("LOCATION", then "Munich – Germany; Coimbra – Portugal"), group 1 of this pattern
+  const textPlace = typeof c.text_location_regex === "string" ? new RegExp(c.text_location_regex) : null;
+  const withTextPlace = (jobs: NormalizedJob[]) =>
+    textPlace
+      ? jobs.map((j) => {
+          const found = j.description ? textPlace.exec(j.description)?.[1] : undefined;
+          return found ? { ...j, location_raw: found.replace(/\s+[–—-]\s+/g, ", ").trim() } : j;
+        })
+      : jobs;
+  if (k.item) return withTextPlace(await runBoard(company, ctx, tidy(await fromItems(k)), (r) => readUrl(r.url, k.body)));
+  if (k.link) return withTextPlace(await runBoard(company, ctx, tidy(await fromPages(k, ctx)), async () => null));
+  return withTextPlace(await runBoard(company, ctx, tidy(await fromJson(k, c)), async (r) => (r.url === k.list ? null : readUrl(r.url, k.body))));
 };

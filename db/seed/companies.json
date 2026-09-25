@@ -1482,6 +1482,7 @@
       "list_url": "https://www.neuraspace.com/all-jobs",
       "item_regex": "css-o88so9\"><p><strong>(?<title>[^<]*)</strong></p></div>[\\s\\S]*?href=\"(?<url>[^\"]*)\"",
       "fetch_text": true,
+      "text_location_regex": "LOCATION\\s*\\n+\\s*([^\\n]+)",
       "default_country": "PT"
     },
     "active": true,
@@ -1590,7 +1591,8 @@
         "687-safran-vectronix-ag"
       ]
     },
-    "active": true
+    "active": true,
+    "logo_url": "/logos/safran.png"
   },
   {
     "name": "CSEM",
@@ -1815,16 +1817,6 @@
     "logo_url": "/logos/adwaiseo.png"
   },
   {
-    "name": "ECAPS",
-    "slug": "ecaps",
-    "sector": "propulsion",
-    "source_type": "none",
-    "active": false,
-    "hq_country": "SE",
-    "careers_url": "https://ecaps.se/",
-    "source_config": {}
-  },
-  {
     "name": "LookUp Space",
     "slug": "lookup-space",
     "sector": "space-ops",
@@ -1832,6 +1824,20 @@
     "active": false,
     "hq_country": "FR",
     "careers_url": "https://www.welcometothejungle.com/en/companies-v1/look-up-space/jobs",
-    "source_config": {}
+    "source_config": {},
+    "logo_url": "/logos/lookup-space.png"
+  },
+  {
+    "name": "Arx Robotics",
+    "slug": "arx-robotics",
+    "sector": "defence",
+    "source_type": "greenhouse",
+    "hq_country": "DE",
+    "careers_url": "https://www.arx-robotics.com/careers",
+    "source_config": {
+      "board_token": "arxroboticsgmbh"
+    },
+    "active": true,
+    "logo_url": "/logos/arx-robotics.png"
   }
 ]
