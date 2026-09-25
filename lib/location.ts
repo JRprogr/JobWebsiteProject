@@ -21,6 +21,9 @@ const COUNTRIES: Record<string, string> = {
   china: "CN", taiwan: "TW", singapore: "SG", australia: "AU", "new zealand": "NZ", israel: "IL",
   "united arab emirates": "AE", uae: "AE", "saudi arabia": "SA", qatar: "QA", "south africa": "ZA", egypt: "EG",
   "french guiana": "GF", philippines: "PH", vietnam: "VN", thailand: "TH", indonesia: "ID", malaysia: "MY", pakistan: "PK",
+  morocco: "MA", tunisia: "TN", algeria: "DZ", "puerto rico": "PR", kazakhstan: "KZ", "hong kong": "HK", jordan: "JO", oman: "OM",
+  kuwait: "KW", bahrain: "BH", nigeria: "NG", kenya: "KE", ghana: "GH", "costa rica": "CR", "dominican republic": "DO",
+  uruguay: "UY", ecuador: "EC", guatemala: "GT", "sri lanka": "LK", bangladesh: "BD",
 };
 
 const ISO_CODES = new Set(Object.values(COUNTRIES));

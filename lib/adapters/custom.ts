@@ -4,6 +4,7 @@ import { gkn, gknDetail } from "./gkn.ts";
 import { kongsberg, kongsbergDetail } from "./kongsberg.ts";
 import { euPortal, euPortalDetail } from "./euportal.ts";
 import { linkList, linkListDetail } from "./linklist.ts";
+import { safran, safranDetail } from "./safran.ts";
 import { wixBoard, wixBoardDetail } from "./wixboard.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
 
@@ -143,6 +144,7 @@ const kinds: Record<string, { adapter: Adapter; detail: DetailFetcher }> = {
   "link-list": { adapter: linkList, detail: linkListDetail },
   "eu-portal": { adapter: euPortal, detail: euPortalDetail },
   "wix-board": { adapter: wixBoard, detail: wixBoardDetail },
+  "safran-web": { adapter: safran, detail: safranDetail },
 };
 
 const kindOf = (company: { slug: string; source_config: Record<string, unknown> }) => {

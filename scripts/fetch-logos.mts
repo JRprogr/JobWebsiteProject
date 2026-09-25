@@ -104,9 +104,73 @@ async function fromOverride(o: Override): Promise<Buffer | null> {
   return canvas.composite([{ input: fitted, gravity: "center" }]).png().toBuffer();
 }
 
+// Logos supplied by hand (screenshots, brand-centre downloads): the source lives in db/seed/logo-sources/<slug>.png.
+//  key   the source has a solid background (a screenshot on a dark or grey page): make it transparent so the mark sits on the white disc
+//  bg    the mark needs its own background (white-on-black marks): fill the whole tile with this colour
+//  crop  use only this part of the source (an emblem out of a wide logo)
+//  size  longest side of the mark inside the 128x128 tile
+type Local = { key?: boolean; bg?: string; crop?: { left: number; top: number; width: number; height: number }; size?: number };
+const LOCAL: Record<string, Local> = {
+  northstar: { crop: { left: 1, top: 2, width: 125, height: 108 }, key: true, size: 112 },
+  ses: { size: 110 },
+  list: { crop: { left: 284, top: 0, width: 71, height: 75 }, size: 100 },
+  visionspace: { key: true, size: 100 },
+  "d-orbit": { bg: "#010101", size: 128 },
+  "lockheed-martin": { key: true, size: 100 },
+  gmv: { key: true, size: 112 },
+  "boeing-space": { key: true, size: 100 },
+  "aac-clyde-space": { key: true, size: 100 },
+  avio: { key: true, size: 116 },
+  euspa: { key: true, size: 116 },
+  neuraspace: { bg: "#01002a", size: 128 },
+  gtd: { key: true, size: 100 },
+  isptech: { bg: "#000000", size: 128 },
+  amphinicy: { key: true, size: 92 },
+  isispace: { key: true, size: 116 },
+  // the brand-centre logotype (blue): only the roundel and "esa", not the line of text below them
+  esa: { crop: { left: 1150, top: 1150, width: 3700, height: 1450 }, size: 116 },
+};
+
+// Turns the solid background (the top-left pixel's colour) transparent. Edge pixels are blends of mark and background, so their
+// colour is un-mixed from the background as well, which avoids a dark or grey halo on the white disc.
+async function keyOut(input: Buffer): Promise<Buffer> {
+  const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const bg = [data[0], data[1], data[2]];
+  for (let i = 0; i < data.length; i += 4) {
+    const d = Math.max(Math.abs(data[i] - bg[0]), Math.abs(data[i + 1] - bg[1]), Math.abs(data[i + 2] - bg[2]));
+    const a = Math.min(1, Math.max(0, (d - 10) / 60));
+    for (let c = 0; c < 3; c++) data[i + c] = a > 0 ? Math.min(255, Math.max(0, Math.round((data[i + c] - (1 - a) * bg[c]) / a))) : 0;
+    data[i + 3] = Math.round(a * (data[i + 3] / 255) * 255);
+  }
+  return sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
+}
+
+async function fromLocal(slug: string, o: Local): Promise<Buffer> {
+  let img = sharp(readFileSync(`db/seed/logo-sources/${slug}.png`));
+  if (o.crop) img = sharp(await img.extract(o.crop).png().toBuffer());
+  let buf: Buffer = await img.png().toBuffer();
+  if (o.key) buf = await keyOut(buf);
+  // trimming only makes sense once the margin is uniform (keyed to transparent, or already transparent)
+  if (o.key || (await sharp(buf).metadata()).hasAlpha) buf = await sharp(buf).trim({ background: { r: 0, g: 0, b: 0, alpha: 0 }, threshold: 1 }).png().toBuffer();
+  const size = o.size ?? 104;
+  const fitted = await sharp(buf).resize(size, size, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+  return sharp({ create: { width: 128, height: 128, channels: 4, background: o.bg ?? { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: fitted, gravity: "center" }])
+    .png()
+    .toBuffer();
+}
+
 let changed = false;
 for (const c of seed) {
   if (only.length ? !only.includes(c.slug) : c.logo_url) continue;
+  const local = LOCAL[c.slug];
+  if (local) {
+    writeFileSync(`${OUT}/${c.slug}.png`, await fromLocal(c.slug, local));
+    c.logo_url = `/logos/${c.slug}.png`;
+    changed = true;
+    console.log(`${c.slug.padEnd(26)} local db/seed/logo-sources/${c.slug}.png`);
+    continue;
+  }
   const override = OVERRIDES[c.slug];
   if (override) {
     const png = await fromOverride(override);

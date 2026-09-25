@@ -33,12 +33,14 @@ export async function Footer() {
             <li>[+] NO ACCOUNTS, NO TRACKING</li>
           </ul>
           <div className="hazard min-h-24 border-r border-line max-lg:border-b lg:border-r" aria-hidden="true" />
-          <div className="relative grid min-h-24 place-items-center p-4 max-lg:border-b border-line">
+          <div className="relative grid min-h-24 place-items-center px-4 py-6 max-lg:border-b border-line">
             <span className={`${corner} left-4 top-4 border-l border-t`} aria-hidden="true" />
             <span className={`${corner} right-4 top-4 border-r border-t`} aria-hidden="true" />
             <span className={`${corner} bottom-4 left-4 border-b border-l`} aria-hidden="true" />
             <span className={`${corner} bottom-4 right-4 border-b border-r`} aria-hidden="true" />
-            <p className="text-center leading-7 text-dim">
+            <p className="text-center leading-6 text-dim">
+              JWEU0001-V8
+              <br />
               {stamp?.lastScrape ? (
                 <>
                   LAST SCRAPE

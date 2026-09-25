@@ -60,7 +60,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
                 onClick={() => onScope(s.value)}
                 aria-pressed={scope === s.value}
                 title={s.label}
-                className={`flex h-10 items-center gap-1.5 rounded-[9px] border border-current px-2.5 font-mono text-[11px] font-bold tracking-[0.06em] text-map ${scope === s.value ? "bg-faint" : "opacity-70"}`}
+                className={`flex h-10 items-center gap-1.5 rounded-[9px] border border-current px-2.5 font-mono text-[11px] font-bold tracking-[0.06em] text-map ${scope === s.value ? "bg-map-ui-faint" : "opacity-70"}`}
               >
                 {Icon ? <Icon size={18} /> : null}
                 {SCOPE_TEXT[s.value]}
@@ -70,26 +70,26 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
         </div>
       </div>
 
-      <div className="map-frame relative overflow-hidden rounded-[14px] border border-line" style={{ background: "var(--map-panel)" }}>
+      <div className="map-frame relative overflow-hidden rounded-[14px] border border-map-ui-line" style={{ background: "var(--map-panel)" }}>
         <EuMap scope={scope} counts={counts} selected={selectedSet} highlighted={highlightedSet} hovered={hovered} onHover={setHovered} onToggle={onToggle} />
         <div className="scanlines absolute inset-0" aria-hidden="true" />
       </div>
 
       <div className="flex items-center justify-between gap-3 font-mono text-xs tracking-[0.06em]">
-        <button type="button" role="switch" aria-checked={multi} onClick={() => onMulti(!multi)} className="flex items-center gap-2.5">
+        <button type="button" role="switch" aria-checked={multi} onClick={() => onMulti(!multi)} className="flex items-center gap-2.5 text-map-ui">
           <span
-            className="relative block h-[22px] w-10 rounded-full border bg-faint transition-[border-color,box-shadow] duration-200"
-            style={multi ? { borderColor: "var(--map)", boxShadow: "0 0 8px var(--map), inset 0 0 6px var(--map-grat)" } : { borderColor: "var(--line)" }}
+            className="relative block h-[22px] w-10 rounded-full border bg-map-ui-faint transition-[border-color,box-shadow] duration-200"
+            style={multi ? { borderColor: "var(--map)", boxShadow: "0 0 8px var(--map), inset 0 0 6px var(--map-grat)" } : { borderColor: "var(--map-ui-line)" }}
           >
             <span
-              className={`absolute top-[3px] size-3.5 rounded-full transition-all duration-200 ${multi ? "left-[calc(100%-17px)]" : "left-[3px] bg-fg"}`}
+              className={`absolute top-[3px] size-3.5 rounded-full transition-all duration-200 ${multi ? "left-[calc(100%-17px)]" : "left-[3px] bg-map-ui"}`}
               style={multi ? { background: "var(--map)", boxShadow: "0 0 6px var(--map)" } : undefined}
             />
           </span>
           SELECT MULTIPLE
         </button>
-        <button type="button" onClick={onClear} disabled={selected.length === 0} className="flex items-center gap-2 disabled:opacity-40">
-          <span className="grid size-[22px] place-items-center rounded-full bg-accent text-on-accent">
+        <button type="button" onClick={onClear} disabled={selected.length === 0} className="flex items-center gap-2 text-map-ui disabled:opacity-40">
+          <span className="grid size-[22px] place-items-center rounded-full bg-map-ui text-map-ui-on">
             <CloseIcon size={11} />
           </span>
           DE-SELECT ALL

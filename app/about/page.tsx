@@ -69,6 +69,21 @@ export default function AboutPage() {
           </a>
           . Thank you for mapping the European space sector so thoroughly and always keeping us up to date with all the latest developments in the industry!
         </p>
+        <p>
+          If you are even further interested in current space developments and the technology behind them, there is also{" "}
+          <a href="https://substack.com/@downlinknewsletter" target="_blank" rel="noopener noreferrer">
+            Downlink
+          </a>{" "}
+          on Substack, a newsletter on space entrepreneurship with a focus on Earth observation companies across the EU.
+        </p>
+        <p>
+          And while researching this project we came across{" "}
+          <a href="https://www.space-careers.com/" target="_blank" rel="noopener noreferrer">
+            Space-Careers
+          </a>
+          , which does something similar: a job portal for the space industry aimed at international, English-speaking job seekers. If DS[Careers] doesn&apos;t
+          have what you are looking for, it is well worth a look as an alternative.
+        </p>
       </LegalSection>
 
       <LegalSection title="WHAT'S NEXT">

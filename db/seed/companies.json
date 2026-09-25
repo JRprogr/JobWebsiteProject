@@ -393,7 +393,8 @@
     },
     "active": true,
     "careers_url": "https://isptech.jobs.personio.com/?language=en",
-    "hq_country": "DE"
+    "hq_country": "DE",
+    "logo_url": "/logos/isptech.png"
   },
   {
     "name": "LiveEO",
@@ -578,7 +579,8 @@
     },
     "active": true,
     "careers_url": "https://careers.isispace.nl/",
-    "hq_country": "NL"
+    "hq_country": "NL",
+    "logo_url": "/logos/isispace.png"
   },
   {
     "name": "MaiaSpace",
@@ -671,7 +673,8 @@
     },
     "active": true,
     "careers_url": "https://northstarearthandspace.bamboohr.com/careers",
-    "hq_country": "CA"
+    "hq_country": "CA",
+    "logo_url": "/logos/northstar.png"
   },
   {
     "name": "ICEYE",
@@ -712,7 +715,7 @@
     "active": true,
     "careers_url": "https://jobs.esa.int/search/",
     "hq_country": "FR",
-    "logo_url": null
+    "logo_url": "/logos/esa.png"
   },
   {
     "name": "SES",
@@ -794,7 +797,7 @@
     "active": true,
     "careers_url": "https://visionspace.factorialhr.pt/",
     "hq_country": "DE",
-    "logo_url": null
+    "logo_url": "/logos/visionspace.png"
   },
   {
     "name": "STI",
@@ -822,7 +825,7 @@
     "active": true,
     "careers_url": "https://www.list.lu/career/job-offers",
     "hq_country": "LU",
-    "logo_url": null
+    "logo_url": "/logos/list.png"
   },
   {
     "name": "Luxembourg Space Agency",
@@ -925,7 +928,8 @@
     },
     "active": true,
     "careers_url": "https://lockheedmartin.eightfold.ai/careers?start=0&location=England&pid=996476677863&sort_by=distance&filter_include_remote=1&filter_include_relocation=0",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/lockheed-martin.png"
   },
   {
     "name": "OHB",
@@ -952,7 +956,8 @@
     },
     "active": true,
     "careers_url": "https://gmv.csod.com/ux/ats/careersite/4/home?c=gmv&lang=en-US",
-    "hq_country": "ES"
+    "hq_country": "ES",
+    "logo_url": "/logos/gmv.png"
   },
   {
     "name": "SatVu",
@@ -993,7 +998,8 @@
     },
     "active": true,
     "careers_url": "https://jobs.boeing.com/search-jobs?k=Defence%2C+Space%2C+Security&orgIds=185",
-    "hq_country": "US"
+    "hq_country": "US",
+    "logo_url": "/logos/boeing-space.png"
   },
   {
     "name": "Dassault Aviation",
@@ -1093,7 +1099,8 @@
     },
     "careers_url": "https://zinrec.intervieweb.it/avio/en/career",
     "hq_country": "IT",
-    "active": true
+    "active": true,
+    "logo_url": "/logos/avio.png"
   },
   {
     "name": "AAC Clyde Space",
@@ -1106,7 +1113,8 @@
     },
     "careers_url": "https://www.aac-clyde.space/careers",
     "hq_country": "SE",
-    "active": true
+    "active": true,
+    "logo_url": "/logos/aac-clyde-space.png"
   },
   {
     "name": "KP Labs",
@@ -1277,7 +1285,8 @@
       "title_tag": true,
       "default_country": "LU"
     },
-    "active": true
+    "active": true,
+    "logo_url": "/logos/amphinicy.png"
   },
   {
     "name": "Creotech Instruments",
@@ -1358,8 +1367,12 @@
       "list_url": "https://www.saga.dk/careers",
       "link_regex": "href=\"(/careers/[a-z0-9-]+)\"",
       "title_regex": "<title[^>]*>([^<]*?)\\s+—\\s+Careers",
-      "location_regex": "(Hanoi)",
-      "default_country": "VN"
+      "location_regex": "\\b(Hanoi|Copenhagen) Office",
+      "place_countries": {
+        "Hanoi": "VN",
+        "Copenhagen": "DK"
+      },
+      "default_country": "DK"
     },
     "active": true,
     "logo_url": "/logos/saga-space-architects.png"
@@ -1451,6 +1464,7 @@
       "list_url": "https://blackswanspace.com/careers/",
       "item_regex": "<h3 class=\"wp-block-heading\"><a href=\"(?<url>[^\"]*\\.pdf)\">(?<title>[^<]*)</a></h3>",
       "item_end": "Unsolicited Applications",
+      "fetch_text": true,
       "default_country": "LU"
     },
     "active": true,
@@ -1467,6 +1481,7 @@
       "kind": "link-list",
       "list_url": "https://www.neuraspace.com/all-jobs",
       "item_regex": "css-o88so9\"><p><strong>(?<title>[^<]*)</strong></p></div>[\\s\\S]*?href=\"(?<url>[^\"]*)\"",
+      "fetch_text": true,
       "default_country": "PT"
     },
     "active": true,
@@ -1537,5 +1552,286 @@
     },
     "active": true,
     "logo_url": "/logos/gtd.png"
+  },
+  {
+    "name": "RIDE",
+    "slug": "ride",
+    "sector": "launch",
+    "source_type": "custom",
+    "hq_country": "FR",
+    "careers_url": "https://www.ridespace.io/join-ride",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.ridespace.io/join-ride",
+      "item_regex": "<p class=\"title_h4\">(?<title>[^<]*)</p></div><div class=\"container-jobdesc\">",
+      "item_end": "SPONTANEOUS APPLICATIONS",
+      "default_country": "FR"
+    },
+    "active": true,
+    "logo_url": "/logos/ride.png"
+  },
+  {
+    "name": "Safran",
+    "slug": "safran",
+    "sector": "prime",
+    "source_type": "custom",
+    "hq_country": "FR",
+    "careers_url": "https://www.safran-group.com/jobs",
+    "source_config": {
+      "kind": "safran-web",
+      "companies": [
+        "3544-safran-spacecraft-propulsion",
+        "609-safran-data-systems",
+        "672-safran-reosc",
+        "618-safran-electronics-defense",
+        "621-safran-electronics-defense-actuation",
+        "627-safran-electronics-defense-avionics-usa",
+        "3556-safran-trusted-4d",
+        "687-safran-vectronix-ag"
+      ]
+    },
+    "active": true
+  },
+  {
+    "name": "CSEM",
+    "slug": "csem",
+    "sector": "institutions",
+    "source_type": "custom",
+    "hq_country": "CH",
+    "careers_url": "https://www.csem.ch/en/jobs/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.csem.ch/en/jobs/",
+      "link_regex": "href=\"(/en/jobs/\\d+)\"",
+      "jsonld": true,
+      "title_skip": "Back2Business",
+      "default_country": "CH"
+    },
+    "active": true,
+    "logo_url": "/logos/csem.png"
+  },
+  {
+    "name": "Honeywell",
+    "slug": "honeywell",
+    "sector": "prime",
+    "source_type": "oraclecloud",
+    "hq_country": "US",
+    "careers_url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/jobs?mode=location",
+    "source_config": {
+      "host": "icfcjb.fa.ocs.oraclecloud.com",
+      "site": "Aerospace",
+      "site_number": "CX_4001",
+      "default_country": "US"
+    },
+    "active": true,
+    "logo_url": "/logos/honeywell.png"
+  },
+  {
+    "name": "Intuitive Machines",
+    "slug": "intuitive-machines",
+    "sector": "components",
+    "source_type": "adp",
+    "hq_country": "US",
+    "careers_url": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=b0e24f83-6e4d-492d-9d6a-bc0fea197d6a&ccId=19000101_000001&lang=en_US",
+    "source_config": {
+      "cid": "b0e24f83-6e4d-492d-9d6a-bc0fea197d6a",
+      "cc_id": "19000101_000001",
+      "default_country": "US"
+    },
+    "active": true,
+    "logo_url": "/logos/intuitive-machines.png"
+  },
+  {
+    "name": "EnduroSat",
+    "slug": "endurosat",
+    "sector": "satellites",
+    "source_type": "custom",
+    "hq_country": "BG",
+    "careers_url": "https://www.endurosat.com/careers/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.endurosat.com/careers/",
+      "item_regex": "<li id='(?<id>job_[^']+)'[^>]*?data-filter-location='(?<location>[^']*)'[^>]*?data-job-title='(?<title>[^']*)'\\s+data-job-description='(?<description>[^']*)'",
+      "place_countries": {
+        "Naples": "IT"
+      },
+      "default_country": "BG"
+    },
+    "active": true,
+    "logo_url": "/logos/endurosat.png"
+  },
+  {
+    "name": "Skyrora",
+    "slug": "skyrora",
+    "sector": "launch",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "GB",
+    "careers_url": "https://skyrora.com/career/",
+    "source_config": {},
+    "logo_url": "/logos/skyrora.png"
+  },
+  {
+    "name": "Anywaves",
+    "slug": "anywaves",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "FR",
+    "careers_url": "https://anywaves.com/about-us/join-us/",
+    "source_config": {},
+    "logo_url": "/logos/anywaves.png"
+  },
+  {
+    "name": "Needronix",
+    "slug": "needronix",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "SK",
+    "careers_url": "https://needronix.eu/careers",
+    "source_config": {},
+    "logo_url": "/logos/needronix.png"
+  },
+  {
+    "name": "OroraTech",
+    "slug": "ororatech",
+    "sector": "earth-observation",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "DE",
+    "careers_url": "https://ororatech.com/company/careers",
+    "source_config": {},
+    "logo_url": "/logos/ororatech.png"
+  },
+  {
+    "name": "GovSat",
+    "slug": "govsat",
+    "sector": "satellites",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "LU",
+    "careers_url": "https://govsat.lu/corporate/careers",
+    "source_config": {},
+    "logo_url": "/logos/govsat.png"
+  },
+  {
+    "name": "Antwerp Space",
+    "slug": "antwerp-space",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "BE",
+    "careers_url": "https://jobpage.cvwarehouse.com/?companyGuid=cb184417-1e4e-4b70-850f-be503d361263&lang=en-US",
+    "source_config": {},
+    "logo_url": "/logos/antwerp-space.png"
+  },
+  {
+    "name": "Sirius Space Services",
+    "slug": "sirius-space-services",
+    "sector": "launch",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "FR",
+    "careers_url": "https://www.sirius-space.com/careers",
+    "source_config": {},
+    "logo_url": "/logos/sirius-space-services.png"
+  },
+  {
+    "name": "Bradford Space",
+    "slug": "bradford-space",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "NL",
+    "careers_url": "https://www.bradford-space.com/careers",
+    "source_config": {},
+    "logo_url": "/logos/bradford-space.png"
+  },
+  {
+    "name": "Rheinmetall",
+    "slug": "rheinmetall",
+    "sector": "defence",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "DE",
+    "careers_url": "https://www.rheinmetall.com/de/karriere/aktuelle-stellenangebote",
+    "source_config": {},
+    "logo_url": "/logos/rheinmetall.png"
+  },
+  {
+    "name": "Gate Space",
+    "slug": "gate-space",
+    "sector": "propulsion",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "AT",
+    "careers_url": "https://jobs.polymer.co/gate-space",
+    "source_config": {},
+    "logo_url": "/logos/gate-space.png"
+  },
+  {
+    "name": "Gradel",
+    "slug": "gradel",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "LU",
+    "careers_url": "https://en.moovijob.com/company/gradel-groupe-sa",
+    "source_config": {},
+    "logo_url": "/logos/gradel.png"
+  },
+  {
+    "name": "OQ Technology",
+    "slug": "oq-technology",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "LU",
+    "careers_url": "https://www.oqtec.space/careers",
+    "source_config": {},
+    "logo_url": "/logos/oq-technology.png"
+  },
+  {
+    "name": "Odysseus Space",
+    "slug": "odysseus-space",
+    "sector": "components",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "LU",
+    "careers_url": "https://www.odysseus.space/careers",
+    "source_config": {},
+    "logo_url": "/logos/odysseus-space.png"
+  },
+  {
+    "name": "adwaisEO",
+    "slug": "adwaiseo",
+    "sector": "services",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "LU",
+    "careers_url": "https://adwaiseo.eu/en/job-opportunities",
+    "source_config": {},
+    "logo_url": "/logos/adwaiseo.png"
+  },
+  {
+    "name": "ECAPS",
+    "slug": "ecaps",
+    "sector": "propulsion",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "SE",
+    "careers_url": "https://ecaps.se/",
+    "source_config": {}
+  },
+  {
+    "name": "LookUp Space",
+    "slug": "lookup-space",
+    "sector": "space-ops",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "FR",
+    "careers_url": "https://www.welcometothejungle.com/en/companies-v1/look-up-space/jobs",
+    "source_config": {}
   }
 ]

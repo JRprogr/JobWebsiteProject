@@ -4,6 +4,19 @@ const NAMED: Record<string, string> = {
   Ouml: "Ö", Uuml: "Ü", szlig: "ß", eacute: "é", egrave: "è", agrave: "à", ccedil: "ç",
 };
 
+// Accented Latin letters by entity suffix ("&acirc;" = a + circ): letters in order, lower case then upper case
+const ACCENTED: [string, string, string][] = [
+  ["acute", "aeiouy", "áéíóúý"], ["grave", "aeiou", "àèìòù"], ["circ", "aeiou", "âêîôû"], ["uml", "aeiouy", "äëïöüÿ"],
+  ["tilde", "ano", "ãñõ"], ["ring", "a", "å"], ["cedil", "c", "ç"], ["slash", "o", "ø"],
+];
+for (const [suffix, letters, glyphs] of ACCENTED) {
+  [...letters].forEach((letter, i) => {
+    NAMED[letter + suffix] ??= glyphs[i];
+    NAMED[letter.toUpperCase() + suffix] ??= glyphs[i].toUpperCase();
+  });
+}
+Object.assign(NAMED, { aelig: "æ", AElig: "Æ", oelig: "œ", OElig: "Œ", laquo: "«", raquo: "»", sect: "§", deg: "°", plusmn: "±", times: "×", trade: "™", bdquo: "„", sbquo: "‚", thinsp: " ", ensp: " ", emsp: " " });
+
 export function decodeEntities(input: string): string {
   return input.replace(/&(#x[0-9a-f]+|#\d+|[a-z][a-z0-9]*);/gi, (whole, body: string) => {
     if (body[0] === "#") {

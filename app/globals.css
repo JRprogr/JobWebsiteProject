@@ -35,6 +35,11 @@
   --pulse: rgba(0, 51, 153, 0.5);
   --stripe-a: #003399;
   --stripe-b: #edf1fa;
+  /* map panel controls: same as the page colours in the light theme, terminal green in the dark one */
+  --map-ui: #003399;
+  --map-ui-line: rgba(0, 51, 153, 0.3);
+  --map-ui-faint: rgba(0, 51, 153, 0.08);
+  --map-ui-on: #ffffff;
 }
 
 :root[data-theme="dark"] {
@@ -70,6 +75,10 @@
   --pulse: rgba(255, 204, 0, 0.55);
   --stripe-a: #ffcc00;
   --stripe-b: #050505;
+  --map-ui: #33ff99;
+  --map-ui-line: rgba(51, 255, 153, 0.3);
+  --map-ui-faint: rgba(51, 255, 153, 0.1);
+  --map-ui-on: #050505;
 }
 
 @theme inline {
@@ -81,6 +90,10 @@
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-map: var(--map-label);
+  --color-map-ui: var(--map-ui);
+  --color-map-ui-line: var(--map-ui-line);
+  --color-map-ui-faint: var(--map-ui-faint);
+  --color-map-ui-on: var(--map-ui-on);
   --font-sans: var(--font-hanken), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
   --font-display: var(--font-shoulders), Impact, sans-serif;

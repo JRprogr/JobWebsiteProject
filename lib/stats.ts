@@ -135,6 +135,8 @@ export type Register = {
   hq: string | null;
   careersUrl: string | null;
   source: string;
+  // false for companies that are only listed (no scrape possible yet): their figures are not shown
+  scraped: boolean;
   open: number;
   europe: number;
   eu: number;
@@ -143,13 +145,13 @@ export type Register = {
 
 export async function loadRegister(): Promise<Register[]> {
   const rows = (await sql().query(
-    `select c.slug, c.name, c.logo_url, c.sector, c.hq_country, c.careers_url, c.source_type,
-       count(j.id) filter (where j.removed_at is null)::int as open,
-       count(j.id) filter (where j.removed_at is null and j.location_countries && $1::text[])::int as europe,
-       count(j.id) filter (where j.removed_at is null and j.location_countries && $2::text[])::int as eu,
+    `select c.slug, c.name, c.logo_url, c.sector, c.hq_country, c.careers_url, c.source_type, c.active,
+       count(j.id) filter (where c.active and j.removed_at is null)::int as open,
+       count(j.id) filter (where c.active and j.removed_at is null and j.location_countries && $1::text[])::int as europe,
+       count(j.id) filter (where c.active and j.removed_at is null and j.location_countries && $2::text[])::int as eu,
        (select max(finished_at) from scrape_runs r where r.company_id = c.id and r.status = 'success') as last_scrape
      from companies c left join jobs j on j.company_id = c.id
-     where c.active group by c.id order by open desc, c.name`,
+     group by c.id order by c.active desc, open desc, c.name`,
     [[...EUROPE_COUNTRIES], [...EU_COUNTRIES]],
   )) as Row[];
   return rows.map((r) => ({
@@ -160,6 +162,7 @@ export async function loadRegister(): Promise<Register[]> {
     hq: (r.hq_country as string | null) ?? null,
     careersUrl: (r.careers_url as string | null) ?? null,
     source: String(r.source_type),
+    scraped: r.active === true,
     open: num(r.open),
     europe: num(r.europe),
     eu: num(r.eu),
