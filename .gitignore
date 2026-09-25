@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+# public intermediate certificates the scraper trusts (see CLAUDE.md), not secrets
+!/certs/*.pem
 
 # debug
 npm-debug.log*
