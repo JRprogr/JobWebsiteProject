@@ -211,10 +211,13 @@ body {
   }
 }
 
+/* List rows deliberately have no backdrop blur (.glass adds one). A row's blur samples everything painted above it, i.e. the
+   previous row's text and gold arrow; while rows shift on hover/focus that sample lags a frame and shows up as a stray lit
+   patch on the next row ("two phases of light"). A translucent plate over the page glow looks the same without the artefact. */
 .job-row {
   border-radius: 16px;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   transition: margin 180ms ease, box-shadow 180ms ease, opacity 180ms ease, filter 180ms ease;
 }
 
@@ -224,14 +227,14 @@ body {
   }
 
   .job-row:hover,
-  .job-row:focus-within,
+  .job-row:has(:focus-visible),
   .job-row[data-selected="true"] {
     margin-right: 0;
   }
 }
 
 .job-row:hover,
-.job-row:focus-within {
+.job-row:has(:focus-visible) {
   box-shadow: var(--glass-hover);
 }
 
@@ -245,7 +248,7 @@ body {
 }
 
 .job-list[data-has-selection="true"] .job-row:not([data-selected="true"]):hover,
-.job-list[data-has-selection="true"] .job-row:not([data-selected="true"]):focus-within {
+.job-list[data-has-selection="true"] .job-row:not([data-selected="true"]):has(:focus-visible) {
   opacity: 0.92;
   filter: none;
 }

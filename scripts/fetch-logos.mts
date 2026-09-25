@@ -76,9 +76,46 @@ async function fetchLogo(domain: string): Promise<{ png: Buffer; source: string 
   return null;
 }
 
+// Companies whose homepage icon is wrong or unusable (a product photo, a wordmark that needs its own background) name the exact file instead.
+type Override = { url: string; background?: string; size?: number; svg?: (text: string) => string };
+const OVERRIDES: Record<string, Override> = {
+  novaspace: { url: "https://nova.space/wp-content/uploads/2024/07/emblem.png", size: 104 },
+  // Wordmark on black, with "AST" in white like the brand's dark-background version (the SVG has it orange like the rest)
+  "ast-spacemobile": {
+    url: "https://irp.cdn-website.com/bbb776b9/dms3rep/multi/ASTSpace-Logo.svg",
+    background: "#000000",
+    size: 118,
+    svg: (text) => {
+      let n = 0;
+      return text.replace(/fill="#F5A145"/g, (m) => (n++ < 3 ? 'fill="#FFFFFF"' : m));
+    },
+  },
+};
+
+async function fromOverride(o: Override): Promise<Buffer | null> {
+  const raw = (await get(o.url, "buffer")) as Buffer | null;
+  if (!raw) return null;
+  const source = o.svg ? Buffer.from(o.svg(raw.toString("utf8"))) : raw;
+  const size = o.size ?? 128;
+  const fitted = await sharp(source, { density: 400 }).resize(size, size, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+  const canvas = sharp({ create: { width: 128, height: 128, channels: 4, background: o.background ?? { r: 0, g: 0, b: 0, alpha: 0 } } });
+  return canvas.composite([{ input: fitted, gravity: "center" }]).png().toBuffer();
+}
+
 let changed = false;
 for (const c of seed) {
   if (only.length ? !only.includes(c.slug) : c.logo_url) continue;
+  const override = OVERRIDES[c.slug];
+  if (override) {
+    const png = await fromOverride(override);
+    if (png) {
+      writeFileSync(`${OUT}/${c.slug}.png`, png);
+      c.logo_url = `/logos/${c.slug}.png`;
+      changed = true;
+      console.log(`${c.slug.padEnd(26)} override ${override.url}`);
+    } else console.log(`${c.slug.padEnd(26)} override FAILED ${override.url}`);
+    continue;
+  }
   const domain = websites[c.slug];
   if (!domain) {
     console.log(`${c.slug.padEnd(26)} NO DOMAIN in db/seed/websites.json`);

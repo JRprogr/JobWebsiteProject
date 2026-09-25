@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AboutButton } from "./AboutButton";
 import { ThemeToggle } from "./ThemeToggle";
 import { TipButton } from "./TipButton";
 
@@ -36,7 +37,10 @@ export function TopBar() {
         </nav>
         <div className="ml-auto flex items-center gap-x-3 md:ml-0 md:contents">
           <ThemeToggle />
-          <TipButton />
+          <div className="flex flex-col gap-1">
+            <TipButton />
+            <AboutButton />
+          </div>
         </div>
       </div>
     </header>

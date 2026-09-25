@@ -1,7 +1,7 @@
 import { ContactEmail } from "@/components/ContactEmail";
 import { LegalSection } from "@/components/LegalSection";
+import { OperatorBlock } from "@/components/Address";
 import { PageShell } from "@/components/PageShell";
-import { CONTROLLER_ADDRESS, CONTROLLER_NAME } from "@/lib/site";
 
 export const metadata = { title: "Privacy" };
 
@@ -13,11 +13,8 @@ export default function PrivacyPage() {
       intro="What happens to your data when you use DS[Careers]: very little. This is the short version required by the GDPR, written in plain language."
     >
       <LegalSection title="WHO IS RESPONSIBLE">
+        <OperatorBlock />
         <p>
-          <b>{CONTROLLER_NAME}</b>
-          <br />
-          {CONTROLLER_ADDRESS}
-          <br />
           Email: <ContactEmail />
         </p>
       </LegalSection>

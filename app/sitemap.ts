@@ -10,6 +10,7 @@ const ROUTES: { path: string; changeFrequency: "hourly" | "weekly"; priority: nu
   { path: "/faq", changeFrequency: "weekly", priority: 0.4 },
   { path: "/terms", changeFrequency: "weekly", priority: 0.3 },
   { path: "/privacy", changeFrequency: "weekly", priority: 0.3 },
+  { path: "/impressum", changeFrequency: "weekly", priority: 0.3 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

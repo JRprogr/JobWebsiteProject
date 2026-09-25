@@ -35,7 +35,18 @@ type Props = {
   onToggle: (iso: string) => void;
 };
 
+// Malta, Luxembourg and Liechtenstein are smaller than a single map dot, so their real outline is (almost) impossible to
+// hit. They get an invisible round target around their dot instead; Malta has no land neighbours to steal, so it gets a wider one.
+const isTiny = (c: MapCountry) => !c.dots && c.label !== null;
+const tinyRadius = (c: MapCountry) => (c.iso === "MT" ? 8 : 4.5);
+
 export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, onToggle }: Props) {
+  const pointer = (iso: string) => ({
+    onClick: () => onToggle(iso),
+    onPointerEnter: () => onHover(iso),
+    onPointerLeave: () => onHover(null),
+  });
+
   return (
     <svg viewBox={`0 0 ${map.w} ${map.h}`} className="block h-full w-full" role="group" aria-label="Map of Europe. Select countries to filter roles.">
       <path d={map.graticule} fill="none" stroke="var(--map-grat)" strokeWidth={0.7} />
@@ -54,21 +65,22 @@ export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, 
               tabIndex={0}
               aria-pressed={selected.has(c.iso)}
               aria-label={`${countryName(c.iso)}, ${count} ${count === 1 ? "role" : "roles"}`}
-              onClick={() => onToggle(c.iso)}
+              {...pointer(c.iso)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   onToggle(c.iso);
                 }
               }}
-              onPointerEnter={() => onHover(c.iso)}
-              onPointerLeave={() => onHover(null)}
               onFocus={() => onHover(c.iso)}
               onBlur={() => onHover(null)}
             />
           </g>
         );
       })}
+      {map.countries.filter(isTiny).map((c) => (
+        <circle key={`hit-${c.iso}`} cx={c.label![0]} cy={c.label![1]} r={tinyRadius(c)} className="map-hit" aria-hidden="true" {...pointer(c.iso)} />
+      ))}
       {map.countries
         .filter((c) => c.area > 380 && c.label)
         .map((c) => {

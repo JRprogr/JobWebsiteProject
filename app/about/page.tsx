@@ -54,6 +54,20 @@ export default function AboutPage() {
         </p>
       </LegalSection>
 
+      <LegalSection title="ACKNOWLEDGEMENTS">
+        <p>
+          A major source of inspiration for this project, and of many of the companies tracked here, is the{" "}
+          <a href="https://europeanspaceflight.com/european-space-industry-map/" target="_blank" rel="noopener noreferrer">
+            European Space Industry Map
+          </a>{" "}
+          by{" "}
+          <a href="https://europeanspaceflight.com" target="_blank" rel="noopener noreferrer">
+            European Spaceflight
+          </a>
+          . Thank you for mapping the European space sector so thoroughly and making it easy to explore!
+        </p>
+      </LegalSection>
+
       <LegalSection title="WHAT'S NEXT">
         <p>
           Maybe more companies, other industries, and coverage for career sites beyond the current sources &mdash;

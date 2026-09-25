@@ -31,7 +31,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
     ? `${countryName(hovered).toUpperCase()} · ${counts[hovered] ?? 0} ${(counts[hovered] ?? 0) === 1 ? "ROLE" : "ROLES"}`
     : selected.length > 0
       ? `SEL: ${selected.join(" · ")}`
-      : { europe: "ALL OF EUROPE", eu: "EU ONLY", all: "GLOBAL" }[scope];
+      : { europe: "EFTA + UK + WEST BALKANS", eu: "EU ONLY", all: "GLOBAL" }[scope];
 
   return (
     <section
@@ -39,16 +39,18 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
       aria-label="Region filter"
       className="glass flex flex-col gap-3 rounded-[22px] p-4 lg:p-5 max-lg:fixed max-lg:inset-x-3 max-lg:top-[104px] md:max-lg:top-20 max-lg:z-40 max-lg:max-h-[calc(100dvh-9.5rem)] md:max-lg:max-h-[calc(100dvh-8rem)] max-lg:overflow-y-auto max-lg:transition-[transform,visibility] max-lg:duration-300 max-lg:data-[open=false]:invisible max-lg:data-[open=false]:-translate-y-[120%]"
     >
-      <div className="-mt-1 flex flex-wrap items-start justify-between gap-x-3 gap-y-2 max-lg:pr-14">
-        <div className="flex min-w-0 flex-col gap-1">
-          <h2 className="whitespace-nowrap font-mono text-xs font-bold tracking-[0.12em] text-map">[ <span className="max-lg:hidden">TARGET </span>REGION ]</h2>
-          <p className="flex min-h-5 items-center gap-2 truncate font-mono text-[11px] tracking-[0.1em] text-map" aria-live="polite">
-            <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current" />
-            <span className="truncate">{readout}</span>
-          </p>
-        </div>
+      {/* The header's height must never depend on the readout text: it changes on every hover, and a header that wraps
+          or grows under a long country name shifts the map away from the pointer, which then flickers in and out. */}
+      <div className="-mt-1 grid grid-cols-1 gap-y-2 lg:grid-cols-[1fr_auto] lg:gap-x-3">
+        <h2 className="whitespace-nowrap font-mono text-xs font-bold tracking-[0.12em] text-map max-lg:pr-14 lg:col-start-1 lg:row-start-1 lg:self-center">
+          [ <span className="max-lg:hidden">TARGET </span>REGION ]
+        </h2>
+        <p className="flex h-5 min-w-0 items-center gap-2 font-mono text-[11px] tracking-[0.1em] text-map lg:col-span-2 lg:row-start-2" aria-live="polite">
+          <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current" />
+          <span className="truncate">{readout}</span>
+        </p>
 
-        <div className="flex shrink-0 items-center gap-1.5" role="group" aria-label="Region scope">
+        <div className="flex items-center gap-1.5 lg:col-start-2 lg:row-start-1" role="group" aria-label="Region scope">
           {SCOPES.map((s) => {
             const Icon = SCOPE_ICON[s.value];
             return (

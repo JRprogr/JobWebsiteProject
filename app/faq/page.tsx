@@ -12,7 +12,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Why the focus on Europe?",
-    a: "Company-wise, “Europe” here means companies primarily active in the EEA, the UK, Switzerland and the Balkans — roughly where a work visa is easier to get and continental relocation is realistic. Some international companies and countries are still scraped and stay available under the Global filter, but the focus, and the default view, is Europe.",
+    a: "Company-wise, “Europe” here means companies primarily active in the EEA, the UK, Switzerland and the Balkans — roughly where a work visa is easier to get and continental relocation is realistic. Some international companies and countries are still scraped and stay available under the Global filter, but the focus, and the default view, is this region. Russia, Ukraine, Belarus, Moldova and Turkey are part of the European continent too, but geopolitical uncertainties make them unsuitable for major space and defence collaboration, so they sit outside this region.",
   },
   {
     q: "Where does the data come from?",
