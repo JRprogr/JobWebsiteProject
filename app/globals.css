@@ -35,10 +35,10 @@
   --pulse: rgba(0, 51, 153, 0.5);
   --stripe-a: #003399;
   --stripe-b: #edf1fa;
-  /* map panel controls: same as the page colours in the light theme, terminal green in the dark one */
-  --map-ui: #003399;
-  --map-ui-line: rgba(0, 51, 153, 0.3);
-  --map-ui-faint: rgba(0, 51, 153, 0.08);
+  /* map panel controls: the map's terminal red in the light theme (same as its labels), terminal green in the dark one */
+  --map-ui: rgba(160, 0, 24, 0.95);
+  --map-ui-line: rgba(212, 0, 31, 0.3);
+  --map-ui-faint: rgba(212, 0, 31, 0.08);
   --map-ui-on: #ffffff;
 }
 
