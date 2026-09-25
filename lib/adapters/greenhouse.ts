@@ -1,6 +1,7 @@
 import { mapPool } from "../pool.ts";
 import { decodeEntities, htmlToText } from "../text.ts";
 import type { Adapter, AdapterContext, Company, DetailFetcher, NormalizedJob } from "../types.ts";
+import { isEvergreen } from "./http.ts";
 
 type GhJob = {
   id: number;
@@ -112,5 +113,6 @@ async function fetchBoard(company: Company, token: string, ctx: AdapterContext):
 
 export const greenhouse: Adapter = async (company, ctx) => {
   const boards = await Promise.all(tokens(company).map((token) => fetchBoard(company, token, ctx)));
-  return boards.flat();
+  // "Future Opportunities" / "Talent community" postings are evergreen entries, not open roles
+  return boards.flat().filter((j) => !isEvergreen(j.title));
 };

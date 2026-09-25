@@ -1229,5 +1229,313 @@
     "hq_country": "FR",
     "active": true,
     "logo_url": "/logos/infinite-orbits.png"
+  },
+  {
+    "name": "Admatis",
+    "slug": "admatis",
+    "sector": "components",
+    "source_type": "custom",
+    "hq_country": "HU",
+    "careers_url": "https://admatis.com/career/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://admatis.com/career/",
+      "item_regex": "<div class=\"vc_toggle_title\"><h4>(?<title>[^<]*)</h4>",
+      "item_end": "class=\"widget-title\"",
+      "default_country": "HU"
+    },
+    "active": true,
+    "logo_url": "/logos/admatis.png"
+  },
+  {
+    "name": "Almatech",
+    "slug": "almatech",
+    "sector": "components",
+    "source_type": "custom",
+    "hq_country": "CH",
+    "careers_url": "https://almatech.ch/careers",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://almatech.ch/careers",
+      "link_regex": "href=\"(/careers/[a-z0-9-]+)\"",
+      "default_country": "CH"
+    },
+    "active": true,
+    "logo_url": "/logos/almatech.png"
+  },
+  {
+    "name": "Amphinicy",
+    "slug": "amphinicy",
+    "sector": "components",
+    "source_type": "custom",
+    "hq_country": "HR",
+    "careers_url": "https://www.amphinicy.com/careers",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.amphinicy.com/careers",
+      "link_regex": "href=\"(/careers/[a-z0-9-]+)\\s*\"",
+      "title_tag": true,
+      "default_country": "LU"
+    },
+    "active": true
+  },
+  {
+    "name": "Creotech Instruments",
+    "slug": "creotech-instruments",
+    "sector": "satellites",
+    "source_type": "custom",
+    "hq_country": "PL",
+    "careers_url": "https://creotech.pl/careers/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://creotech.pl/careers/",
+      "link_regex": "href=\"(https://creotech\\.pl/job_offer/[a-z0-9-]+/)\"",
+      "default_country": "PL"
+    },
+    "active": true,
+    "logo_url": "/logos/creotech-instruments.png"
+  },
+  {
+    "name": "Maana Electric",
+    "slug": "maana-electric",
+    "sector": "institutions",
+    "source_type": "custom",
+    "hq_country": "LU",
+    "careers_url": "https://maanaelectric.com/career/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://maanaelectric.com/career/",
+      "link_regex": "href=\"(https://maanaelectric\\.com/jobs/(?!elementor)[a-z0-9-]+/)\"",
+      "title_tag": true,
+      "default_country": "LU"
+    },
+    "active": true,
+    "logo_url": "/logos/maana-electric.png"
+  },
+  {
+    "name": "Piap Space",
+    "slug": "piap-space",
+    "sector": "components",
+    "source_type": "custom",
+    "hq_country": "PL",
+    "careers_url": "https://piap.space/job-openings/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://piap.space/job-openings/",
+      "link_regex": "href=\"(https://piap\\.space/jobs/[a-z0-9-]+/)\"",
+      "title_tag": true,
+      "default_country": "PL"
+    },
+    "active": true,
+    "logo_url": "/logos/piap-space.png"
+  },
+  {
+    "name": "SAB Aerospace",
+    "slug": "sab-aerospace",
+    "sector": "components",
+    "source_type": "custom",
+    "hq_country": "IT",
+    "careers_url": "https://www.sabaerospace.com/careers/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.sabaerospace.com/careers/",
+      "link_regex": "href=\"(https://www\\.sabaerospace\\.com/careers/(?!feed)[a-z0-9-]+/)\"",
+      "title_tag": true,
+      "default_country": "IT"
+    },
+    "active": true,
+    "logo_url": "/logos/sab-aerospace.png"
+  },
+  {
+    "name": "SAGA Space Architects",
+    "slug": "saga-space-architects",
+    "sector": "space-ops",
+    "source_type": "custom",
+    "hq_country": "DK",
+    "careers_url": "https://www.saga.dk/careers",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.saga.dk/careers",
+      "link_regex": "href=\"(/careers/[a-z0-9-]+)\"",
+      "title_regex": "<title[^>]*>([^<]*?)\\s+—\\s+Careers",
+      "location_regex": "(Hanoi)",
+      "default_country": "VN"
+    },
+    "active": true,
+    "logo_url": "/logos/saga-space-architects.png"
+  },
+  {
+    "name": "ESPI",
+    "slug": "espi",
+    "sector": "institutions",
+    "source_type": "custom",
+    "hq_country": "AT",
+    "careers_url": "https://www.espi.eu/vacancies/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.espi.eu/vacancies/",
+      "link_regex": "href=\"(https://www\\.espi\\.eu/news/vacancy-notice-[a-z0-9-]+/)\"",
+      "title_tag": true,
+      "default_country": "AT"
+    },
+    "active": true,
+    "logo_url": "/logos/espi.png"
+  },
+  {
+    "name": "PLD Space",
+    "slug": "pld-space",
+    "sector": "launch",
+    "source_type": "custom",
+    "hq_country": "ES",
+    "careers_url": "https://www.pldspace.com/en/pld-space-open-positions/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.pldspace.com/en/pld-space-open-positions/",
+      "json_regex": ":jobs=\"([^\"]*)\"",
+      "json_map": {
+        "id": "id",
+        "title": "position",
+        "location": "location",
+        "department": "department",
+        "url": "link"
+      },
+      "location_strip": "^\\(?PLD ?SPACE\\)?\\s*(?:HQ\\s*-\\s*)?",
+      "default_country": "ES"
+    },
+    "active": true,
+    "logo_url": "/logos/pld-space.png"
+  },
+  {
+    "name": "Space Dreams",
+    "slug": "space-dreams",
+    "sector": "launch",
+    "source_type": "custom",
+    "hq_country": "FR",
+    "careers_url": "https://spacedreams.com/career/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://spacedreams.com/career/",
+      "link_regex": "href=\"(https://spacedreams\\.com/positions/[a-z0-9-]+/)\"",
+      "default_country": "FR"
+    },
+    "active": true,
+    "logo_url": "/logos/space-dreams.png"
+  },
+  {
+    "name": "Officina Stellare",
+    "slug": "officina-stellare",
+    "sector": "components",
+    "source_type": "custom",
+    "hq_country": "IT",
+    "careers_url": "https://www.officinastellare.com/careers-in-officina-stellare/become-part-of-our-team/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.officinastellare.com/careers-in-officina-stellare/become-part-of-our-team/",
+      "item_regex": "e-n-accordion-item-title-text\">\\s*(?<title>[^<]*?)\\s*</div>",
+      "item_end": "Unsolecited",
+      "title_skip": "^Define Role$",
+      "default_country": "IT"
+    },
+    "active": true,
+    "logo_url": "/logos/officina-stellare.png"
+  },
+  {
+    "name": "Blackswan Space",
+    "slug": "blackswan-space",
+    "sector": "services",
+    "source_type": "custom",
+    "hq_country": "LU",
+    "careers_url": "https://blackswanspace.com/careers/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://blackswanspace.com/careers/",
+      "item_regex": "<h3 class=\"wp-block-heading\"><a href=\"(?<url>[^\"]*\\.pdf)\">(?<title>[^<]*)</a></h3>",
+      "item_end": "Unsolicited Applications",
+      "default_country": "LU"
+    },
+    "active": true,
+    "logo_url": "/logos/blackswan-space.png"
+  },
+  {
+    "name": "Neuraspace",
+    "slug": "neuraspace",
+    "sector": "space-ops",
+    "source_type": "custom",
+    "hq_country": "PT",
+    "careers_url": "https://www.neuraspace.com/all-jobs",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.neuraspace.com/all-jobs",
+      "item_regex": "css-o88so9\"><p><strong>(?<title>[^<]*)</strong></p></div>[\\s\\S]*?href=\"(?<url>[^\"]*)\"",
+      "default_country": "PT"
+    },
+    "active": true,
+    "logo_url": "/logos/neuraspace.png"
+  },
+  {
+    "name": "Space Norway",
+    "slug": "space-norway",
+    "sector": "space-ops",
+    "source_type": "custom",
+    "hq_country": "NO",
+    "careers_url": "https://www.finn.no/job/company/9002",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.finn.no/job/company/9002",
+      "link_regex": "href=\"(https://www\\.finn\\.no/job/ad/\\d+)\"",
+      "title_tag": true,
+      "default_country": "NO"
+    },
+    "active": true,
+    "logo_url": "/logos/space-norway.png"
+  },
+  {
+    "name": "Unseenlabs",
+    "slug": "unseenlabs",
+    "sector": "earth-observation",
+    "source_type": "custom",
+    "hq_country": "FR",
+    "careers_url": "https://careers.werecruit.io/en/unseenlabs",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://careers.werecruit.io/en/unseenlabs",
+      "link_regex": "href=\"(https://careers\\.werecruit\\.io/en/unseenlabs/offers/(?!spontaneous)[a-z0-9-]+)\"",
+      "title_tag": true,
+      "default_country": "FR"
+    },
+    "active": true,
+    "logo_url": "/logos/unseenlabs.png"
+  },
+  {
+    "name": "Spire",
+    "slug": "spire",
+    "sector": "services",
+    "source_type": "greenhouse",
+    "hq_country": "US",
+    "careers_url": "https://spire.com/careers/job-openings/",
+    "source_config": {
+      "board_token": "spire"
+    },
+    "active": true,
+    "logo_url": "/logos/spire.png"
+  },
+  {
+    "name": "GTD",
+    "slug": "gtd",
+    "sector": "services",
+    "source_type": "custom",
+    "hq_country": "ES",
+    "careers_url": "https://www.gtd.eu/careers",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://careers.talentclue.com/en/company/17af4ec697c2c8ce6a3acf390be43bdd/jsoffers/modal",
+      "item_regex": "<a href=\"(?<url>https://careers\\.talentclue\\.com/[a-z]{2}/node/\\d+/\\d+/modal)\"[^>]*>(?<title>[^<]*)</a></td><td[^>]*>[^<]*</td><td[^>]*>(?<city>[^<]*)</td><td[^>]*>(?<country>[^<]*)</td>",
+      "id_regex": "/node/(\\d+)/",
+      "fetch_text": true,
+      "title_skip": "Buscamos talento",
+      "default_country": "ES"
+    },
+    "active": true,
+    "logo_url": "/logos/gtd.png"
   }
 ]
