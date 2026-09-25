@@ -31,7 +31,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
     ? `${countryName(hovered).toUpperCase()} · ${counts[hovered] ?? 0} ${(counts[hovered] ?? 0) === 1 ? "ROLE" : "ROLES"}`
     : selected.length > 0
       ? `SEL: ${selected.join(" · ")}`
-      : { europe: "EFTA + UK + WEST BALKANS", eu: "EU ONLY", all: "GLOBAL" }[scope];
+      : { europe: "EU + EFTA + UK + WEST BALKANS", eu: "EU ONLY", all: "GLOBAL" }[scope];
 
   return (
     <section
