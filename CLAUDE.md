@@ -102,7 +102,7 @@ type NormalizedJob = {
   salary_currency: string | null;
   posted_at: string | null; // ISO
   country_hint?: string | null; // ISO-2 when the source provides one (e.g. Lever)
-  description?: string | null; // plain text, only for jobs not processed before; used for experience extraction, never stored
+  description?: string | null; // plain text, only for jobs not processed before; used for experience extraction and stored in job_details
 };
 
 type AdapterContext = {
@@ -112,7 +112,7 @@ type AdapterContext = {
 
 type Adapter = (company: Company, ctx: AdapterContext) => Promise<NormalizedJob[]>;
 
-// Per-source fetch of one listing's plain text; used by /api/jobs/[id]/details (fetched on demand, then cached in job_details)
+// Per-source fetch of one listing's plain text; only the scraper uses it (lib/texts.ts fills in texts a scrape run did not provide)
 type DetailFetcher = (company: Company, job: { external_id: string; url: string }) => Promise<string | null>;
 ```
 
@@ -148,7 +148,7 @@ exhaustive).
 ## Schema additions since the original design
 - `jobs.location_region` and `jobs.location_countries text[]` (all countries a posting lists; `location_country` stays the primary).
 - `jobs.experience_min/max/kind` ('explicit' | 'estimated') extracted from listing text during scraping; `jobs.details_checked_at` marks jobs whose text was processed.
-- `job_details(job_id, body, fetched_at)`: on-demand cache of listing text, capped at 20k chars per job. Full descriptions are deliberately NOT stored for every job (Neon free tier is 0.5 GB); re-extracting experience means re-reading sources (`npm run scrape -- --backfill`).
+- `job_details(job_id, body, fetched_at)`: the listing text of every open job, capped at 20k chars (about 4 KB on average). Since batch 3 it is filled by the scraper (see "Data lifecycle"), never by the web app. An empty body means "the source has no text for this job". Re-extracting experience means re-reading sources (`npm run scrape -- --backfill`).
 - `companies.careers_url` and `companies.hq_country`: shown on the Company Register page.
 
 ## Workday adapter (`lib/adapters/workday.ts`)
@@ -248,7 +248,14 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 - **User agent**: `Mozilla/5.0 (compatible; DSCareersBot/0.1; +<SITE_URL>/faq; <CONTACT_EMAIL>)` (only the mailbox when `SITE_URL` is localhost). The Q&A page has an entry "Which bot visits employer pages, and how can an employer opt out?" (runs from GitHub's servers, at most hourly, public pages only, opt-out by email). Employers' robots.txt is not evaluated.
 - **Incomplete certificate chains**: some sites send only their own certificate (pldspace.com misses the Sectigo intermediate). Browsers and Windows fetch the missing intermediate themselves, Node on a GitHub runner does not (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`). The workflow therefore sets `NODE_EXTRA_CA_CERTS` to `certs/intermediates.pem`; add further intermediates there (download from the leaf certificate's "CA Issuers" URL, convert to PEM). The developer's PC has `NODE_USE_SYSTEM_CA=1`, which hides this problem: to test the way the runner sees a site run node with `NODE_USE_SYSTEM_CA=0 NODE_EXTRA_CA_CERTS=certs/intermediates.pem`.
 - **First real run on GitHub (2026-09-25)**: whole pass 76 s, 104 of 108 companies fine. Blocked from GitHub's datacenter IPs but fine from a home IP: space-norway (finn.no answers 403), pld-space and esyen (`fetch failed`, cause was not logged yet), officina-stellare (empty page, held back by the guard). `politeFetch` now puts the cause (ECONNRESET, timeout…) into the error text, so the next annotation says why. Options if it stays blocked: leave as is (warnings only), run those slugs from a PC with residential IP, or move them to register-only.
-- The details endpoint `/api/jobs/[id]/details` still fetches from employers on demand from Vercel until batch 3 stores listing text at scrape time.
+- The details endpoint `/api/jobs/[id]/details` only reads `job_details` (see "Data lifecycle"); nothing is fetched from an employer while someone browses the site.
+
+## Data lifecycle (Batch 3 of the pre-deploy plan)
+- **Listing text is stored at scrape time.** `scrapeCompany` writes every `description` an adapter returns into `job_details` (empty text = marker "processed, no text", never overwrites real text). `lib/texts.ts` `fillTexts()` then tops up: open jobs without a `job_details` row get their text from the source's `DetailFetcher`, 20 per company and run (`TOP_UP` in `lib/scrape.ts`), an empty body is stored when the fetcher answers "no text" so it isn't asked again, a fetch that throws is retried on a later run. `npm run scrape -- --texts [slugs]` (workflow dispatch with the "backfill" option) does the same for every missing text at once, the one-off catch-up (about 14k jobs, SpaceX alone 2,600 requests).
+- `lib/details.ts` `getJobDetails` is a plain database read (the web bundle imports no adapter). Never add a fetch to an employer back into the web app: Vercel's fair-use rules list scrapers under "Never fair use".
+- `source_config.store_text: false` keeps a company's listing text out of the database (nothing stored, existing text deleted by housekeeping). Use it if an employer asks for that or its terms forbid copying its listings; `storesText()` in `lib/texts.ts`.
+- **Housekeeping** (`lib/housekeeping.ts`, runs at the end of every `--due` run and of a full `--texts` run, must never fail the run): scrape history older than 60 days is deleted except each company's first successful run (the Statistics baseline); open jobs of switched-off (`active = false`) companies are closed with `removed_at = last_seen_at` (this cleaned up Redwire's stale jobs); listing texts of jobs closed more than 30 days ago are deleted (a job that comes back is refilled by the top-up).
+- **Backups**: `.github/workflows/backup.yml` dumps the production database every Sunday (`pg_dump` 18 in the `postgres:18` image, custom format, listing texts excluded because `scrape` refills them) and keeps it as a workflow artifact for 30 days (artifacts of a public repo are downloadable by signed-in GitHub users; the data is the same as on the site). Secret `BACKUP_DATABASE_URL` (a read-only role) is optional, the workflow falls back to `DATABASE_URL`. Restore steps are in the README.
 
 ## Bug log 8 notes
 - **Search** (`where()` in `lib/jobs.ts`): every word of the query must match the job title or one of its cities (`location_city`, `location_cities`), so "embedded engineer munich" works.

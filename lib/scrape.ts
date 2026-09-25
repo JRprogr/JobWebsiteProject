@@ -2,6 +2,8 @@ import { adapterFor } from "./adapters/index.ts";
 import { retryDb, sql } from "./db.ts";
 import { extractExperience, type Experience } from "./experience.ts";
 import { parseLocation } from "./location.ts";
+import { fillTexts, storesText } from "./texts.ts";
+import { MAX_DETAIL_CHARS } from "./text.ts";
 import type { Company, NormalizedJob } from "./types.ts";
 
 // "partial" = the source answered but so much of the board vanished that the removals were held back (see the guard below)
@@ -12,6 +14,7 @@ export type ScrapeResult = {
   added: number;
   removed: number;
   detailed: number;
+  texts: number; // listing texts stored in this run (from the scrape itself and from the top-up)
   seconds: number;
   error?: string;
 };
@@ -64,8 +67,30 @@ on conflict (company_id, external_id) do update set
 returning (xmax = 0) as inserted
 `;
 
+// Listing text the adapter downloaded anyway. An empty body only marks "processed, the source has no text" and never
+// overwrites text that is already stored.
+const STORE_TEXT = `
+insert into job_details (job_id, body)
+select j.id, t.body
+from unnest($2::text[], $3::text[]) as t(external_id, body)
+join jobs j on j.company_id = $1::uuid and j.external_id = t.external_id
+on conflict (job_id) do update set body = excluded.body, fetched_at = now() where excluded.body <> ''
+`;
+
+// Jobs still without stored text after a scrape get some from the source's detail fetcher, this many per run and company
+const TOP_UP = 20;
+
 function dedupe(jobs: NormalizedJob[]): NormalizedJob[] {
   return [...new Map(jobs.map((j) => [j.external_id, j])).values()];
+}
+
+// Never throws: missing texts must not turn a good scrape into a failed one
+async function topUp(company: Company, fill: number | undefined): Promise<number> {
+  try {
+    return await fillTexts(company, fill ?? TOP_UP);
+  } catch {
+    return 0;
+  }
 }
 
 // A drop is confirmed when the runs just before this one were all held back by the guard and saw about as many jobs as this
@@ -90,8 +115,9 @@ async function dropConfirmed(companyId: string, runId: string, found: number): P
   return found > 0 || Date.now() - new Date(oldest).getTime() >= EMPTY_CONFIRM_MS;
 }
 
-// `force` skips the guard, for a deliberate change such as a rewritten adapter that legitimately finds far fewer jobs
-export async function scrapeCompany(company: Company, opts: { backfill?: boolean; force?: boolean } = {}): Promise<ScrapeResult> {
+// `force` skips the guard, for a deliberate change such as a rewritten adapter that legitimately finds far fewer jobs;
+// `fill` is how many missing listing texts to fetch afterwards (default TOP_UP)
+export async function scrapeCompany(company: Company, opts: { backfill?: boolean; force?: boolean; fill?: number } = {}): Promise<ScrapeResult> {
   const db = sql();
   const q = (text: string, params: unknown[] = []) => retryDb(() => db.query(text, params));
   const t0 = Date.now();
@@ -161,30 +187,34 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
       );
     }
     queries.push(db.query("update jobs set posted_at = first_seen_at where company_id = $1 and posted_at is null", [company.id]));
+    const withText = jobs.filter((j) => typeof j.description === "string");
+    if (storesText(company) && withText.length > 0) {
+      queries.push(db.query(STORE_TEXT, [company.id, withText.map((j) => j.external_id), withText.map((j) => (j.description as string).slice(0, MAX_DETAIL_CHARS))]));
+    }
+    const stored = storesText(company) ? withText.filter((j) => j.description).length : 0;
     const [upserted, removedRows] = await retryDb(() => db.transaction(queries));
 
     const added = upserted.filter((r) => r.inserted === true).length;
     const removed = hold ? 0 : removedRows.length;
     const detailed = checked.filter(Boolean).length;
-    const seconds = (Date.now() - t0) / 1000;
     if (hold) {
       const error = `held back: ${missing} of ${active.length} active jobs are missing from this result, removals apply once the next run confirms it`;
       await q(
         "update scrape_runs set finished_at = now(), status = 'partial', jobs_found = $2, jobs_added = $3, jobs_removed = 0, error = $4 where id = $1",
         [runId, jobs.length, added, error],
       );
-      return { slug: company.slug, status: "partial", found: jobs.length, added, removed: 0, detailed, seconds, error };
+      return { slug: company.slug, status: "partial", found: jobs.length, added, removed: 0, detailed, texts: stored + (await topUp(company, opts.fill)), seconds: (Date.now() - t0) / 1000, error };
     }
     await q(
       "update scrape_runs set finished_at = now(), status = 'success', jobs_found = $2, jobs_added = $3, jobs_removed = $4 where id = $1",
       [runId, jobs.length, added, removed],
     );
-    return { slug: company.slug, status: "success", found: jobs.length, added, removed, detailed, seconds };
+    return { slug: company.slug, status: "success", found: jobs.length, added, removed, detailed, texts: stored + (await topUp(company, opts.fill)), seconds: (Date.now() - t0) / 1000 };
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
     // best effort: if the database itself is the problem the run stays unfinished and is retried after RETRY_MIN
     if (runId) await q("update scrape_runs set finished_at = now(), status = 'failed', error = $2 where id = $1", [runId, error]).catch(() => undefined);
-    return { slug: company.slug, status: "failed", found: 0, added: 0, removed: 0, detailed: 0, seconds: (Date.now() - t0) / 1000, error };
+    return { slug: company.slug, status: "failed", found: 0, added: 0, removed: 0, detailed: 0, texts: 0, seconds: (Date.now() - t0) / 1000, error };
   }
 }
 
@@ -203,8 +233,25 @@ const CONCURRENCY = 4;
 const SLACK_MIN = 10;
 const RETRY_MIN = 50;
 
-export async function scrapeDue({ budgetMs, onResult }: { budgetMs: number; onResult?: (result: ScrapeResult) => void }) {
+type RunOptions = { backfill?: boolean; force?: boolean; fill?: number; budgetMs?: number; onResult?: (result: ScrapeResult) => void };
+
+// Scrapes the companies CONCURRENCY at a time; companies not started before the budget runs out are left for the next run
+export async function scrapeMany(companies: Company[], { budgetMs = Infinity, onResult, ...opts }: RunOptions = {}) {
   const deadline = Date.now() + budgetMs;
+  const results: ScrapeResult[] = [];
+  const queue = [...companies];
+  const worker = async () => {
+    for (let company = queue.shift(); company && Date.now() < deadline; company = queue.shift()) {
+      const result = await scrapeCompany(company, opts);
+      results.push(result);
+      onResult?.(result);
+    }
+  };
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  return { total: companies.length, ran: results.length, deferred: companies.length - results.length, results };
+}
+
+export async function scrapeDue(opts: RunOptions & { budgetMs: number }) {
   const due = (await retryDb(() => sql().query(
     `select c.* from companies c
      left join lateral (
@@ -219,16 +266,5 @@ export async function scrapeDue({ budgetMs, onResult }: { budgetMs: number; onRe
      order by coalesce(last.started_at, 'epoch'::timestamptz), c.name`,
     [SLACK_MIN, RETRY_MIN],
   ))) as Company[];
-
-  const results: ScrapeResult[] = [];
-  const queue = [...due];
-  const worker = async () => {
-    for (let company = queue.shift(); company && Date.now() < deadline; company = queue.shift()) {
-      const result = await scrapeCompany(company);
-      results.push(result);
-      onResult?.(result);
-    }
-  };
-  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-  return { due: due.length, ran: results.length, deferred: due.length - results.length, results };
+  return { due: due.length, ...(await scrapeMany(due, opts)) };
 }

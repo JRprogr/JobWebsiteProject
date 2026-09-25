@@ -2,17 +2,18 @@ name: scrape
 
 # Scrapes every company whose interval has elapsed (hourly by default, big career sites every six hours, see
 # source_config.every_hours in db/seed/companies.json). Runs here rather than on Vercel, which does not allow scrapers.
+# It also stores listing texts and tidies the database (lib/housekeeping.ts).
 on:
   schedule:
     - cron: "17 * * * *"
   workflow_dispatch:
     inputs:
       slugs:
-        description: "Only these companies, space separated (empty = whatever is due)"
+        description: "Only these companies, space separated (empty = whatever is due, or all companies with the option below)"
         required: false
         default: ""
       backfill:
-        description: "Read many more listing texts per company (only with slugs)"
+        description: "Catch-up: also fetch the listing text of every open job that has none (slow, up to a few hours for all companies)"
         type: boolean
         default: false
 
@@ -27,7 +28,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: ${{ inputs.backfill && 300 || 30 }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -43,10 +44,12 @@ jobs:
           # certificates some sites forget to send, see certs/intermediates.pem
           NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/certs/intermediates.pem
           SLUGS: ${{ inputs.slugs }}
-          BACKFILL: ${{ inputs.backfill && '--backfill' || '' }}
+          BACKFILL: ${{ inputs.backfill }}
         run: |
-          if [ -n "$SLUGS" ]; then
-            node scripts/scrape.mts $SLUGS $BACKFILL
+          if [ "$BACKFILL" = "true" ]; then
+            node scripts/scrape.mts --texts $SLUGS
+          elif [ -n "$SLUGS" ]; then
+            node scripts/scrape.mts $SLUGS
           else
             node scripts/scrape.mts --due
           fi

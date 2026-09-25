@@ -41,9 +41,9 @@ export default function AboutPage() {
           separate tracking system behind it, just the history of each scrape.
         </p>
         <p>
-          Experience level is estimated from each listing&apos;s own text where it isn&apos;t stated outright. Full
-          listing text is fetched on demand rather than stored for every role, to keep the project running on a
-          lean database operation.
+          Experience level is estimated from each listing&apos;s own text where it isn&apos;t stated outright. That
+          text is kept while a role is open, so a full listing opens instantly and nothing is fetched from the
+          employer while you browse; it is dropped a month after the role closes.
         </p>
       </LegalSection>
 

@@ -1,6 +1,6 @@
 import { politeFetch } from "./http.ts";
 import { mapPool, sleep } from "../pool.ts";
-import { decodeEntities, extractElement, htmlToText } from "../text.ts";
+import { decodeEntities, extractElement, htmlToText, parseJsonLd } from "../text.ts";
 import { gkn, gknDetail } from "./gkn.ts";
 import { kongsberg, kongsbergDetail } from "./kongsberg.ts";
 import { euPortal, euPortalDetail } from "./euportal.ts";
@@ -37,7 +37,7 @@ export function parseCnesPage(html: string): Page {
   const raw = html.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)?.[1];
   if (!raw) return { title: null, text: null };
   try {
-    const j = JSON.parse(raw) as {
+    const j = parseJsonLd(raw) as {
       title?: string;
       description?: string;
       datePosted?: string;

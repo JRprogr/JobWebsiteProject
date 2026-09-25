@@ -21,7 +21,8 @@ export type NormalizedJob = {
   salary_currency: string | null;
   posted_at: string | null;
   country_hint?: string | null;
-  // Plain-text listing body, only set for postings not processed before; used for experience extraction, never stored.
+  // Plain-text listing body, only set for postings not processed before; used for experience extraction and stored in job_details
+  // ("" = processed, the source has no text).
   description?: string | null;
 };
 
@@ -34,5 +35,6 @@ export type AdapterContext = {
 
 export type Adapter = (company: Company, ctx: AdapterContext) => Promise<NormalizedJob[]>;
 
-// Returns the plain-text listing body for one job, or null when the source has none.
+// Returns the plain-text listing body for one job, or null when the source has none. Only the scraper calls it (lib/texts.ts, to
+// fill in texts a scrape run did not provide); the web app never fetches from an employer.
 export type DetailFetcher = (company: Company, job: { external_id: string; url: string }) => Promise<string | null>;

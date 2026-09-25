@@ -1,5 +1,5 @@
 import { pdfText } from "../pdf.ts";
-import { decodeEntities, extractElement, htmlToText } from "../text.ts";
+import { decodeEntities, extractElement, htmlToText, parseJsonLd } from "../text.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
 import { configString, getText } from "./http.ts";
 import { runBoard, strip, type Row } from "./board.ts";
@@ -57,7 +57,7 @@ function jobPosting(html: string): { title: string; text: string | null; locatio
   for (const m of html.matchAll(/<script[^>]*ld\+json[^>]*>([\s\S]*?)<\/script>/g)) {
     let data: unknown;
     try {
-      data = JSON.parse(m[1]);
+      data = parseJsonLd(m[1]);
     } catch {
       continue;
     }

@@ -1,5 +1,5 @@
 import { mapPool, sleep } from "../pool.ts";
-import { decodeEntities, htmlToText } from "../text.ts";
+import { decodeEntities, htmlToText, parseJsonLd } from "../text.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
 import { configString, defaultCountry, getText, isEvergreen } from "./http.ts";
 
@@ -61,7 +61,7 @@ async function posting(url: string): Promise<{ text: string | null; posted: stri
   }
   for (const m of html.matchAll(/<script[^>]*ld\+json[^>]*>([\s\S]*?)<\/script>/g)) {
     try {
-      const j = JSON.parse(m[1]) as { "@type"?: string; description?: string; datePosted?: string };
+      const j = parseJsonLd(m[1]) as { "@type"?: string; description?: string; datePosted?: string };
       if (j["@type"] === "JobPosting") {
         const t = j.datePosted ? Date.parse(j.datePosted) : NaN;
         return { text: j.description ? htmlToText(j.description) || null : null, posted: Number.isNaN(t) ? null : new Date(t).toISOString() };

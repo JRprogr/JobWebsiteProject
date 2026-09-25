@@ -29,6 +29,12 @@ export function decodeEntities(input: string): string {
 
 export const MAX_DETAIL_CHARS = 20_000;
 
+// JSON-LD blocks in the wild often carry raw line breaks inside their strings (Boeing), which JSON.parse rejects.
+// Control characters are only ever whitespace here, so they become spaces.
+export function parseJsonLd(raw: string): unknown {
+  return JSON.parse(raw.replace(/[\u0000-\u001f]+/g, " "));
+}
+
 // Turns HTML into readable plain text (paragraph breaks kept); never returns markup.
 export function htmlToText(html: string): string {
   const text = html

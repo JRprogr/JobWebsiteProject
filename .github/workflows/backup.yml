@@ -1,0 +1,43 @@
+name: backup
+
+# Weekly dump of the production database, kept as a workflow artifact for 30 days. The dump leaves out the listing texts
+# (job_details): they are copies of the employers' pages and are refilled by `scrape` with the catch-up option. Everything
+# else (companies, jobs with their first-seen and removed dates, scrape history) cannot be rebuilt, so it is kept.
+# Artifacts of a public repository can be downloaded by any signed-in GitHub user; this data is the same as what the site shows.
+# Restore instructions: README.md, section "Backups".
+on:
+  schedule:
+    - cron: "43 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dump:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Dump
+        env:
+          # a read-only role is nicer than the owner: create it once and add its connection string as BACKUP_DATABASE_URL
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL || secrets.DATABASE_URL }}
+        run: |
+          # pg_dump must be at least as new as the server (Neon runs PostgreSQL 18) and wants a direct, not a pooled, connection
+          export PGURL="${DATABASE_URL/-pooler/}"
+          docker run --rm -e PGURL postgres:18 sh -c 'pg_dump "$PGURL" --format=custom --no-owner --no-privileges --exclude-table-data=job_details' > backup.dump
+          ls -l backup.dump
+          # the file must be readable and hold the tables that matter
+          docker run --rm -v "$PWD":/dump postgres:18 pg_restore --list /dump/backup.dump > backup.toc
+          for table in companies jobs scrape_runs; do
+            grep -q "TABLE DATA public $table " backup.toc || { echo "::error::no data for $table in the dump"; exit 1; }
+          done
+      - name: Date
+        id: stamp
+        run: echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: db-backup-${{ steps.stamp.outputs.date }}
+          path: backup.dump
+          retention-days: 30
+          if-no-files-found: error
