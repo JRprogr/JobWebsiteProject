@@ -79,6 +79,8 @@ async function fetchLogo(domain: string): Promise<{ png: Buffer; source: string 
 // Companies whose homepage icon is wrong or unusable (a product photo, a wordmark that needs its own background) name the exact file instead.
 type Override = { url: string; background?: string; size?: number; svg?: (text: string) => string };
 const OVERRIDES: Record<string, Override> = {
+  // The site icon is a white-on-transparent mark made for a dark header, so it gets a navy disc
+  swissto12: { url: "https://swissto12.com/wp-content/uploads/2024/06/logo.svg", background: "#0b1f3a", size: 96 },
   novaspace: { url: "https://nova.space/wp-content/uploads/2024/07/emblem.png", size: 104 },
   // Wordmark on black, with "AST" in white like the brand's dark-background version (the SVG has it orange like the rest)
   "ast-spacemobile": {

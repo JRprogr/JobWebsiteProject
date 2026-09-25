@@ -192,3 +192,12 @@ All read the platform's public feed; helpers live in `lib/adapters/http.ts` (fet
 - **ashby**: `{board, default_country}` → `https://api.ashbyhq.com/posting-api/job-board/<board>`; structured address country is used.
 - `default_country` is only a fallback `country_hint` when a listing's location names no country the parser knows (it never overrides a parsed country). Evergreen entries ("Initiativbewerbung", "Unsolicited application", "Open applications", "Talent pool"…) are skipped by every one of these adapters via `isEvergreen`.
 - New company checklist: seed entry in `db/seed/companies.json` (+ `db/seed/websites.json` domain), `npm run db:seed`, `npm run scrape <slug> -- --backfill`, `npm run logos <slug>`.
+
+## ATS adapters added in Phase 3
+- **successfactors** (`{base, prefix?, default_country?}`: ESA, SES, Beyond Gravity): server-rendered `<base><prefix>/search/?q=&startrow=N`, two layouts (table rows / tiles) parsed by `parseSearchPage`; pages until no new ids; per-job page text via `parseDlrPage` (30 detail fetches per cron run, `--backfill` all, like Workday). Locations arrive as "City, CC[, zip]" — `isoPlace()` splits the ISO code off as `country_hint`, because the location parser would read IN/DE/AL/… as US states.
+- **custom kind `gkn-api`** (GKN Aerospace): `POST joinus.gknaerospace.com/api/jobs` pages of 50 with full descriptions; same ISO-code-as-hint handling.
+- **factorial** (`{host, default_country}`): the start page lists all jobs (data attributes + location filter options); job page gives text and a "City, Country" chip.
+- **hibob** (`{subdomain}`): `GET <sub>.careers.hibob.com/api/job-ad` with header `companyIdentifier: <sub>`; descriptions inline.
+- **skeeled** (`{board_id}` or `{listing_url}`, plus `default_country`): board page cards, or (LIST) the employer's own page whose cards link to `app.skeeled.com/offer/c/<id>`; text from the offer page's `offer-description` block.
+- **odoo** (`{host, default_country}`): `/jobs` cards (paged via `/jobs/page/N`), text from `itemprop="description"`. EnduroSat is NOT an Odoo jobs site (static page; Phase 5).
+- `scripts/fetch-logos.mts` has an `OVERRIDES` map for logos that need a specific file/background (Novaspace, AST, Swissto12).

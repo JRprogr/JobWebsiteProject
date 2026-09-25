@@ -2,14 +2,19 @@ import type { Adapter, Company, DetailFetcher } from "../types.ts";
 import { ashby, ashbyDetail } from "./ashby.ts";
 import { bamboohr, bamboohrDetail } from "./bamboohr.ts";
 import { custom, customDetail } from "./custom.ts";
+import { factorial, factorialDetail } from "./factorial.ts";
 import { greenhouse, greenhouseDetail } from "./greenhouse.ts";
+import { hibob, hibobDetail } from "./hibob.ts";
 import { lever, leverDetail } from "./lever.ts";
+import { odoo, odooDetail } from "./odoo.ts";
 import { personio, personioDetail } from "./personio.ts";
 import { recruitee, recruiteeDetail } from "./recruitee.ts";
+import { skeeled, skeeledDetail } from "./skeeled.ts";
+import { successfactors, successfactorsDetail } from "./successfactors.ts";
 import { teamtailor, teamtailorDetail } from "./teamtailor.ts";
 import { workday, workdayDetail } from "./workday.ts";
 
-const adapters: Record<Company["source_type"], Adapter> = { greenhouse, lever, custom, workday, personio, teamtailor, recruitee, bamboohr, ashby };
+const adapters: Record<Company["source_type"], Adapter> = { greenhouse, lever, custom, workday, personio, teamtailor, recruitee, bamboohr, ashby, successfactors, factorial, hibob, skeeled, odoo };
 const details: Record<Company["source_type"], DetailFetcher> = {
   greenhouse: greenhouseDetail,
   lever: leverDetail,
@@ -20,6 +25,11 @@ const details: Record<Company["source_type"], DetailFetcher> = {
   recruitee: recruiteeDetail,
   bamboohr: bamboohrDetail,
   ashby: ashbyDetail,
+  successfactors: successfactorsDetail,
+  factorial: factorialDetail,
+  hibob: hibobDetail,
+  skeeled: skeeledDetail,
+  odoo: odooDetail,
 };
 
 export function adapterFor(company: Company): Adapter {

@@ -700,5 +700,196 @@
     "careers_url": "https://www.exploration.space/careers",
     "hq_country": "DE",
     "logo_url": "/logos/the-exploration-company.png"
+  },
+  {
+    "name": "ESA",
+    "slug": "esa",
+    "sector": "institutions",
+    "source_type": "successfactors",
+    "source_config": {
+      "base": "https://jobs.esa.int"
+    },
+    "active": true,
+    "careers_url": "https://jobs.esa.int/search/",
+    "hq_country": "FR",
+    "logo_url": null
+  },
+  {
+    "name": "SES",
+    "slug": "ses",
+    "sector": "satellites",
+    "source_type": "successfactors",
+    "source_config": {
+      "base": "https://careers.ses.com"
+    },
+    "active": true,
+    "careers_url": "https://careers.ses.com/search/",
+    "hq_country": "LU",
+    "logo_url": "/logos/ses.png"
+  },
+  {
+    "name": "Beyond Gravity",
+    "slug": "beyond-gravity",
+    "sector": "components",
+    "source_type": "successfactors",
+    "source_config": {
+      "base": "https://careers.beyondgravity.com",
+      "prefix": "/BeyondGravity"
+    },
+    "active": true,
+    "careers_url": "https://careers.beyondgravity.com/BeyondGravity/search/",
+    "hq_country": "CH",
+    "logo_url": "/logos/beyond-gravity.png"
+  },
+  {
+    "name": "GKN Aerospace",
+    "slug": "gkn-aerospace",
+    "sector": "components",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "gkn-api"
+    },
+    "active": true,
+    "careers_url": "https://joinus.gknaerospace.com/",
+    "hq_country": "SE",
+    "logo_url": "/logos/gkn-aerospace.png"
+  },
+  {
+    "name": "D-Orbit",
+    "slug": "d-orbit",
+    "sector": "space-ops",
+    "source_type": "factorial",
+    "source_config": {
+      "host": "dorbit-space.factorial.it",
+      "default_country": "IT"
+    },
+    "active": true,
+    "careers_url": "https://dorbit-space.factorial.it/",
+    "hq_country": "IT",
+    "logo_url": "/logos/d-orbit.png"
+  },
+  {
+    "name": "Pangea Propulsion",
+    "slug": "pangea-propulsion",
+    "sector": "propulsion",
+    "source_type": "factorial",
+    "source_config": {
+      "host": "pangeapropulsion.factorialhr.com",
+      "default_country": "ES"
+    },
+    "active": true,
+    "careers_url": "https://pangeapropulsion.factorialhr.com/",
+    "hq_country": "ES",
+    "logo_url": "/logos/pangea-propulsion.png"
+  },
+  {
+    "name": "Visionspace",
+    "slug": "visionspace",
+    "sector": "services",
+    "source_type": "factorial",
+    "source_config": {
+      "host": "visionspace.factorialhr.pt",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://visionspace.factorialhr.pt/",
+    "hq_country": "DE",
+    "logo_url": null
+  },
+  {
+    "name": "STI",
+    "slug": "sti",
+    "sector": "satellites",
+    "source_type": "factorial",
+    "source_config": {
+      "host": "spacetech.factorialhr.com",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://spacetech-i.com/career",
+    "hq_country": "DE",
+    "logo_url": "/logos/sti.png"
+  },
+  {
+    "name": "LIST",
+    "slug": "list",
+    "sector": "institutions",
+    "source_type": "skeeled",
+    "source_config": {
+      "listing_url": "https://www.list.lu/career/job-offers",
+      "default_country": "LU"
+    },
+    "active": true,
+    "careers_url": "https://www.list.lu/career/job-offers",
+    "hq_country": "LU",
+    "logo_url": null
+  },
+  {
+    "name": "Luxembourg Space Agency",
+    "slug": "luxembourg-space-agency",
+    "sector": "institutions",
+    "source_type": "skeeled",
+    "source_config": {
+      "board_id": "65f17f1e19e8b93481b153a1",
+      "default_country": "LU"
+    },
+    "active": true,
+    "careers_url": "https://app.skeeled.com/board/65f17f1e19e8b93481b153a1",
+    "hq_country": "LU",
+    "logo_url": "/logos/luxembourg-space-agency.png"
+  },
+  {
+    "name": "HITEC",
+    "slug": "hitec",
+    "sector": "space-ops",
+    "source_type": "skeeled",
+    "source_config": {
+      "board_id": "69d613c4af3e3c0ac13a380c",
+      "default_country": "LU"
+    },
+    "active": true,
+    "careers_url": "https://www.hitec.lu/jobs/",
+    "hq_country": "LU",
+    "logo_url": "/logos/hitec.png"
+  },
+  {
+    "name": "SSC",
+    "slug": "ssc",
+    "sector": "space-ops",
+    "source_type": "hibob",
+    "source_config": {
+      "subdomain": "ssc"
+    },
+    "active": true,
+    "careers_url": "https://ssc.careers.hibob.com/jobs",
+    "hq_country": "SE",
+    "logo_url": "/logos/ssc.png"
+  },
+  {
+    "name": "Swissto12",
+    "slug": "swissto12",
+    "sector": "satellites",
+    "source_type": "hibob",
+    "source_config": {
+      "subdomain": "swissto12-b67d359b42"
+    },
+    "active": true,
+    "careers_url": "https://swissto12-b67d359b42.careers.hibob.com/jobs",
+    "hq_country": "CH",
+    "logo_url": "/logos/swissto12.png"
+  },
+  {
+    "name": "Arkadia Space",
+    "slug": "arkadia-space",
+    "sector": "components",
+    "source_type": "odoo",
+    "source_config": {
+      "host": "arkadia-space.odoo.com",
+      "default_country": "ES"
+    },
+    "active": true,
+    "careers_url": "https://arkadia-space.odoo.com/jobs",
+    "hq_country": "ES",
+    "logo_url": "/logos/arkadia-space.png"
   }
 ]
