@@ -209,3 +209,15 @@ All read the platform's public feed; helpers live in `lib/adapters/http.ts` (fet
 - **custom kind `kongsberg-web`**: kongsberg.com's own filtered vacancies page + vacancy pages (their Easycruit ATS sits behind a bot check).
 - **clinch** (Redwire): written, but careers.rdw.com now answers with an AWS WAF challenge (HTTP 202, empty body), so the company is `active: false`. Per the project rule, don't fight bot walls.
 - Skipped on purpose: Rheinmetall (1,406 roles behind 141 heavy JS pages, ~50 MB per refresh, no feed — not compatible with the 60 s cron), Intuitive Machines (ADP, US-only, low value), EnduroSat (static page with no job list).
+
+## Phase 5 adapters (small boards)
+Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns its page into `Row`s (id, url, title, location, department, optional inline `text`), and the runner does the usual detail-gated text fetch (30 new listings per cron run, more with `--backfill`).
+- **peopleforce** (Scanway; `{subdomain, default_country}`): `<sub>.peopleforce.io/careers?page=N` cards (no location on the list), text from the `fr-view` block.
+- **hron** (GomSpace; `{subdomain, default_country, place_countries?}`): the HR-ON start page lists every position with its place of work; `place_countries` maps a place outside the default country to its ISO code (`"Esch-sur-Alzette": "LU"`).
+- **intervieweb** (Avio; `{base, default_country}`): first page from `<base>/en/career`, later pages via the CSRF-tokened POST URL embedded in it; per-listing JobPosting JSON-LD.
+- **clarityloop** (AAC Clyde Space; `{list_url, default_country}`): `list_url` is the embedded `hr.clarityloop.com/.../open-recruitments/<token>/` page; text from the application-form page (`recruitmentInfoBody`).
+- **custom kind `link-list`** (config-driven; KP Labs, Liftero, Latitude, Esyen, Andøya Space): `list_url` (+ `page_template`/`max_pages`), `link_regex` (group 1 = link), `body_marker`, optional `title_regex`, `id_regex`, `location_regex`, `default_country`. A new job page is read once for its title; known jobs are not fetched again.
+- **custom kind `eu-portal`** (EUSPA; `{base, default_country}`): the Kendo grid endpoint `POST /Home/Index_Binding?showOnly=current`, only rows open for applications.
+- **custom kind `wix-board`** (Infinite Orbits; `{list_url, default_country}`): Wix repeater cards; text between "Apply Now" and the footer.
+- Not done yet: GTD (Talentclue widget, IT roles from its sister company mixed in), Aldoria (Lucca), LookUp Space (WTTJ), GovSat, NanoAvionics (site unreachable), Antwerp Space/Unseenlabs (0 open roles) and ~35 static pages with 0-5 roles each.
+- The experience extractor (`lib/experience.ts`) also reads Polish and Italian ("lat/lata doświadczenia", "anni di esperienza", "staż", "tirocinio"); older rows only pick that up on a `--backfill`.

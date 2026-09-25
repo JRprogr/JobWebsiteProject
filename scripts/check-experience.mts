@@ -22,6 +22,13 @@ const cases: [string, string, string | null][] = [
     "3+ explicit",
   ],
   ["Requirements: a degree.\nNice to have: 6+ years of experience leading teams", "Engineer", "6+ estimated"],
+  ["Minimum 4 lata doświadczenia na podobnym stanowisku", "Inżynier elektronik", "4+ explicit"],
+  ["Wymagamy 2-3 lat doświadczenia w projektowaniu", "Konstruktor", "2-3 explicit"],
+  ["Great team.", "Technik AIT - praktyki", "0 estimated"],
+  ["Great team.", "Młodszy specjalista ds. IT f/m", "0-2 estimated"],
+  ["Almeno 5 anni di esperienza nel settore aerospaziale", "Ingegnere", "5+ explicit"],
+  ["Great team.", "Stage - Tecnologo lavorazioni meccaniche", "0 estimated"],
+  ["Great team.", "Tirocinio ingegneria", "0 estimated"],
 ];
 
 let bad = 0;

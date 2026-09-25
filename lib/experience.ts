@@ -3,15 +3,15 @@ export type Experience = { min: number; max: number | null; kind: "explicit" | "
 const WORDS: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12, fifteen: 15 };
 const WORD_RE = new RegExp(`\\b(${Object.keys(WORDS).join("|")})\\b(?=\\s*\\+?\\s*[- ]?(?:years?|yrs?)\\b)`, "gi");
 
-const UNIT = "(?:years?|yrs?|jahre?n?|ans|années|años)";
+const UNIT = "(?:years?|yrs?|jahre?n?|ans|années|años|anni|lat|lata|roku|rok)";
 const RANGE_RE = new RegExp(`(\\d{1,2})\\s*(?:-|–|—|to|bis|à|und|or)\\s*(\\d{1,2})\\s*\\+?\\s*[- ]?${UNIT}\\b`, "gi");
 const SINGLE_RE = new RegExp(
-  `(?:(at least|minimum(?: of)?|min\\.?|mindestens|au moins|over|more than|>)\\s*)?(\\d{1,2})\\s*(\\+)?\\s*[- ]?${UNIT}\\b`,
+  `(?:(at least|minimum(?: of)?|min\\.?|mindestens|au moins|almeno|co najmniej|over|more than|>)\\s*)?(\\d{1,2})\\s*(\\+)?\\s*[- ]?${UNIT}\\b`,
   "gi",
 );
 
 // A year figure only counts when it sits next to talk of experience, so "founded 15 years ago" is ignored.
-const CONTEXT_RE = /experience|erfahrung|expérience|experiencia|background|track record|professional|proven|practical|working (?:in|with|as)|berufs/i;
+const CONTEXT_RE = /experience|erfahrung|expérience|experiencia|esperienza|doświadczeni|staż pracy|background|track record|professional|proven|practical|working (?:in|with|as)|berufs/i;
 const NOISE_AFTER_RE = /^\W{0,3}(?:ago|old|of age|alt\b|d['’]âge|since|in the|on the market)/i;
 const NOISE_BEFORE_RE = /(?:last|past|previous|next|within|over the|for the last|founded|since|in the past)\s*$/i;
 
@@ -27,12 +27,14 @@ function inPreferredSection(body: string, index: number): boolean {
 
 const STUDENT_TITLE_RE = /\b(?:intern(?:ship)?|praktik(?:um|ant|antin)|werkstudent(?:in)?|working student|thesis|abschlussarbeit|masterarbeit|bachelorarbeit|diplomarbeit|stagiaire|apprentice(?:ship)?|ausbildung|azubi|student(?:in)?|studentische|aushilfe|hiwi|co-?op)\b|^\s*stage\b/i;
 const ENTRY_TEXT_RE = /\b(?:entry[- ]level|no (?:prior |previous )?(?:work )?experience (?:is )?(?:required|needed|necessary)|recent graduates?|new grads?|fresh graduates?|berufseinsteiger(?:in)?|absolvent(?:en|in)?|sans expérience|débutants? accepté)/i;
+// Polish and Italian entry-level cues; no trailing \b because the Polish diacritics are not word characters
+const STUDENT_EXTRA_RE = /\b(?:staż|stażyst|praktyk[ia]|tirocini|stagist|apprendist)/i;
 const SEVERAL_RE = /\b(?:several|multiple|a few|mehrjährige[rn]?|plusieurs) (?:years|jahre|années)|\bmehrjährige[rn]?\b|\bplusieurs années\b/i;
 const MANY_RE = /\b(?:many years|extensive (?:professional |industry )?experience|jahrelange[rn]?|années d['’]expérience significative|decades of)\b/i;
 
 function fromTitle(title: string): Experience | null {
-  if (STUDENT_TITLE_RE.test(title)) return { min: 0, max: 0, kind: "estimated" };
-  if (/\bjunior\b|\bjr\.?\b|\bgraduate\b/i.test(title)) return { min: 0, max: 2, kind: "estimated" };
+  if (STUDENT_TITLE_RE.test(title) || STUDENT_EXTRA_RE.test(title)) return { min: 0, max: 0, kind: "estimated" };
+  if (/\bmłodsz|\bjunior\b|\bjr\.?\b|\bgraduate\b/i.test(title)) return { min: 0, max: 2, kind: "estimated" };
   if (/\b(?:director|head of|vp|vice president|chief)\b/i.test(title)) return { min: 10, max: null, kind: "estimated" };
   if (/\b(?:principal|staff|distinguished|fellow)\b/i.test(title)) return { min: 8, max: null, kind: "estimated" };
   if (/\b(?:senior|sr\.?|lead|leitende[rn]?)\b/i.test(title)) return { min: 5, max: null, kind: "estimated" };
@@ -69,7 +71,7 @@ export function extractExperience(text: string | null, title: string): Experienc
     if (best) return best;
     if (bestPreferred) return bestPreferred;
 
-    if (STUDENT_TITLE_RE.test(title) || ENTRY_TEXT_RE.test(body)) return { min: 0, max: 0, kind: "estimated" };
+    if (STUDENT_TITLE_RE.test(title) || STUDENT_EXTRA_RE.test(title) || ENTRY_TEXT_RE.test(body)) return { min: 0, max: 0, kind: "estimated" };
     if (MANY_RE.test(body)) return { min: 8, max: null, kind: "estimated" };
     if (SEVERAL_RE.test(body)) return { min: 5, max: null, kind: "estimated" };
   }

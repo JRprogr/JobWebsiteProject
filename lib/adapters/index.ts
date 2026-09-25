@@ -1,4 +1,8 @@
 import type { Adapter, Company, DetailFetcher } from "../types.ts";
+import { clarityloop, clarityloopDetail } from "./clarityloop.ts";
+import { hron, hronDetail } from "./hron.ts";
+import { intervieweb, interviewebDetail } from "./intervieweb.ts";
+import { peopleforce, peopleforceDetail } from "./peopleforce.ts";
 import { clinch, clinchDetail } from "./clinch.ts";
 import { cornerstone, cornerstoneDetail } from "./cornerstone.ts";
 import { eightfold, eightfoldDetail } from "./eightfold.ts";
@@ -22,7 +26,7 @@ import { successfactors, successfactorsDetail } from "./successfactors.ts";
 import { teamtailor, teamtailorDetail } from "./teamtailor.ts";
 import { workday, workdayDetail } from "./workday.ts";
 
-const adapters: Record<Company["source_type"], Adapter> = { greenhouse, lever, custom, workday, personio, teamtailor, recruitee, bamboohr, ashby, successfactors, factorial, hibob, skeeled, odoo, clinch, cornerstone, eightfold, jibe, talentbrew, talentsoft, ultipro, workable };
+const adapters: Record<Company["source_type"], Adapter> = { greenhouse, lever, custom, workday, personio, teamtailor, recruitee, bamboohr, ashby, successfactors, factorial, hibob, skeeled, odoo, clinch, cornerstone, eightfold, jibe, talentbrew, talentsoft, ultipro, workable, peopleforce, hron, intervieweb, clarityloop };
 const details: Record<Company["source_type"], DetailFetcher> = {
   greenhouse: greenhouseDetail,
   lever: leverDetail,
@@ -46,6 +50,10 @@ const details: Record<Company["source_type"], DetailFetcher> = {
   talentsoft: talentsoftDetail,
   ultipro: ultiproDetail,
   workable: workableDetail,
+  peopleforce: peopleforceDetail,
+  hron: hronDetail,
+  intervieweb: interviewebDetail,
+  clarityloop: clarityloopDetail,
 };
 
 export function adapterFor(company: Company): Adapter {

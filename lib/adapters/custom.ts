@@ -2,6 +2,9 @@ import { mapPool, sleep } from "../pool.ts";
 import { decodeEntities, extractElement, htmlToText } from "../text.ts";
 import { gkn, gknDetail } from "./gkn.ts";
 import { kongsberg, kongsbergDetail } from "./kongsberg.ts";
+import { euPortal, euPortalDetail } from "./euportal.ts";
+import { linkList, linkListDetail } from "./linklist.ts";
+import { wixBoard, wixBoardDetail } from "./wixboard.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
 
 const USER_AGENT = "Mozilla/5.0 (compatible; DSCareersBot/0.1; portfolio project)";
@@ -137,6 +140,9 @@ const kinds: Record<string, { adapter: Adapter; detail: DetailFetcher }> = {
   "sitemap-cnes": { adapter: cnes, detail: async (_c, job) => parseCnesPage(await fetchText(job.url)).text },
   "gkn-api": { adapter: gkn, detail: gknDetail },
   "kongsberg-web": { adapter: kongsberg, detail: kongsbergDetail },
+  "link-list": { adapter: linkList, detail: linkListDetail },
+  "eu-portal": { adapter: euPortal, detail: euPortalDetail },
+  "wix-board": { adapter: wixBoard, detail: wixBoardDetail },
 };
 
 const kindOf = (company: { slug: string; source_config: Record<string, unknown> }) => {

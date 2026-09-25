@@ -1050,5 +1050,184 @@
     "careers_url": "https://careers.rdw.com/jobs/search",
     "hq_country": "US",
     "logo_url": "/logos/redwire.png"
+  },
+  {
+    "name": "Scanway",
+    "slug": "scanway",
+    "sector": "components",
+    "source_type": "peopleforce",
+    "source_config": {
+      "subdomain": "scanway",
+      "default_country": "PL"
+    },
+    "careers_url": "https://scanway.peopleforce.io/careers",
+    "hq_country": "PL",
+    "active": true,
+    "logo_url": "/logos/scanway.png"
+  },
+  {
+    "name": "GomSpace",
+    "slug": "gomspace",
+    "sector": "satellites",
+    "source_type": "hron",
+    "source_config": {
+      "subdomain": "gomspace",
+      "place_countries": {
+        "Esch-sur-Alzette": "LU"
+      },
+      "default_country": "DK"
+    },
+    "careers_url": "https://gomspace.com/open-positions/",
+    "hq_country": "DK",
+    "active": true,
+    "logo_url": "/logos/gomspace.png"
+  },
+  {
+    "name": "Avio",
+    "slug": "avio",
+    "sector": "propulsion",
+    "source_type": "intervieweb",
+    "source_config": {
+      "base": "https://zinrec.intervieweb.it/avio",
+      "default_country": "IT"
+    },
+    "careers_url": "https://zinrec.intervieweb.it/avio/en/career",
+    "hq_country": "IT",
+    "active": true
+  },
+  {
+    "name": "AAC Clyde Space",
+    "slug": "aac-clyde-space",
+    "sector": "satellites",
+    "source_type": "clarityloop",
+    "source_config": {
+      "list_url": "https://hr.clarityloop.com/recruitment/open-recruitments/Z0FBQUFBQnFSN19NN29saDZRdlNCX3Y3UUdRckpmN25vdGcxLU5ndTZMdXdiM3pOMVJwQllNSkIxYjV2SGpuN0dSNWt1RjVmNVVJTWNDeks3aUd6RjBscEd6T1luNjQ0elE9PQ%3D%3D/",
+      "default_country": "GB"
+    },
+    "careers_url": "https://www.aac-clyde.space/careers",
+    "hq_country": "SE",
+    "active": true
+  },
+  {
+    "name": "KP Labs",
+    "slug": "kp-labs",
+    "sector": "components",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.kplabs.space/career",
+      "link_regex": "href=\"(/jobs/[a-z0-9-]+)\"",
+      "body_marker": "class=\"text-rich-text w-richtext\"",
+      "location_regex": "career14_detail-wrapper[\\s\\S]*?class=\"text-size-medium\">([^<]*)<",
+      "default_country": "PL"
+    },
+    "careers_url": "https://www.kplabs.space/career",
+    "hq_country": "PL",
+    "active": true,
+    "logo_url": "/logos/kp-labs.png"
+  },
+  {
+    "name": "Liftero",
+    "slug": "liftero",
+    "sector": "propulsion",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://liftero.com/careers",
+      "link_regex": "(https://liftero\\.traffit\\.com/public/an/[0-9a-f]+)",
+      "body_marker": "class=\"article__content\"",
+      "default_country": "PL"
+    },
+    "careers_url": "https://liftero.com/careers",
+    "hq_country": "PL",
+    "active": true,
+    "logo_url": "/logos/liftero.png"
+  },
+  {
+    "name": "Andøya Space",
+    "slug": "andoya-space",
+    "sector": "launch",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://andoyaspace.no/career/",
+      "link_regex": "href=\"(https://web103\\.reachmee\\.com/ext/[^\"]*rmjob=\\d+)\"",
+      "id_regex": "rmjob=(\\d+)",
+      "title_regex": "<title>[^|]*\\|\\s*([^<]*)<",
+      "body_marker": "class=\"jobad-body\"",
+      "default_country": "NO"
+    },
+    "careers_url": "https://andoyaspace.no/career/",
+    "hq_country": "NO",
+    "active": true,
+    "logo_url": "/logos/andoya-space.png"
+  },
+  {
+    "name": "EUSPA",
+    "slug": "euspa",
+    "sector": "institutions",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "eu-portal",
+      "base": "https://vacancies.euspa.europa.eu",
+      "default_country": "CZ"
+    },
+    "careers_url": "https://www.euspa.europa.eu/opportunities/careers",
+    "hq_country": "CZ",
+    "active": true,
+    "logo_url": "/logos/euspa.png"
+  },
+  {
+    "name": "Latitude",
+    "slug": "latitude",
+    "sector": "launch",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.latitude.eu/jobs/",
+      "link_regex": "(https://www\\.latitude\\.eu/job/[a-z0-9-]+/)",
+      "title_regex": "<title>([^<]*?)\\s+-\\s+Latitude",
+      "body_marker": "class=\"job-description\"",
+      "default_country": "FR"
+    },
+    "careers_url": "https://www.latitude.eu/jobs/",
+    "hq_country": "FR",
+    "active": true,
+    "logo_url": "/logos/latitude.png"
+  },
+  {
+    "name": "Esyen",
+    "slug": "esyen",
+    "sector": "services",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.esyen.com/jobs/",
+      "page_template": "https://www.esyen.com/jobs/page/{n}/",
+      "max_pages": 5,
+      "link_regex": "post-title\">\\s*<a href=\"([^\"]+)\"",
+      "body_marker": "class=\"wd-entry-content\"",
+      "location_regex": "class=\"custom-location\">\\s*Location:\\s*<b>([^<]*)</b>",
+      "default_country": "IT"
+    },
+    "careers_url": "https://www.esyen.com/jobs/",
+    "hq_country": "IT",
+    "active": true,
+    "logo_url": "/logos/esyen.png"
+  },
+  {
+    "name": "Infinite Orbits",
+    "slug": "infinite-orbits",
+    "sector": "space-ops",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "wix-board",
+      "list_url": "https://jobs.infiniteorbits.io/jobs",
+      "default_country": "FR"
+    },
+    "careers_url": "https://jobs.infiniteorbits.io/jobs",
+    "hq_country": "FR",
+    "active": true,
+    "logo_url": "/logos/infinite-orbits.png"
   }
 ]
