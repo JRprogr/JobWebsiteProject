@@ -3,6 +3,8 @@ import { Footer } from "@/components/Footer";
 import { TopBar } from "@/components/TopBar";
 
 export const metadata = { title: "Not found" };
+// the footer shows the last scrape time, so refresh this static page every ten minutes
+export const revalidate = 600;
 
 export default function NotFound() {
   return (

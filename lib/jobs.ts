@@ -184,3 +184,17 @@ export async function headline() {
     updated: r.last_scrape ? timeAgo(new Date(r.last_scrape as string).toISOString(), Date.now()) : null,
   };
 }
+
+// Footer stamp: when the last successful scrape finished and how many employers are on the board
+export async function footerStamp(): Promise<{ companies: number; lastScrape: string | null } | null> {
+  try {
+    const rows = (await sql().query(
+      `select (select count(*)::int from companies where active) as companies,
+              (select max(finished_at) from scrape_runs where status = 'success') as last_scrape`,
+    )) as Row[];
+    const r = rows[0];
+    return { companies: r.companies as number, lastScrape: r.last_scrape ? new Date(r.last_scrape as string).toISOString() : null };
+  } catch {
+    return null; // the footer must never take a page down
+  }
+}

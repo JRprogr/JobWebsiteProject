@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { utcStamp } from "@/lib/format";
+import { footerStamp } from "@/lib/jobs";
 
 const cell = "border-line p-4";
 const corner = "absolute size-3.5 border-fg";
@@ -11,7 +13,8 @@ const PAGES = [
   { href: "/privacy", label: "PRIVACY" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const stamp = await footerStamp();
   return (
     <footer className="mx-auto mt-16 w-full max-w-[1440px] px-4 pb-10 md:px-12">
       <div className="border border-line font-mono text-[11px] tracking-[0.08em]">
@@ -36,8 +39,19 @@ export function Footer() {
             <span className={`${corner} bottom-4 left-4 border-b border-l`} aria-hidden="true" />
             <span className={`${corner} bottom-4 right-4 border-b border-r`} aria-hidden="true" />
             <p className="text-center leading-7 text-dim">
-              SN-DS0001-A
-              <br />[ RESERVED ]
+              {stamp?.lastScrape ? (
+                <>
+                  LAST SCRAPE
+                  <br />
+                  <time dateTime={stamp.lastScrape} className="text-fg">
+                    {utcStamp(stamp.lastScrape)}
+                  </time>
+                  <br />
+                  {stamp.companies} EMPLOYERS
+                </>
+              ) : (
+                <>NO SCRAPE YET</>
+              )}
             </p>
           </div>
         </div>

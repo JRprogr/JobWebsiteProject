@@ -4,6 +4,8 @@ import { OperatorBlock } from "@/components/Address";
 import { PageShell } from "@/components/PageShell";
 
 export const metadata = { title: "Impressum" };
+// the footer shows the last scrape time, so refresh this static page every ten minutes
+export const revalidate = 600;
 
 export default function ImpressumPage() {
   return (

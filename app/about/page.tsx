@@ -3,6 +3,8 @@ import { PageShell } from "@/components/PageShell";
 import { ContactEmail } from "@/components/ContactEmail";
 
 export const metadata = { title: "About" };
+// the footer shows the last scrape time, so refresh this static page every ten minutes
+export const revalidate = 600;
 
 export default function AboutPage() {
   return (

@@ -4,6 +4,8 @@ import { PageShell } from "@/components/PageShell";
 import { ContactEmail } from "@/components/ContactEmail";
 
 export const metadata = { title: "Q&A" };
+// the footer shows the last scrape time, so refresh this static page every ten minutes
+export const revalidate = 600;
 
 const FAQ: { q: string; a: React.ReactNode }[] = [
   {
