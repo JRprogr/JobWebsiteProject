@@ -37,7 +37,7 @@ export function TopBar() {
         </nav>
         <div className="ml-auto flex items-center gap-x-3 md:ml-0 md:contents">
           <ThemeToggle />
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col items-center gap-1">
             <TipButton />
             <AboutButton />
           </div>

@@ -1,7 +1,7 @@
 import { TIP_LABEL, TIP_URL } from "@/lib/site";
 import { CoffeeIcon } from "./icons";
 
-export const headerButton =
+const headerButton =
   "flex h-7 items-center justify-center gap-1.5 whitespace-nowrap rounded-[9px] border px-2.5 font-mono text-[11px] tracking-[0.08em]";
 
 export function TipButton() {

@@ -2,21 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { InfoIcon } from "./icons";
-import { headerButton } from "./TipButton";
 
+// Same bracketed text link as the footer's [ ABOUT ], shown under the tip button
 export function AboutButton() {
   const current = usePathname() === "/about";
   return (
     <Link
       href="/about"
       aria-current={current ? "page" : undefined}
-      title="About DS[Careers]"
-      aria-label="About DS[Careers]"
-      className={`${headerButton} ${current ? "border-fg bg-faint font-bold" : "border-line text-dim"}`}
+      className={`whitespace-nowrap font-mono text-[11px] tracking-[0.08em] hover:text-fg ${current ? "font-bold text-fg" : "text-dim"}`}
     >
-      <InfoIcon size={15} />
-      <span className="hidden sm:inline">ABOUT</span>
+      [ ABOUT ]
     </Link>
   );
 }

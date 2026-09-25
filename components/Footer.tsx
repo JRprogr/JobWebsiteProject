@@ -6,6 +6,7 @@ const corner = "absolute size-3.5 border-fg";
 const PAGES = [
   { href: "/terms", label: "TERMS" },
   { href: "/faq", label: "Q&A" },
+  { href: "/about", label: "ABOUT" },
   { href: "/impressum", label: "IMPRESSUM" },
   { href: "/privacy", label: "PRIVACY" },
 ];
