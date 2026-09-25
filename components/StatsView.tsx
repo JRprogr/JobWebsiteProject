@@ -178,8 +178,8 @@ export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
         <Card title="EXPERIENCE" note="READ FROM LISTING TEXT">
           <BarList items={stats.experience} />
         </Card>
-        <Card title="SECTORS" note="OPEN ROLES">
-          <BarList items={stats.sectors} />
+        <Card title="CLASSIFICATIONS" note="OPEN ROLES">
+          <BarList items={stats.classifications} />
         </Card>
       </div>
     </>

@@ -2,20 +2,20 @@
 
 import { useMemo, useState } from "react";
 import { EXPERIENCE_BUCKETS, type ExperienceBucket } from "@/lib/experience";
-import { sectorLabel } from "@/lib/sectors";
+import { classificationLabel } from "@/lib/classifications";
 import { countryName } from "@/lib/geo";
 import type { CompanyFacet } from "@/lib/jobs";
 import { ChevronIcon } from "./icons";
 
-type Section = "country" | "company" | "sector" | "experience";
+type Section = "country" | "company" | "classification" | "experience";
 
 type Props = {
   countries: string[];
   countryFacets: Record<string, number>;
   companies: string[];
   companyFacets: CompanyFacet[];
-  sector: string | null;
-  sectors: string[];
+  classification: string | null;
+  classifications: string[];
   experience: ExperienceBucket | null;
   onChange: (patch: Record<string, string | null>) => void;
 };
@@ -64,7 +64,7 @@ function PickList({ items, selected, placeholder, onToggle }: { items: Item[]; s
   );
 }
 
-export function AdvancedFilters({ countries, countryFacets, companies, companyFacets, sector, sectors, experience, onChange }: Props) {
+export function AdvancedFilters({ countries, countryFacets, companies, companyFacets, classification, classifications, experience, onChange }: Props) {
   const [open, setOpen] = useState<Section | null>(null);
 
   const countryItems = useMemo(
@@ -112,23 +112,23 @@ export function AdvancedFilters({ countries, countryFacets, companies, companyFa
       ),
     },
     {
-      id: "sector",
+      id: "classification",
       title: "CLASSIFICATION",
-      badge: sector ? sectorLabel(sector) : null,
+      badge: classification ? classificationLabel(classification) : null,
       body: (
         <div className="flex flex-wrap gap-2">
-          <button type="button" aria-pressed={!sector} onClick={() => onChange({ sector: null })} className={`${chip} ${!sector ? "border-fg bg-faint" : "border-line"}`}>
+          <button type="button" aria-pressed={!classification} onClick={() => onChange({ classification: null })} className={`${chip} ${!classification ? "border-fg bg-faint" : "border-line"}`}>
             ALL CLASSIFICATIONS
           </button>
-          {sectors.map((s) => (
+          {classifications.map((s) => (
             <button
               key={s}
               type="button"
-              aria-pressed={sector === s}
-              onClick={() => onChange({ sector: sector === s ? null : s })}
-              className={`${chip} ${sector === s ? "border-fg bg-faint" : "border-line"}`}
+              aria-pressed={classification === s}
+              onClick={() => onChange({ classification: classification === s ? null : s })}
+              className={`${chip} ${classification === s ? "border-fg bg-faint" : "border-line"}`}
             >
-              {sectorLabel(s)}
+              {classificationLabel(s)}
             </button>
           ))}
         </div>

@@ -2,7 +2,7 @@ import { sql } from "./db.ts";
 import { EXPERIENCE_BUCKETS } from "./experience.ts";
 import { timeAgo } from "./format.ts";
 import { EU_COUNTRIES, EUROPE_COUNTRIES } from "./geo.ts";
-import { sectorLabel } from "./sectors.ts";
+import { classificationLabel } from "./classifications.ts";
 
 type Row = Record<string, unknown>;
 const num = (v: unknown) => Number(v ?? 0);
@@ -20,7 +20,7 @@ const ADDED = "j.first_seen_at > b.at";
 
 export type Overview = { open: number; europe: number; eu: number; companies: number; added: number; removed: number; lastScrape: string | null };
 
-export type CompanyStat = { slug: string; name: string; sector: string | null; open: number; europe: number; added: number; removed: number };
+export type CompanyStat = { slug: string; name: string; classification: string | null; open: number; europe: number; added: number; removed: number };
 
 export type DayPoint = { day: string; open: number; eu: number; added: number; removed: number };
 
@@ -32,7 +32,7 @@ export type Stats = {
   timeline: DayPoint[];
   countries: Bar[];
   experience: Bar[];
-  sectors: Bar[];
+  classifications: Bar[];
 };
 
 export async function loadStats(range: Range): Promise<Stats> {
@@ -40,7 +40,7 @@ export async function loadStats(range: Range): Promise<Stats> {
   const europe = [...EUROPE_COUNTRIES];
   const eu = [...EU_COUNTRIES];
 
-  const [ov, perCompany, timeline, countries, experience, sectors] = await Promise.all([
+  const [ov, perCompany, timeline, countries, experience, classifications] = await Promise.all([
     db.query(
       `select
          count(*) filter (where j.removed_at is null)::int as open,
@@ -55,14 +55,14 @@ export async function loadStats(range: Range): Promise<Stats> {
       [europe, eu, range],
     ),
     db.query(
-      `select c.slug, c.name, c.sector,
+      `select c.slug, c.name, c.classification,
          count(j.id) filter (where j.removed_at is null)::int as open,
          count(j.id) filter (where j.removed_at is null and j.location_countries && $1::text[])::int as europe,
          count(j.id) filter (where ${ADDED} and j.first_seen_at > now() - make_interval(days => $2))::int as added,
          count(j.id) filter (where j.removed_at > now() - make_interval(days => $2))::int as removed
        from companies c left join jobs j on j.company_id = c.id
        left join ${BASELINE} b on b.company_id = c.id
-       where c.active group by c.slug, c.name, c.sector`,
+       where c.active group by c.slug, c.name, c.classification`,
       [europe, range],
     ),
     db.query(
@@ -93,7 +93,7 @@ export async function loadStats(range: Range): Promise<Stats> {
        from jobs j join companies c on c.id = j.company_id and c.active where j.removed_at is null group by 1`,
     ),
     db.query(
-      `select coalesce(c.sector, 'other') as key, count(*)::int as n from jobs j join companies c on c.id = j.company_id and c.active
+      `select coalesce(c.classification, 'other') as key, count(*)::int as n from jobs j join companies c on c.id = j.company_id and c.active
        where j.removed_at is null group by 1 order by n desc`,
     ),
   ]);
@@ -118,12 +118,12 @@ export async function loadStats(range: Range): Promise<Stats> {
       lastScrape: o.last_scrape ? new Date(o.last_scrape as string).toISOString() : null,
     },
     companies: (perCompany as Row[])
-      .map((r) => ({ slug: String(r.slug), name: String(r.name), sector: (r.sector as string | null) ?? null, open: num(r.open), europe: num(r.europe), added: num(r.added), removed: num(r.removed) }))
+      .map((r) => ({ slug: String(r.slug), name: String(r.name), classification: (r.classification as string | null) ?? null, open: num(r.open), europe: num(r.europe), added: num(r.added), removed: num(r.removed) }))
       .sort((a, b) => b.open - a.open),
     timeline: (timeline as Row[]).map((r) => ({ day: String(r.day), open: num(r.open), eu: num(r.eu), added: num(r.added), removed: num(r.removed) })),
     countries: (countries as Row[]).map((r) => ({ key: String(r.key), label: String(r.key), n: num(r.n) })),
     experience: expOrder.map((k) => ({ key: k, label: expLabel[k], n: num((experience as Row[]).find((r) => r.key === k)?.n) })),
-    sectors: (sectors as Row[]).map((r) => ({ key: String(r.key), label: sectorLabel(String(r.key)), n: num(r.n) })),
+    classifications: (classifications as Row[]).map((r) => ({ key: String(r.key), label: classificationLabel(String(r.key)), n: num(r.n) })),
   };
 }
 
@@ -131,7 +131,7 @@ export type Register = {
   slug: string;
   name: string;
   logo: string | null;
-  sector: string | null;
+  classification: string | null;
   hq: string | null;
   careersUrl: string | null;
   source: string;
@@ -145,7 +145,7 @@ export type Register = {
 
 export async function loadRegister(): Promise<Register[]> {
   const rows = (await sql().query(
-    `select c.slug, c.name, c.logo_url, c.sector, c.hq_country, c.careers_url, c.source_type, c.active,
+    `select c.slug, c.name, c.logo_url, c.classification, c.hq_country, c.careers_url, c.source_type, c.active,
        count(j.id) filter (where c.active and j.removed_at is null)::int as open,
        count(j.id) filter (where c.active and j.removed_at is null and j.location_countries && $1::text[])::int as europe,
        count(j.id) filter (where c.active and j.removed_at is null and j.location_countries && $2::text[])::int as eu,
@@ -158,7 +158,7 @@ export async function loadRegister(): Promise<Register[]> {
     slug: String(r.slug),
     name: String(r.name),
     logo: (r.logo_url as string | null) ?? null,
-    sector: (r.sector as string | null) ?? null,
+    classification: (r.classification as string | null) ?? null,
     hq: (r.hq_country as string | null) ?? null,
     careersUrl: (r.careers_url as string | null) ?? null,
     source: String(r.source_type),

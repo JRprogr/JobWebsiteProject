@@ -15,14 +15,14 @@ export async function getJobDetails(jobId: string): Promise<Details | null> {
   if (cached.length > 0) return { text: String(cached[0].body), cached: true };
 
   const rows = await db.query(
-    `select j.external_id, j.url, c.id, c.name, c.slug, c.logo_url, c.sector, c.source_type, c.source_config, c.active
+    `select j.external_id, j.url, c.id, c.name, c.slug, c.logo_url, c.classification, c.source_type, c.source_config, c.active
      from jobs j join companies c on c.id = j.company_id where j.id = $1`,
     [jobId],
   );
   if (rows.length === 0) return null;
   const r = rows[0];
   const company = {
-    id: r.id, name: r.name, slug: r.slug, logo_url: r.logo_url, sector: r.sector,
+    id: r.id, name: r.name, slug: r.slug, logo_url: r.logo_url, classification: r.classification,
     source_type: r.source_type, source_config: r.source_config, active: r.active,
   } as Company;
 

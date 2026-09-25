@@ -2,7 +2,7 @@ import { sql } from "./db.ts";
 import { EXPERIENCE_BUCKETS, type ExperienceBucket } from "./experience.ts";
 import { timeAgo } from "./format.ts";
 import { EU_COUNTRIES, EUROPE_COUNTRIES, type Scope } from "./geo.ts";
-import { sortSectors } from "./sectors.ts";
+import { sortClassifications } from "./classifications.ts";
 
 export type Sort = "latest" | "oldest" | "az" | "za";
 
@@ -29,7 +29,7 @@ const ORDER: Record<Sort, string> = {
 
 export type Filters = {
   q: string;
-  sector: string | null;
+  classification: string | null;
   scope: Scope;
   countries: string[];
   companies: string[];
@@ -46,7 +46,7 @@ export type JobView = {
   company: string;
   companySlug: string;
   logo: string | null;
-  sector: string | null;
+  classification: string | null;
   city: string | null;
   cities: string[];
   countries: string[];
@@ -71,7 +71,7 @@ function where(f: Filters, skip: Skip = {}) {
     const like = add(`%${word.replace(/[%_\\]/g, (ch) => `\\${ch}`)}%`);
     clauses.push(`(j.title ilike ${like} or j.location_city ilike ${like} or exists (select 1 from unnest(j.location_cities) city where city ilike ${like}))`);
   }
-  if (f.sector) clauses.push(`c.sector = ${add(f.sector)}`);
+  if (f.classification) clauses.push(`c.classification = ${add(f.classification)}`);
   if (f.remote) clauses.push("j.remote");
   if (f.newOnly) clauses.push("j.first_seen_at > now() - interval '24 hours'");
   if (!skip.companies && f.companies.length > 0) clauses.push(`c.slug = any(${add(f.companies)}::text[])`);
@@ -104,7 +104,7 @@ export async function listJobs(f: Filters, limit: number): Promise<{ jobs: JobVi
   const w = where(f);
   const [rows, totals] = await Promise.all([
     sql().query(
-      `select j.id, j.title, j.url, c.name as company, c.slug as company_slug, c.logo_url, c.sector, j.location_city, j.location_cities, j.location_countries,
+      `select j.id, j.title, j.url, c.name as company, c.slug as company_slug, c.logo_url, c.classification, j.location_city, j.location_cities, j.location_countries,
               j.location_raw, j.remote, j.department, j.salary_min, j.salary_max, j.salary_currency,
               j.experience_min, j.experience_max, j.experience_kind,
               j.first_seen_at
@@ -124,7 +124,7 @@ export async function listJobs(f: Filters, limit: number): Promise<{ jobs: JobVi
     company: String(r.company),
     companySlug: String(r.company_slug),
     logo: (r.logo_url as string | null) ?? null,
-    sector: (r.sector as string | null) ?? null,
+    classification: (r.classification as string | null) ?? null,
     city: (r.location_city as string | null) ?? null,
     cities: (r.location_cities as string[] | null) ?? [],
     countries: (r.location_countries as string[] | null) ?? [],
@@ -167,9 +167,9 @@ export async function companyFacets(f: Filters): Promise<CompanyFacet[]> {
   return rows.map((r) => ({ slug: String(r.slug), name: String(r.name), n: r.n as number })).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
 }
 
-export async function sectors(): Promise<string[]> {
-  const rows = await sql().query("select distinct sector from companies where active and sector is not null order by 1");
-  return sortSectors((rows as Row[]).map((r) => String(r.sector)));
+export async function classifications(): Promise<string[]> {
+  const rows = await sql().query("select distinct classification from companies where active and classification is not null order by 1");
+  return sortClassifications((rows as Row[]).map((r) => String(r.classification)));
 }
 
 export async function headline() {

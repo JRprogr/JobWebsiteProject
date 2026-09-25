@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { EXPERIENCE_BUCKETS } from "@/lib/experience";
 import { countryName, type Scope } from "@/lib/geo";
-import { sectorLabel } from "@/lib/sectors";
+import { classificationLabel } from "@/lib/classifications";
 import type { CompanyFacet, Filters, JobView } from "@/lib/jobs";
 import { AdvancedFilters } from "./AdvancedFilters";
 import { ChevronIcon, CloseIcon, GlobeIcon } from "./icons";
@@ -22,7 +22,7 @@ type Props = {
   facets: Record<string, number>;
   globalFacets: Record<string, number>;
   companyFacets: CompanyFacet[];
-  sectors: string[];
+  classifications: string[];
   headline: { roles: number; companies: number; updated: string | null };
 };
 
@@ -30,9 +30,9 @@ const chip = "rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.
 
 const SCOPE_LABEL: Record<Scope, string> = { europe: "EUROPE", eu: "EU ONLY", all: "GLOBAL" };
 
-const ADVANCED_RESET = { c: null, co: null, sector: null, exp: null };
+const ADVANCED_RESET = { c: null, co: null, classification: null, exp: null };
 
-export function Board({ jobs, total, limit, filters, facets, globalFacets, companyFacets, sectors, headline }: Props) {
+export function Board({ jobs, total, limit, filters, facets, globalFacets, companyFacets, classifications, headline }: Props) {
   const { update, pending } = useFilterNav();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [multi, setMulti] = useState(false);
@@ -81,11 +81,11 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
         update({ co: next.length ? next.join(",") : null });
       },
     })),
-    ...(filters.sector ? [{ key: "sector", label: sectorLabel(filters.sector), clear: () => update({ sector: null }) }] : []),
+    ...(filters.classification ? [{ key: "classification", label: classificationLabel(filters.classification), clear: () => update({ classification: null }) }] : []),
     ...(filters.experience ? [{ key: "exp", label: EXPERIENCE_BUCKETS[filters.experience].label, clear: () => update({ exp: null }) }] : []),
   ];
 
-  const advancedCount = filters.countries.length + filters.companies.length + (filters.sector ? 1 : 0) + (filters.experience ? 1 : 0);
+  const advancedCount = filters.countries.length + filters.companies.length + (filters.classification ? 1 : 0) + (filters.experience ? 1 : 0);
   const summary = filters.countries.length > 0 ? filters.countries.join(", ") : SCOPE_LABEL[filters.scope];
   const step = limit <= 20 ? 20 : 50;
 
@@ -174,8 +174,8 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
                 countryFacets={globalFacets}
                 companies={filters.companies}
                 companyFacets={companyFacets}
-                sector={filters.sector}
-                sectors={sectors}
+                classification={filters.classification}
+                classifications={classifications}
                 experience={filters.experience}
                 onChange={update}
               />

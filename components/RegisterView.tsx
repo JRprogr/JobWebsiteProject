@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { sectorLabel } from "@/lib/sectors";
+import { classificationLabel } from "@/lib/classifications";
 import { countryName } from "@/lib/geo";
 import type { Register } from "@/lib/stats";
 import { CompanyLogo } from "./CompanyLogo";
@@ -10,24 +10,24 @@ const fmt = (n: number) => n.toLocaleString("en");
 const figure = (c: Register, n: number) => (c.scraped ? fmt(n) : "—");
 const sourceLabel = (source: string) => (source === "custom" ? "OWN CAREERS SITE" : source.toUpperCase());
 
-type Props = { companies: Register[]; sectors: string[]; sector: string | null };
+type Props = { companies: Register[]; classifications: string[]; classification: string | null };
 
-export function RegisterView({ companies, sectors, sector }: Props) {
-  const shown = sector ? companies.filter((c) => c.sector === sector) : companies;
+export function RegisterView({ companies, classifications, classification }: Props) {
+  const shown = classification ? companies.filter((c) => c.classification === classification) : companies;
   const live = shown.filter((c) => c.scraped).length;
 
   return (
     <>
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Classification">
         <span className={label}>CLASSIFICATION</span>
-        {[null, ...sectors].map((s) => (
+        {[null, ...classifications].map((s) => (
           <Link
             key={s ?? "all"}
-            href={s ? `/companies?sector=${encodeURIComponent(s)}` : "/companies"}
-            aria-current={sector === s ? "true" : undefined}
-            className={`rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.08em] ${sector === s ? "border-fg bg-faint font-bold" : "border-line"}`}
+            href={s ? `/companies?classification=${encodeURIComponent(s)}` : "/companies"}
+            aria-current={classification === s ? "true" : undefined}
+            className={`rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.08em] ${classification === s ? "border-fg bg-faint font-bold" : "border-line"}`}
           >
-            {s ? sectorLabel(s) : "ALL"}
+            {s ? classificationLabel(s) : "ALL"}
           </Link>
         ))}
         <span className="ml-auto font-mono text-[11px] tracking-[0.08em] text-dim">
@@ -47,7 +47,7 @@ export function RegisterView({ companies, sectors, sector }: Props) {
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <h2 className="truncate text-xl font-bold leading-tight">{c.name}</h2>
                 <p className="truncate font-mono text-[11px] tracking-[0.06em] text-dim">
-                  {c.sector ? sectorLabel(c.sector) : "—"}
+                  {c.classification ? classificationLabel(c.classification) : "—"}
                   {c.hq ? ` · HQ ${countryName(c.hq).toUpperCase()}` : ""}
                 </p>
               </div>

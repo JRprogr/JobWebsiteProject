@@ -31,7 +31,7 @@ companies (
   name          text not null,
   slug          text unique not null,
   logo_url      text,
-  sector        text,        -- one of the 10 keys in lib/sectors.ts: prime, defence, launch, propulsion, satellites, components, earth-observation, space-ops, services, institutions
+  classification text,       -- one of the 10 keys in lib/classifications.ts (the column was called sector until migration 006): prime, defence, launch, propulsion, satellites, components, earth-observation, space-ops, services, institutions
   source_type   text not null, -- 'greenhouse' | 'lever' | 'workday' | 'custom'
   source_config jsonb not null, -- board token, tenant id, base url, whatever the adapter needs
   active        boolean default true,
@@ -177,8 +177,8 @@ Scoping options in `source_config` (all optional, tried in this order of prefere
 
 The requisition id is the first `bulletFields` entry that looks like an id (`^[A-Za-z]{0,4}-?\d{4,}$`), else the tail of `externalPath`; some tenants (Thales, RTX) put other fields first.
 
-## Sector taxonomy
-`lib/sectors.ts` is the single source for the 10 sector keys, their display labels and their display order. Every UI spot goes through `sectorLabel()`/`sortSectors()` — never `.toUpperCase()` a raw key.
+## Classification taxonomy
+`lib/classifications.ts` is the single source for the 10 classification keys (formerly "sectors"), their display labels and their display order. The URL parameter is `?classification=` (overview and register), the seed key is `classification`. Every UI spot goes through `classificationLabel()`/`sortClassifications()` — never `.toUpperCase()` a raw key.
 
 ## Company logos
 `companies.logo_url` points at `public/logos/<slug>.png` (128x128, transparent). `npm run logos [slug ...]` downloads them (site apple-touch/svg icon first, gstatic favicon as fallback), using the domain in `db/seed/websites.json`, then writes `logo_url` into `db/seed/companies.json`; run `npm run db:seed` afterwards. Add every new company's domain to `websites.json`. `CompanyLogo` renders them on a white disc in both themes and falls back to the initial letter.
@@ -234,6 +234,6 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 
 ## Bug log 8 notes
 - **Search** (`where()` in `lib/jobs.ts`): every word of the query must match the job title or one of its cities (`location_city`, `location_cities`), so "embedded engineer munich" works.
-- **Classification**: the visible word for the sector taxonomy on the overview (filters, preview) and the register is "Classification"; keys, URL parameters and `lib/sectors.ts` are still `sector`. The Statistics page still says "Sectors".
+- **Classification** (renamed from "sector" everywhere, bug log 8): UI wording (overview filters and preview, register, Statistics), URL parameter `classification`, code (`lib/classifications.ts`, `classificationLabel`, `Filters.classification`), seed key and the database column (`companies.classification`, migration 006). Only the industry-sense word "sector" in About prose is untouched.
 - **link-list `text_location_regex`**: takes the place from the listing text when the list doesn't carry one (Neuraspace's PDFs state "LOCATION: Munich – Germany; Coimbra – Portugal; …"); the dash between city and country becomes a comma. It only applies when a listing text is read, so re-reading existing jobs needs `update jobs set details_checked_at = null` for that company and a `--backfill`.
 - Arx Robotics is a plain Greenhouse board (`arxroboticsgmbh`, EU-hosted but the public API answers on boards-api.greenhouse.io).

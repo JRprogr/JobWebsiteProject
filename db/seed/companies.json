@@ -2,7 +2,7 @@
   {
     "name": "SpaceX",
     "slug": "spacex",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "spacex",
@@ -19,7 +19,7 @@
   {
     "name": "Palantir",
     "slug": "palantir",
-    "sector": "defence",
+    "classification": "defence",
     "source_type": "lever",
     "source_config": {
       "site": "palantir"
@@ -32,7 +32,7 @@
   {
     "name": "Helsing",
     "slug": "helsing",
-    "sector": "defence",
+    "classification": "defence",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "helsing"
@@ -45,7 +45,7 @@
   {
     "name": "Isar Aerospace",
     "slug": "isar-aerospace",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "isaraerospace"
@@ -58,7 +58,7 @@
   {
     "name": "DLR",
     "slug": "dlr",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "custom",
     "source_config": {
       "kind": "sitemap-dlr",
@@ -73,7 +73,7 @@
   {
     "name": "CNES",
     "slug": "cnes",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "custom",
     "source_config": {
       "kind": "sitemap-cnes",
@@ -88,7 +88,7 @@
   {
     "name": "Airbus Defence and Space",
     "slug": "airbus-defence-and-space",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "workday",
     "source_config": {
       "tenant": "ag",
@@ -110,7 +110,7 @@
   {
     "name": "Rocket Lab",
     "slug": "rocket-lab",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "rocketlab",
@@ -124,7 +124,7 @@
   {
     "name": "constellr",
     "slug": "constellr",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "constellrgmbh"
@@ -137,7 +137,7 @@
   {
     "name": "Dawn Aerospace",
     "slug": "dawn-aerospace",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "dawnaerospace"
@@ -150,7 +150,7 @@
   {
     "name": "Rocket Factory Augsburg",
     "slug": "rocket-factory-augsburg",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "rocketfactoryaugsburgag"
@@ -163,7 +163,7 @@
   {
     "name": "Planet",
     "slug": "planet",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "planetlabs",
@@ -177,7 +177,7 @@
   {
     "name": "AST SpaceMobile",
     "slug": "ast-spacemobile",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "astspacemobile",
@@ -191,7 +191,7 @@
   {
     "name": "BlackSky",
     "slug": "blacksky",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "greenhouse",
     "source_config": {
       "board_token": "blacksky",
@@ -205,7 +205,7 @@
   {
     "name": "ispace",
     "slug": "ispace",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "lever",
     "source_config": {
       "site": "ispace-inc"
@@ -218,7 +218,7 @@
   {
     "name": "Novaspace",
     "slug": "novaspace",
-    "sector": "services",
+    "classification": "services",
     "source_type": "lever",
     "source_config": {
       "site": "novaspace"
@@ -231,7 +231,7 @@
   {
     "name": "Loft Orbital",
     "slug": "loft-orbital",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "lever",
     "source_config": {
       "site": "loftorbital"
@@ -244,7 +244,7 @@
   {
     "name": "ArianeGroup",
     "slug": "arianegroup",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "workday",
     "source_config": {
       "tenant": "arianegroup",
@@ -259,7 +259,7 @@
   {
     "name": "Blue Origin",
     "slug": "blue-origin",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "workday",
     "source_config": {
       "tenant": "blueorigin",
@@ -275,7 +275,7 @@
   {
     "name": "Leonardo",
     "slug": "leonardo",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "workday",
     "source_config": {
       "tenant": "leonardocompany",
@@ -290,7 +290,7 @@
   {
     "name": "Thales Alenia Space",
     "slug": "thales-alenia-space",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "workday",
     "source_config": {
       "tenant": "thales",
@@ -307,7 +307,7 @@
   {
     "name": "RTX",
     "slug": "rtx",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "workday",
     "source_config": {
       "tenant": "globalhr",
@@ -323,7 +323,7 @@
   {
     "name": "Vantor",
     "slug": "vantor",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "workday",
     "source_config": {
       "tenant": "maxar",
@@ -339,7 +339,7 @@
   {
     "name": "Vyoma",
     "slug": "vyoma",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "personio",
     "source_config": {
       "subdomain": "vyoma-gmbh",
@@ -354,7 +354,7 @@
   {
     "name": "HyImpulse",
     "slug": "hyimpulse",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "personio",
     "source_config": {
       "subdomain": "hyimpulse-technologies-gmbh",
@@ -369,7 +369,7 @@
   {
     "name": "IENAI Space",
     "slug": "ienai-space",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "personio",
     "source_config": {
       "subdomain": "ienai-space-personio",
@@ -384,7 +384,7 @@
   {
     "name": "ISPTech",
     "slug": "isptech",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "personio",
     "source_config": {
       "subdomain": "isptech",
@@ -399,7 +399,7 @@
   {
     "name": "LiveEO",
     "slug": "liveeo",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "personio",
     "source_config": {
       "subdomain": "liveeo-gmbh",
@@ -414,7 +414,7 @@
   {
     "name": "OKAPI:Orbits",
     "slug": "okapi-orbits",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "personio",
     "source_config": {
       "subdomain": "okapiorbits",
@@ -429,7 +429,7 @@
   {
     "name": "Polaris Raumflugzeuge",
     "slug": "polaris-raumflugzeuge",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "personio",
     "source_config": {
       "subdomain": "polaris-raumflugzeuge-gmbh",
@@ -444,7 +444,7 @@
   {
     "name": "Indra Avitech",
     "slug": "indra-avitech",
-    "sector": "components",
+    "classification": "components",
     "source_type": "personio",
     "source_config": {
       "subdomain": "indra-avitech",
@@ -459,7 +459,7 @@
   {
     "name": "dcubed",
     "slug": "dcubed",
-    "sector": "components",
+    "classification": "components",
     "source_type": "teamtailor",
     "source_config": {
       "host": "dcubed.teamtailor.com",
@@ -473,7 +473,7 @@
   {
     "name": "Ecosmic",
     "slug": "ecosmic",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "teamtailor",
     "source_config": {
       "host": "careers.ecosmic.space",
@@ -487,7 +487,7 @@
   {
     "name": "Exotrail",
     "slug": "exotrail",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "teamtailor",
     "source_config": {
       "host": "careers.exotrail.com",
@@ -501,7 +501,7 @@
   {
     "name": "Kuva Space",
     "slug": "kuva-space",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "teamtailor",
     "source_config": {
       "host": "careers.kuvaspace.com",
@@ -515,7 +515,7 @@
   {
     "name": "Leaf Space",
     "slug": "leaf-space",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "teamtailor",
     "source_config": {
       "host": "leafspace.teamtailor.com",
@@ -529,7 +529,7 @@
   {
     "name": "Reorbit",
     "slug": "reorbit",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "teamtailor",
     "source_config": {
       "host": "careers.reorbit.space",
@@ -543,7 +543,7 @@
   {
     "name": "SSTL",
     "slug": "sstl",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "teamtailor",
     "source_config": {
       "host": "jobs.sstl.co.uk",
@@ -557,7 +557,7 @@
   {
     "name": "ATG Europe",
     "slug": "atg-europe",
-    "sector": "services",
+    "classification": "services",
     "source_type": "recruitee",
     "source_config": {
       "host": "jobs.atg-europe.com",
@@ -571,7 +571,7 @@
   {
     "name": "ISISPACE",
     "slug": "isispace",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "recruitee",
     "source_config": {
       "host": "careers.isispace.nl",
@@ -585,7 +585,7 @@
   {
     "name": "MaiaSpace",
     "slug": "maiaspace",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "recruitee",
     "source_config": {
       "host": "careers.maia-space.com",
@@ -599,7 +599,7 @@
   {
     "name": "Netherlands Aerospace Centre (NLR)",
     "slug": "netherlands-aerospace-centre-nlr",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "recruitee",
     "source_config": {
       "host": "werkenbijnlr.recruitee.com",
@@ -613,7 +613,7 @@
   {
     "name": "Morpheus Space",
     "slug": "morpheus-space",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "recruitee",
     "source_config": {
       "host": "careers.morpheus.space",
@@ -627,7 +627,7 @@
   {
     "name": "Astroscale",
     "slug": "astroscale",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "bamboohr",
     "source_config": {
       "subdomain": "astroscale"
@@ -640,7 +640,7 @@
   {
     "name": "ClearSpace",
     "slug": "clearspace",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "bamboohr",
     "source_config": {
       "subdomain": "clearspace"
@@ -653,7 +653,7 @@
   {
     "name": "Cysec",
     "slug": "cysec",
-    "sector": "services",
+    "classification": "services",
     "source_type": "bamboohr",
     "source_config": {
       "subdomain": "cysec"
@@ -666,7 +666,7 @@
   {
     "name": "Northstar",
     "slug": "northstar",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "bamboohr",
     "source_config": {
       "subdomain": "northstarearthandspace"
@@ -679,7 +679,7 @@
   {
     "name": "ICEYE",
     "slug": "iceye",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "ashby",
     "source_config": {
       "board": "iceye",
@@ -693,7 +693,7 @@
   {
     "name": "The Exploration Company",
     "slug": "the-exploration-company",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "ashby",
     "source_config": {
       "board": "the-exploration-company",
@@ -707,7 +707,7 @@
   {
     "name": "ESA",
     "slug": "esa",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "successfactors",
     "source_config": {
       "base": "https://jobs.esa.int"
@@ -720,7 +720,7 @@
   {
     "name": "SES",
     "slug": "ses",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "successfactors",
     "source_config": {
       "base": "https://careers.ses.com"
@@ -733,7 +733,7 @@
   {
     "name": "Beyond Gravity",
     "slug": "beyond-gravity",
-    "sector": "components",
+    "classification": "components",
     "source_type": "successfactors",
     "source_config": {
       "base": "https://careers.beyondgravity.com",
@@ -747,7 +747,7 @@
   {
     "name": "GKN Aerospace",
     "slug": "gkn-aerospace",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "source_config": {
       "kind": "gkn-api"
@@ -760,7 +760,7 @@
   {
     "name": "D-Orbit",
     "slug": "d-orbit",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "factorial",
     "source_config": {
       "host": "dorbit-space.factorial.it",
@@ -774,7 +774,7 @@
   {
     "name": "Pangea Propulsion",
     "slug": "pangea-propulsion",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "factorial",
     "source_config": {
       "host": "pangeapropulsion.factorialhr.com",
@@ -788,7 +788,7 @@
   {
     "name": "Visionspace",
     "slug": "visionspace",
-    "sector": "services",
+    "classification": "services",
     "source_type": "factorial",
     "source_config": {
       "host": "visionspace.factorialhr.pt",
@@ -802,7 +802,7 @@
   {
     "name": "STI",
     "slug": "sti",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "factorial",
     "source_config": {
       "host": "spacetech.factorialhr.com",
@@ -816,7 +816,7 @@
   {
     "name": "LIST",
     "slug": "list",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "skeeled",
     "source_config": {
       "listing_url": "https://www.list.lu/career/job-offers",
@@ -830,7 +830,7 @@
   {
     "name": "Luxembourg Space Agency",
     "slug": "luxembourg-space-agency",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "skeeled",
     "source_config": {
       "board_id": "65f17f1e19e8b93481b153a1",
@@ -844,7 +844,7 @@
   {
     "name": "HITEC",
     "slug": "hitec",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "skeeled",
     "source_config": {
       "board_id": "69d613c4af3e3c0ac13a380c",
@@ -858,7 +858,7 @@
   {
     "name": "SSC",
     "slug": "ssc",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "hibob",
     "source_config": {
       "subdomain": "ssc"
@@ -871,7 +871,7 @@
   {
     "name": "Swissto12",
     "slug": "swissto12",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "hibob",
     "source_config": {
       "subdomain": "swissto12-b67d359b42"
@@ -884,7 +884,7 @@
   {
     "name": "Arkadia Space",
     "slug": "arkadia-space",
-    "sector": "components",
+    "classification": "components",
     "source_type": "odoo",
     "source_config": {
       "host": "arkadia-space.odoo.com",
@@ -898,7 +898,7 @@
   {
     "name": "Lockheed Martin",
     "slug": "lockheed-martin",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "eightfold",
     "source_config": {
       "base": "https://lockheedmartin.eightfold.ai",
@@ -934,7 +934,7 @@
   {
     "name": "OHB",
     "slug": "ohb",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "cornerstone",
     "source_config": {
       "host": "career-ohb.csod.com",
@@ -948,7 +948,7 @@
   {
     "name": "GMV",
     "slug": "gmv",
-    "sector": "services",
+    "classification": "services",
     "source_type": "cornerstone",
     "source_config": {
       "host": "gmv.csod.com",
@@ -962,7 +962,7 @@
   {
     "name": "SatVu",
     "slug": "satvu",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "workable",
     "source_config": {
       "account": "satellitevu"
@@ -975,7 +975,7 @@
   {
     "name": "MDA Space",
     "slug": "mda-space",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "ultipro",
     "source_config": {
       "board": "https://recruiting.ultipro.ca/MAC5000MCDW/JobBoard/4f9bafdd-9002-4e06-975a-bcaae5edaf84"
@@ -988,7 +988,7 @@
   {
     "name": "Boeing Space",
     "slug": "boeing-space",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "talentbrew",
     "source_config": {
       "base": "https://jobs.boeing.com",
@@ -1004,7 +1004,7 @@
   {
     "name": "Dassault Aviation",
     "slug": "dassault-aviation",
-    "sector": "defence",
+    "classification": "defence",
     "source_type": "talentsoft",
     "source_config": {
       "base": "https://carriere.dassault-aviation.com",
@@ -1018,7 +1018,7 @@
   {
     "name": "Kongsberg",
     "slug": "kongsberg",
-    "sector": "defence",
+    "classification": "defence",
     "source_type": "custom",
     "source_config": {
       "kind": "kongsberg-web",
@@ -1033,7 +1033,7 @@
   {
     "name": "Viasat",
     "slug": "viasat",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "jibe",
     "source_config": {
       "base": "https://careers.viasat.com"
@@ -1046,7 +1046,7 @@
   {
     "name": "Redwire",
     "slug": "redwire",
-    "sector": "components",
+    "classification": "components",
     "source_type": "clinch",
     "source_config": {
       "base": "https://careers.rdw.com",
@@ -1060,7 +1060,7 @@
   {
     "name": "Scanway",
     "slug": "scanway",
-    "sector": "components",
+    "classification": "components",
     "source_type": "peopleforce",
     "source_config": {
       "subdomain": "scanway",
@@ -1074,7 +1074,7 @@
   {
     "name": "GomSpace",
     "slug": "gomspace",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "hron",
     "source_config": {
       "subdomain": "gomspace",
@@ -1091,7 +1091,7 @@
   {
     "name": "Avio",
     "slug": "avio",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "intervieweb",
     "source_config": {
       "base": "https://zinrec.intervieweb.it/avio",
@@ -1105,7 +1105,7 @@
   {
     "name": "AAC Clyde Space",
     "slug": "aac-clyde-space",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "clarityloop",
     "source_config": {
       "list_url": "https://hr.clarityloop.com/recruitment/open-recruitments/Z0FBQUFBQnFSN19NN29saDZRdlNCX3Y3UUdRckpmN25vdGcxLU5ndTZMdXdiM3pOMVJwQllNSkIxYjV2SGpuN0dSNWt1RjVmNVVJTWNDeks3aUd6RjBscEd6T1luNjQ0elE9PQ%3D%3D/",
@@ -1119,7 +1119,7 @@
   {
     "name": "KP Labs",
     "slug": "kp-labs",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "source_config": {
       "kind": "link-list",
@@ -1137,7 +1137,7 @@
   {
     "name": "Liftero",
     "slug": "liftero",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "custom",
     "source_config": {
       "kind": "link-list",
@@ -1154,7 +1154,7 @@
   {
     "name": "Andøya Space",
     "slug": "andoya-space",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "custom",
     "source_config": {
       "kind": "link-list",
@@ -1173,7 +1173,7 @@
   {
     "name": "EUSPA",
     "slug": "euspa",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "custom",
     "source_config": {
       "kind": "eu-portal",
@@ -1188,7 +1188,7 @@
   {
     "name": "Latitude",
     "slug": "latitude",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "custom",
     "source_config": {
       "kind": "link-list",
@@ -1206,7 +1206,7 @@
   {
     "name": "Esyen",
     "slug": "esyen",
-    "sector": "services",
+    "classification": "services",
     "source_type": "custom",
     "source_config": {
       "kind": "link-list",
@@ -1226,7 +1226,7 @@
   {
     "name": "Infinite Orbits",
     "slug": "infinite-orbits",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "custom",
     "source_config": {
       "kind": "wix-board",
@@ -1241,7 +1241,7 @@
   {
     "name": "Admatis",
     "slug": "admatis",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "hq_country": "HU",
     "careers_url": "https://admatis.com/career/",
@@ -1258,7 +1258,7 @@
   {
     "name": "Almatech",
     "slug": "almatech",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "hq_country": "CH",
     "careers_url": "https://almatech.ch/careers",
@@ -1274,7 +1274,7 @@
   {
     "name": "Amphinicy",
     "slug": "amphinicy",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "hq_country": "HR",
     "careers_url": "https://www.amphinicy.com/careers",
@@ -1291,7 +1291,7 @@
   {
     "name": "Creotech Instruments",
     "slug": "creotech-instruments",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "custom",
     "hq_country": "PL",
     "careers_url": "https://creotech.pl/careers/",
@@ -1307,7 +1307,7 @@
   {
     "name": "Maana Electric",
     "slug": "maana-electric",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "custom",
     "hq_country": "LU",
     "careers_url": "https://maanaelectric.com/career/",
@@ -1324,7 +1324,7 @@
   {
     "name": "Piap Space",
     "slug": "piap-space",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "hq_country": "PL",
     "careers_url": "https://piap.space/job-openings/",
@@ -1341,7 +1341,7 @@
   {
     "name": "SAB Aerospace",
     "slug": "sab-aerospace",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "hq_country": "IT",
     "careers_url": "https://www.sabaerospace.com/careers/",
@@ -1358,7 +1358,7 @@
   {
     "name": "SAGA Space Architects",
     "slug": "saga-space-architects",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "custom",
     "hq_country": "DK",
     "careers_url": "https://www.saga.dk/careers",
@@ -1380,7 +1380,7 @@
   {
     "name": "ESPI",
     "slug": "espi",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "custom",
     "hq_country": "AT",
     "careers_url": "https://www.espi.eu/vacancies/",
@@ -1397,7 +1397,7 @@
   {
     "name": "PLD Space",
     "slug": "pld-space",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "custom",
     "hq_country": "ES",
     "careers_url": "https://www.pldspace.com/en/pld-space-open-positions/",
@@ -1421,7 +1421,7 @@
   {
     "name": "Space Dreams",
     "slug": "space-dreams",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "custom",
     "hq_country": "FR",
     "careers_url": "https://spacedreams.com/career/",
@@ -1437,7 +1437,7 @@
   {
     "name": "Officina Stellare",
     "slug": "officina-stellare",
-    "sector": "components",
+    "classification": "components",
     "source_type": "custom",
     "hq_country": "IT",
     "careers_url": "https://www.officinastellare.com/careers-in-officina-stellare/become-part-of-our-team/",
@@ -1455,7 +1455,7 @@
   {
     "name": "Blackswan Space",
     "slug": "blackswan-space",
-    "sector": "services",
+    "classification": "services",
     "source_type": "custom",
     "hq_country": "LU",
     "careers_url": "https://blackswanspace.com/careers/",
@@ -1473,7 +1473,7 @@
   {
     "name": "Neuraspace",
     "slug": "neuraspace",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "custom",
     "hq_country": "PT",
     "careers_url": "https://www.neuraspace.com/all-jobs",
@@ -1491,7 +1491,7 @@
   {
     "name": "Space Norway",
     "slug": "space-norway",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "custom",
     "hq_country": "NO",
     "careers_url": "https://www.finn.no/job/company/9002",
@@ -1508,7 +1508,7 @@
   {
     "name": "Unseenlabs",
     "slug": "unseenlabs",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "custom",
     "hq_country": "FR",
     "careers_url": "https://careers.werecruit.io/en/unseenlabs",
@@ -1525,7 +1525,7 @@
   {
     "name": "Spire",
     "slug": "spire",
-    "sector": "services",
+    "classification": "services",
     "source_type": "greenhouse",
     "hq_country": "US",
     "careers_url": "https://spire.com/careers/job-openings/",
@@ -1538,7 +1538,7 @@
   {
     "name": "GTD",
     "slug": "gtd",
-    "sector": "services",
+    "classification": "services",
     "source_type": "custom",
     "hq_country": "ES",
     "careers_url": "https://www.gtd.eu/careers",
@@ -1557,7 +1557,7 @@
   {
     "name": "RIDE",
     "slug": "ride",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "custom",
     "hq_country": "FR",
     "careers_url": "https://www.ridespace.io/join-ride",
@@ -1574,7 +1574,7 @@
   {
     "name": "Safran",
     "slug": "safran",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "custom",
     "hq_country": "FR",
     "careers_url": "https://www.safran-group.com/jobs",
@@ -1597,7 +1597,7 @@
   {
     "name": "CSEM",
     "slug": "csem",
-    "sector": "institutions",
+    "classification": "institutions",
     "source_type": "custom",
     "hq_country": "CH",
     "careers_url": "https://www.csem.ch/en/jobs/",
@@ -1615,7 +1615,7 @@
   {
     "name": "Honeywell",
     "slug": "honeywell",
-    "sector": "prime",
+    "classification": "prime",
     "source_type": "oraclecloud",
     "hq_country": "US",
     "careers_url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/jobs?mode=location",
@@ -1631,7 +1631,7 @@
   {
     "name": "Intuitive Machines",
     "slug": "intuitive-machines",
-    "sector": "components",
+    "classification": "components",
     "source_type": "adp",
     "hq_country": "US",
     "careers_url": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=b0e24f83-6e4d-492d-9d6a-bc0fea197d6a&ccId=19000101_000001&lang=en_US",
@@ -1646,7 +1646,7 @@
   {
     "name": "EnduroSat",
     "slug": "endurosat",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "custom",
     "hq_country": "BG",
     "careers_url": "https://www.endurosat.com/careers/",
@@ -1665,7 +1665,7 @@
   {
     "name": "Skyrora",
     "slug": "skyrora",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "none",
     "active": false,
     "hq_country": "GB",
@@ -1676,7 +1676,7 @@
   {
     "name": "Anywaves",
     "slug": "anywaves",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "FR",
@@ -1687,7 +1687,7 @@
   {
     "name": "Needronix",
     "slug": "needronix",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "SK",
@@ -1698,7 +1698,7 @@
   {
     "name": "OroraTech",
     "slug": "ororatech",
-    "sector": "earth-observation",
+    "classification": "earth-observation",
     "source_type": "none",
     "active": false,
     "hq_country": "DE",
@@ -1709,7 +1709,7 @@
   {
     "name": "GovSat",
     "slug": "govsat",
-    "sector": "satellites",
+    "classification": "satellites",
     "source_type": "none",
     "active": false,
     "hq_country": "LU",
@@ -1720,7 +1720,7 @@
   {
     "name": "Antwerp Space",
     "slug": "antwerp-space",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "BE",
@@ -1731,7 +1731,7 @@
   {
     "name": "Sirius Space Services",
     "slug": "sirius-space-services",
-    "sector": "launch",
+    "classification": "launch",
     "source_type": "none",
     "active": false,
     "hq_country": "FR",
@@ -1742,7 +1742,7 @@
   {
     "name": "Bradford Space",
     "slug": "bradford-space",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "NL",
@@ -1753,7 +1753,7 @@
   {
     "name": "Rheinmetall",
     "slug": "rheinmetall",
-    "sector": "defence",
+    "classification": "defence",
     "source_type": "none",
     "active": false,
     "hq_country": "DE",
@@ -1764,7 +1764,7 @@
   {
     "name": "Gate Space",
     "slug": "gate-space",
-    "sector": "propulsion",
+    "classification": "propulsion",
     "source_type": "none",
     "active": false,
     "hq_country": "AT",
@@ -1775,7 +1775,7 @@
   {
     "name": "Gradel",
     "slug": "gradel",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "LU",
@@ -1786,7 +1786,7 @@
   {
     "name": "OQ Technology",
     "slug": "oq-technology",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "LU",
@@ -1797,7 +1797,7 @@
   {
     "name": "Odysseus Space",
     "slug": "odysseus-space",
-    "sector": "components",
+    "classification": "components",
     "source_type": "none",
     "active": false,
     "hq_country": "LU",
@@ -1808,7 +1808,7 @@
   {
     "name": "adwaisEO",
     "slug": "adwaiseo",
-    "sector": "services",
+    "classification": "services",
     "source_type": "none",
     "active": false,
     "hq_country": "LU",
@@ -1819,7 +1819,7 @@
   {
     "name": "LookUp Space",
     "slug": "lookup-space",
-    "sector": "space-ops",
+    "classification": "space-ops",
     "source_type": "none",
     "active": false,
     "hq_country": "FR",
@@ -1830,7 +1830,7 @@
   {
     "name": "Arx Robotics",
     "slug": "arx-robotics",
-    "sector": "defence",
+    "classification": "defence",
     "source_type": "greenhouse",
     "hq_country": "DE",
     "careers_url": "https://www.arx-robotics.com/careers",

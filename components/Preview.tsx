@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { formatExperience } from "@/lib/experience";
 import { countryName } from "@/lib/geo";
-import { sectorLabel } from "@/lib/sectors";
+import { classificationLabel } from "@/lib/classifications";
 import type { JobView } from "@/lib/jobs";
 import { DetailsModal } from "./DetailsModal";
 import { CompanyLogo } from "./CompanyLogo";
@@ -74,7 +74,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
         />
         <Fact label="LOCATION" value={where} />
         <Fact label="DEPARTMENT" value={job.department ?? "—"} />
-        <Fact label="CLASSIFICATION" value={job.sector ? sectorLabel(job.sector) : "—"} />
+        <Fact label="CLASSIFICATION" value={job.classification ? classificationLabel(job.classification) : "—"} />
       </dl>
 
       <div className="flex gap-2.5">

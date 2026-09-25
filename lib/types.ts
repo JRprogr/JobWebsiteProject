@@ -3,7 +3,7 @@ export type Company = {
   name: string;
   slug: string;
   logo_url: string | null;
-  sector: string | null;
+  classification: string | null;
   source_type: "greenhouse" | "lever" | "workday" | "personio" | "teamtailor" | "recruitee" | "bamboohr" | "ashby" | "successfactors" | "factorial" | "hibob" | "skeeled" | "odoo" | "eightfold" | "cornerstone" | "workable" | "ultipro" | "jibe" | "talentbrew" | "talentsoft" | "clinch" | "peopleforce" | "hron" | "intervieweb" | "clarityloop" | "oraclecloud" | "adp" | "none" | "custom";
   source_config: Record<string, unknown>;
   active: boolean;

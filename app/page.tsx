@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer";
 import { TopBar } from "@/components/TopBar";
 import { parseBucket } from "@/lib/experience";
 import { parseScope } from "@/lib/geo";
-import { allCountryFacets, companyFacets, countryFacets, headline, listJobs, parseSort, sectors, type Filters } from "@/lib/jobs";
+import { allCountryFacets, companyFacets, countryFacets, headline, listJobs, parseSort, classifications, type Filters } from "@/lib/jobs";
 
 const DEFAULT_LIMIT = 20;
 
@@ -23,7 +23,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
   const filters: Filters = {
     q: (one("q") ?? "").trim().slice(0, 80),
-    sector: one("sector")?.slice(0, 40) || null,
+    classification: one("classification")?.slice(0, 40) || null,
     scope: parseScope(one("scope")),
     countries: list(one("c")?.toUpperCase(), /^[A-Z]{2}$/, 12),
     companies: list(one("co"), /^[a-z0-9-]{1,60}$/, 20),
@@ -34,12 +34,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   };
   const limit = Math.min(500, Math.max(20, Number.parseInt(one("limit") ?? "", 10) || DEFAULT_LIMIT));
 
-  const [{ jobs, total }, facets, globalFacets, companyList, sectorList, head] = await Promise.all([
+  const [{ jobs, total }, facets, globalFacets, companyList, classificationList, head] = await Promise.all([
     listJobs(filters, limit),
     countryFacets(filters),
     allCountryFacets(filters),
     companyFacets(filters),
-    sectors(),
+    classifications(),
     headline(),
   ]);
 
@@ -55,7 +55,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           facets={facets}
           globalFacets={globalFacets}
           companyFacets={companyList}
-          sectors={sectorList}
+          classifications={classificationList}
           headline={head}
         />
       </main>
