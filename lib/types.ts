@@ -4,7 +4,7 @@ export type Company = {
   slug: string;
   logo_url: string | null;
   sector: string | null;
-  source_type: "greenhouse" | "lever" | "workday" | "custom";
+  source_type: "greenhouse" | "lever" | "workday" | "personio" | "teamtailor" | "recruitee" | "bamboohr" | "ashby" | "custom";
   source_config: Record<string, unknown>;
   active: boolean;
 };

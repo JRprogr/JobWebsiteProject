@@ -335,5 +335,370 @@
     "careers_url": "https://maxar.wd1.myworkdayjobs.com/Vantor",
     "hq_country": "US",
     "logo_url": "/logos/vantor.png"
+  },
+  {
+    "name": "Vyoma",
+    "slug": "vyoma",
+    "sector": "space-ops",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "vyoma-gmbh",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://vyoma-gmbh.jobs.personio.de/",
+    "hq_country": "DE",
+    "logo_url": "/logos/vyoma.png"
+  },
+  {
+    "name": "HyImpulse",
+    "slug": "hyimpulse",
+    "sector": "launch",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "hyimpulse-technologies-gmbh",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://hyimpulse-technologies-gmbh.jobs.personio.com/",
+    "hq_country": "DE",
+    "logo_url": "/logos/hyimpulse.png"
+  },
+  {
+    "name": "IENAI Space",
+    "slug": "ienai-space",
+    "sector": "propulsion",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "ienai-space-personio",
+      "tld": "com",
+      "default_country": "ES"
+    },
+    "active": true,
+    "careers_url": "https://ienai.space/careers/",
+    "hq_country": "ES",
+    "logo_url": "/logos/ienai-space.png"
+  },
+  {
+    "name": "ISPTech",
+    "slug": "isptech",
+    "sector": "propulsion",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "isptech",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://isptech.jobs.personio.com/?language=en",
+    "hq_country": "DE"
+  },
+  {
+    "name": "LiveEO",
+    "slug": "liveeo",
+    "sector": "earth-observation",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "liveeo-gmbh",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://liveeo-gmbh.jobs.personio.de/",
+    "hq_country": "DE",
+    "logo_url": "/logos/liveeo.png"
+  },
+  {
+    "name": "OKAPI:Orbits",
+    "slug": "okapi-orbits",
+    "sector": "space-ops",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "okapiorbits",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://okapiorbits.jobs.personio.de/",
+    "hq_country": "DE",
+    "logo_url": "/logos/okapi-orbits.png"
+  },
+  {
+    "name": "Polaris Raumflugzeuge",
+    "slug": "polaris-raumflugzeuge",
+    "sector": "launch",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "polaris-raumflugzeuge-gmbh",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://www.polaris-raumflugzeuge.de/career",
+    "hq_country": "DE",
+    "logo_url": "/logos/polaris-raumflugzeuge.png"
+  },
+  {
+    "name": "Indra Avitech",
+    "slug": "indra-avitech",
+    "sector": "components",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "indra-avitech",
+      "tld": "de",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://indra-avitech.jobs.personio.de/?language=en",
+    "hq_country": "DE",
+    "logo_url": "/logos/indra-avitech.png"
+  },
+  {
+    "name": "dcubed",
+    "slug": "dcubed",
+    "sector": "components",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "dcubed.teamtailor.com",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://dcubed.teamtailor.com/jobs",
+    "hq_country": "DE",
+    "logo_url": "/logos/dcubed.png"
+  },
+  {
+    "name": "Ecosmic",
+    "slug": "ecosmic",
+    "sector": "space-ops",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "careers.ecosmic.space",
+      "default_country": "IT"
+    },
+    "active": true,
+    "careers_url": "https://careers.ecosmic.space/",
+    "hq_country": "IT",
+    "logo_url": "/logos/ecosmic.png"
+  },
+  {
+    "name": "Exotrail",
+    "slug": "exotrail",
+    "sector": "space-ops",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "careers.exotrail.com",
+      "default_country": "FR"
+    },
+    "active": true,
+    "careers_url": "https://careers.exotrail.com/jobs",
+    "hq_country": "FR",
+    "logo_url": "/logos/exotrail.png"
+  },
+  {
+    "name": "Kuva Space",
+    "slug": "kuva-space",
+    "sector": "earth-observation",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "careers.kuvaspace.com",
+      "default_country": "FI"
+    },
+    "active": true,
+    "careers_url": "https://careers.kuvaspace.com/jobs",
+    "hq_country": "FI",
+    "logo_url": "/logos/kuva-space.png"
+  },
+  {
+    "name": "Leaf Space",
+    "slug": "leaf-space",
+    "sector": "space-ops",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "leafspace.teamtailor.com",
+      "default_country": "IT"
+    },
+    "active": true,
+    "careers_url": "https://leafspace.teamtailor.com/jobs",
+    "hq_country": "IT",
+    "logo_url": "/logos/leaf-space.png"
+  },
+  {
+    "name": "Reorbit",
+    "slug": "reorbit",
+    "sector": "satellites",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "careers.reorbit.space",
+      "default_country": "FI"
+    },
+    "active": true,
+    "careers_url": "https://careers.reorbit.space/jobs",
+    "hq_country": "FI",
+    "logo_url": "/logos/reorbit.png"
+  },
+  {
+    "name": "SSTL",
+    "slug": "sstl",
+    "sector": "satellites",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "jobs.sstl.co.uk",
+      "default_country": "GB"
+    },
+    "active": true,
+    "careers_url": "https://jobs.sstl.co.uk/",
+    "hq_country": "GB",
+    "logo_url": "/logos/sstl.png"
+  },
+  {
+    "name": "ATG Europe",
+    "slug": "atg-europe",
+    "sector": "services",
+    "source_type": "recruitee",
+    "source_config": {
+      "host": "jobs.atg-europe.com",
+      "default_country": "NL"
+    },
+    "active": true,
+    "careers_url": "https://jobs.atg-europe.com/",
+    "hq_country": "NL",
+    "logo_url": "/logos/atg-europe.png"
+  },
+  {
+    "name": "ISISPACE",
+    "slug": "isispace",
+    "sector": "satellites",
+    "source_type": "recruitee",
+    "source_config": {
+      "host": "careers.isispace.nl",
+      "default_country": "NL"
+    },
+    "active": true,
+    "careers_url": "https://careers.isispace.nl/",
+    "hq_country": "NL"
+  },
+  {
+    "name": "MaiaSpace",
+    "slug": "maiaspace",
+    "sector": "launch",
+    "source_type": "recruitee",
+    "source_config": {
+      "host": "careers.maia-space.com",
+      "default_country": "FR"
+    },
+    "active": true,
+    "careers_url": "https://careers.maia-space.com/jobs-at-maiaspace",
+    "hq_country": "FR",
+    "logo_url": "/logos/maiaspace.png"
+  },
+  {
+    "name": "Netherlands Aerospace Centre (NLR)",
+    "slug": "netherlands-aerospace-centre-nlr",
+    "sector": "institutions",
+    "source_type": "recruitee",
+    "source_config": {
+      "host": "werkenbijnlr.recruitee.com",
+      "default_country": "NL"
+    },
+    "active": true,
+    "careers_url": "https://werkenbijnlr.recruitee.com/vacatures",
+    "hq_country": "NL",
+    "logo_url": "/logos/netherlands-aerospace-centre-nlr.png"
+  },
+  {
+    "name": "Morpheus Space",
+    "slug": "morpheus-space",
+    "sector": "propulsion",
+    "source_type": "recruitee",
+    "source_config": {
+      "host": "careers.morpheus.space",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://careers.morpheus.space/",
+    "hq_country": "DE",
+    "logo_url": "/logos/morpheus-space.png"
+  },
+  {
+    "name": "Astroscale",
+    "slug": "astroscale",
+    "sector": "satellites",
+    "source_type": "bamboohr",
+    "source_config": {
+      "subdomain": "astroscale"
+    },
+    "active": true,
+    "careers_url": "https://www.astroscale.com/en/careers",
+    "hq_country": "JP",
+    "logo_url": "/logos/astroscale.png"
+  },
+  {
+    "name": "ClearSpace",
+    "slug": "clearspace",
+    "sector": "space-ops",
+    "source_type": "bamboohr",
+    "source_config": {
+      "subdomain": "clearspace"
+    },
+    "active": true,
+    "careers_url": "https://clearspace.bamboohr.com/careers",
+    "hq_country": "CH",
+    "logo_url": "/logos/clearspace.png"
+  },
+  {
+    "name": "Cysec",
+    "slug": "cysec",
+    "sector": "services",
+    "source_type": "bamboohr",
+    "source_config": {
+      "subdomain": "cysec"
+    },
+    "active": true,
+    "careers_url": "https://cysec.bamboohr.com/careers/",
+    "hq_country": "FR",
+    "logo_url": "/logos/cysec.png"
+  },
+  {
+    "name": "Northstar",
+    "slug": "northstar",
+    "sector": "space-ops",
+    "source_type": "bamboohr",
+    "source_config": {
+      "subdomain": "northstarearthandspace"
+    },
+    "active": true,
+    "careers_url": "https://northstarearthandspace.bamboohr.com/careers",
+    "hq_country": "CA"
+  },
+  {
+    "name": "ICEYE",
+    "slug": "iceye",
+    "sector": "earth-observation",
+    "source_type": "ashby",
+    "source_config": {
+      "board": "iceye",
+      "default_country": "FI"
+    },
+    "active": true,
+    "careers_url": "https://jobs.ashbyhq.com/iceye",
+    "hq_country": "FI",
+    "logo_url": "/logos/iceye.png"
+  },
+  {
+    "name": "The Exploration Company",
+    "slug": "the-exploration-company",
+    "sector": "space-ops",
+    "source_type": "ashby",
+    "source_config": {
+      "board": "the-exploration-company",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://www.exploration.space/careers",
+    "hq_country": "DE",
+    "logo_url": "/logos/the-exploration-company.png"
   }
 ]

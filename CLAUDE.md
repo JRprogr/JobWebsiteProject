@@ -182,3 +182,13 @@ The requisition id is the first `bulletFields` entry that looks like an id (`^[A
 
 ## Company logos
 `companies.logo_url` points at `public/logos/<slug>.png` (128x128, transparent). `npm run logos [slug ...]` downloads them (site apple-touch/svg icon first, gstatic favicon as fallback), using the domain in `db/seed/websites.json`, then writes `logo_url` into `db/seed/companies.json`; run `npm run db:seed` afterwards. Add every new company's domain to `websites.json`. `CompanyLogo` renders them on a white disc in both themes and falls back to the initial letter.
+
+## ATS adapters added in Phase 2 (`lib/adapters/{personio,teamtailor,recruitee,bamboohr,ashby}.ts`)
+All read the platform's public feed; helpers live in `lib/adapters/http.ts` (fetch with UA and timeout, `isEvergreen`) and `lib/xml.ts` (tiny tolerant XML reader).
+- **personio**: `source_config {subdomain, tld ("de"|"com"), default_country}` → `https://<subdomain>.jobs.personio.<tld>/xml` (full descriptions inline). Falls back to `/search.json` when the XML feed 404s (Polaris).
+- **teamtailor**: `{host, default_country}` → `https://<host>/jobs.rss` (works on custom domains too). Job id = the number in the `/jobs/<id>-slug` URL.
+- **recruitee**: `{host, default_country}` → `https://<host>/api/offers/` (custom domains work).
+- **bamboohr**: `{subdomain}` → `/careers/list` has city/state but **no country or text**; the per-job `/careers/<id>/detail` gives both, so it follows the Workday pattern (30 details per cron run, `--backfill` does all; the upsert preserves an already-resolved country).
+- **ashby**: `{board, default_country}` → `https://api.ashbyhq.com/posting-api/job-board/<board>`; structured address country is used.
+- `default_country` is only a fallback `country_hint` when a listing's location names no country the parser knows (it never overrides a parsed country). Evergreen entries ("Initiativbewerbung", "Unsolicited application", "Open applications", "Talent pool"…) are skipped by every one of these adapters via `isEvergreen`.
+- New company checklist: seed entry in `db/seed/companies.json` (+ `db/seed/websites.json` domain), `npm run db:seed`, `npm run scrape <slug> -- --backfill`, `npm run logos <slug>`.

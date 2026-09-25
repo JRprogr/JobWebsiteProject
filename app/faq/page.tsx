@@ -16,7 +16,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Where does the data come from?",
-    a: "Each company's own public career page or applicant tracking system — Greenhouse, Lever, Workday-hosted career sites (myworkdayjobs.com), or a company's own listings page for sources without a public API.",
+    a: "Each company's own public career page or applicant tracking system — Greenhouse, Lever, Workday, Personio, Teamtailor, Recruitee, BambooHR or Ashby, or a company's own listings page for sources without a public API.",
   },
   {
     q: "How often is it updated?",
