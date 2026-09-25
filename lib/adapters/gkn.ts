@@ -1,6 +1,6 @@
 import { htmlToText } from "../text.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
-import { isEvergreen } from "./http.ts";
+import { isEvergreen, politeFetch } from "./http.ts";
 
 // GKN Aerospace's own careers front end (joinus.gknaerospace.com) is a JS app over a JSON API: POST /api/jobs pages through every
 // open job with its full description, location list and country code. It is used as the custom kind "gkn-api".
@@ -20,9 +20,9 @@ type Item = {
 type Page = { items: Item[]; hasNextPage: boolean };
 
 async function page(pageNumber: number): Promise<Page> {
-  const res = await fetch(API, {
+  const res = await politeFetch(API, {
     method: "POST",
-    headers: { "content-type": "application/json", "user-agent": "Mozilla/5.0 (compatible; DSCareersBot/0.1; portfolio project)" },
+    headers: { "content-type": "application/json" },
     body: JSON.stringify({ searchQuery: "", location: "", team: "", startDate: null, endDate: null, pageNumber, pageSize: 50 }),
     signal: AbortSignal.timeout(40_000),
   });

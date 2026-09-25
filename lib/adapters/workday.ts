@@ -1,3 +1,4 @@
+import { politeFetch } from "./http.ts";
 import { mapPool, sleep } from "../pool.ts";
 import { decodeEntities, htmlToText } from "../text.ts";
 import type { Adapter, AdapterContext, Company, DetailFetcher, NormalizedJob } from "../types.ts";
@@ -67,7 +68,7 @@ function findFacet(facets: Facet[] | undefined, param: string): Facet | undefine
 }
 
 async function fetchPage(c: Config, offset: number, applied?: Record<string, string[]>): Promise<ListPage> {
-  const res = await fetch(`${apiBase(c)}/jobs`, {
+  const res = await politeFetch(`${apiBase(c)}/jobs`, {
     method: "POST",
     headers: { "content-type": "application/json", accept: "application/json" },
     body: JSON.stringify({
@@ -122,7 +123,7 @@ async function listAll(c: Config): Promise<{ id: string; item: ListItem }[]> {
 type Detail = { title: string; location: string | null; postedAt: string | null; countryHint: string | null; url: string; text: string | null };
 
 async function fetchDetail(c: Config, externalPath: string): Promise<Detail> {
-  const res = await fetch(`${apiBase(c)}${externalPath}`, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(20_000) });
+  const res = await politeFetch(`${apiBase(c)}${externalPath}`, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(20_000) });
   if (!res.ok) throw new Error(`workday ${res.status} for detail ${externalPath}`);
   const j = (await res.json()) as {
     jobPostingInfo?: {

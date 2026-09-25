@@ -1,7 +1,7 @@
 import { countryName } from "../geo.ts";
 import { htmlToText } from "../text.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
-import { configString, getJson, isEvergreen } from "./http.ts";
+import { configString, getJson, isEvergreen, politeFetch } from "./http.ts";
 
 // Workable career sites: POST https://apply.workable.com/api/v3/accounts/<account>/jobs (list, paged by `token`),
 // GET /api/v2/accounts/<account>/jobs/<shortcode> for the text.
@@ -22,9 +22,9 @@ async function list(company: Company): Promise<Item[]> {
   const out: Item[] = [];
   let token: string | undefined;
   for (let page = 0; page < 30; page++) {
-    const res = await fetch(`https://apply.workable.com/api/v3/accounts/${acc}/jobs`, {
+    const res = await politeFetch(`https://apply.workable.com/api/v3/accounts/${acc}/jobs`, {
       method: "POST",
-      headers: { "content-type": "application/json", accept: "application/json", "user-agent": "Mozilla/5.0 (compatible; DSCareersBot/0.1; portfolio project)" },
+      headers: { "content-type": "application/json", accept: "application/json" },
       body: JSON.stringify({ query: "", location: [], department: [], worktype: [], remote: [], ...(token ? { token } : {}) }),
       signal: AbortSignal.timeout(30_000),
     });

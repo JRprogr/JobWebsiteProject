@@ -25,6 +25,10 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     a: "“Live” means it reflects the most recent scrape, not a real-time push. Companies are checked on a schedule; the Statistics page shows when each one was last checked.",
   },
   {
+    q: "Which bot visits employer pages, and how can an employer opt out?",
+    a: <>The listings are read by a small program that calls itself DSCareersBot and gives this site’s address and a contact mailbox in its user agent. It runs from GitHub’s servers, looks at each company at most once an hour (large career sites every six hours), reads only public listing pages and never logs in anywhere. If you represent an employer and want the visits to stop or your listings taken off the board, email <ContactEmail /> and we will do that.</>,
+  },
+  {
     q: "Why do I see US or Asia-based roles if this is a Europe-focused board?",
     a: "Every open role from a tracked company is kept, just classified by region. Roles outside Europe are one filter away — switch to Global, or pick a specific country under Advanced.",
   },

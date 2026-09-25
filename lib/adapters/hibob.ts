@@ -1,6 +1,6 @@
 import { htmlToText } from "../text.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
-import { configString, defaultCountry, isEvergreen } from "./http.ts";
+import { configString, defaultCountry, isEvergreen, politeFetch } from "./http.ts";
 
 type Ad = {
   id: string;
@@ -23,7 +23,7 @@ type Ad = {
 // HiBob career sites: GET https://<subdomain>.careers.hibob.com/api/job-ad with the header companyIdentifier: <subdomain>
 async function ads(company: Pick<Company, "slug" | "source_config">): Promise<Ad[]> {
   const sub = configString(company.source_config, "subdomain", company.slug);
-  const res = await fetch(`https://${sub}.careers.hibob.com/api/job-ad`, {
+  const res = await politeFetch(`https://${sub}.careers.hibob.com/api/job-ad`, {
     headers: { companyIdentifier: sub, accept: "application/json" },
     signal: AbortSignal.timeout(40_000),
   });

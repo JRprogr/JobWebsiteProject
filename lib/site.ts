@@ -1,7 +1,7 @@
 // Set NEXT_PUBLIC_SITE_URL once the site has its own domain. Until then a Vercel deploy uses its own production URL
 // (VERCEL_PROJECT_PRODUCTION_URL, no scheme); local dev falls back to localhost.
 const VERCEL_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? (VERCEL_HOST ? `https://${VERCEL_HOST}` : "http://localhost:3000");
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (VERCEL_HOST ? `https://${VERCEL_HOST}` : "http://localhost:3000");
 
 export const CONTACT_EMAIL = "info.dscareers@proton.me";
 

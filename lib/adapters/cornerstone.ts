@@ -2,7 +2,7 @@ import { countryName } from "../geo.ts";
 import { mapPool } from "../pool.ts";
 import { htmlToText, stripCss } from "../text.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
-import { configString, getText, isEvergreen, USER_AGENT } from "./http.ts";
+import { configString, getText, isEvergreen, politeFetch } from "./http.ts";
 
 // Cornerstone OnDemand career sites (OHB, GMV): the careers page embeds a short-lived bearer token, which the site's own
 // search service (<cloud>/rec-job-search/external/jobs) accepts. That search only returns the tasks part of a listing
@@ -35,7 +35,7 @@ async function open(company: Pick<Company, "slug" | "source_config">): Promise<S
 async function search(s: Session): Promise<Req[]> {
   const out: Req[] = [];
   for (let page = 1; page <= 30; page++) {
-    const res = await fetch(`${s.cloud}rec-job-search/external/jobs`, {
+    const res = await politeFetch(`${s.cloud}rec-job-search/external/jobs`, {
       method: "POST",
       headers: {
         authorization: `Bearer ${s.token}`,
@@ -43,7 +43,6 @@ async function search(s: Session): Promise<Req[]> {
         accept: "application/json",
         "csod-accept-language": "en-US",
         origin: `https://${s.host}`,
-        "user-agent": USER_AGENT,
       },
       body: JSON.stringify({
         careerSiteId: s.site, careerSitePageId: s.site, pageNumber: page, pageSize: 100, cultureId: 1, searchText: "", cultureName: "en-US",
@@ -66,8 +65,8 @@ const shortText = (r: Req) => clean(r.externalDescription ?? "");
 
 // The complete advertisement of one requisition, or null when the service has none
 async function fullText(s: Session, id: string | number): Promise<string | null> {
-  const res = await fetch(`https://${s.host}/Services/API/ATS/CareerSite/${s.site}/JobRequisitions/${id}?useMobileAd=false&cultureId=2`, {
-    headers: { authorization: `Bearer ${s.token}`, accept: "application/json", "user-agent": USER_AGENT },
+  const res = await politeFetch(`https://${s.host}/Services/API/ATS/CareerSite/${s.site}/JobRequisitions/${id}?useMobileAd=false&cultureId=2`, {
+    headers: { authorization: `Bearer ${s.token}`, accept: "application/json" },
     signal: AbortSignal.timeout(30_000),
   });
   if (!res.ok) return null;

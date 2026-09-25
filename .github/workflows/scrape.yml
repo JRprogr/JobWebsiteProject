@@ -1,19 +1,50 @@
 name: scrape
 
-# The hourly schedule is switched off until scraping moves into this workflow (batch 2): the endpoint it used to call
-# is going away, so a schedule would only fail every hour.
+# Scrapes every company whose interval has elapsed (hourly by default, big career sites every six hours, see
+# source_config.every_hours in db/seed/companies.json). Runs here rather than on Vercel, which does not allow scrapers.
 on:
+  schedule:
+    - cron: "17 * * * *"
   workflow_dispatch:
+    inputs:
+      slugs:
+        description: "Only these companies, space separated (empty = whatever is due)"
+        required: false
+        default: ""
+      backfill:
+        description: "Read many more listing texts per company (only with slugs)"
+        type: boolean
+        default: false
+
+# One run at a time: a slow run must never overlap the next hourly one
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
-  trigger:
+  scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Call cron endpoint
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --omit=dev
+      - name: Scrape
         env:
-          APP_URL: ${{ secrets.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL }}
+          NODE_OPTIONS: --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
+          SLUGS: ${{ inputs.slugs }}
+          BACKFILL: ${{ inputs.backfill && '--backfill' || '' }}
         run: |
-          curl --fail --silent --show-error --max-time 90 \
-            -H "Authorization: Bearer $CRON_SECRET" \
-            "$APP_URL/api/cron/scrape"
+          if [ -n "$SLUGS" ]; then
+            node scripts/scrape.mts $SLUGS $BACKFILL
+          else
+            node scripts/scrape.mts --due
+          fi

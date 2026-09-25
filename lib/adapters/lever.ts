@@ -1,3 +1,4 @@
+import { politeFetch } from "./http.ts";
 import { decodeEntities, htmlToText } from "../text.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
 
@@ -29,7 +30,7 @@ function bodyText(p: LeverPosting): string | null {
 }
 
 export const leverDetail: DetailFetcher = async (company, job) => {
-  const res = await fetch(`${endpoint(company)}/${encodeURIComponent(job.external_id)}`, {
+  const res = await politeFetch(`${endpoint(company)}/${encodeURIComponent(job.external_id)}`, {
     headers: { accept: "application/json" },
     signal: AbortSignal.timeout(20_000),
   });
@@ -39,7 +40,7 @@ export const leverDetail: DetailFetcher = async (company, job) => {
 
 export const lever: Adapter = async (company, ctx) => {
   const url = `${endpoint(company)}?mode=json`;
-  const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(30_000) });
+  const res = await politeFetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(30_000) });
   if (!res.ok) throw new Error(`lever ${res.status} for ${url}`);
   const postings = (await res.json()) as LeverPosting[];
 

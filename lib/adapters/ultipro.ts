@@ -1,7 +1,7 @@
 import { mapPool, sleep } from "../pool.ts";
 import { decodeEntities, htmlToText } from "../text.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
-import { configString, getText, isEvergreen } from "./http.ts";
+import { configString, getText, isEvergreen, politeFetch } from "./http.ts";
 
 // UKG / UltiPro job boards (MDA Space): POST <board>/JobBoardView/LoadSearchResults for the list, and the
 // <board>/OpportunityDetail?opportunityId=<guid> page embeds the full description as JSON.
@@ -19,9 +19,9 @@ const board = (company: Pick<Company, "slug" | "source_config">) => configString
 async function list(company: Company): Promise<Opportunity[]> {
   const out: Opportunity[] = [];
   for (let skip = 0; skip < 2000; skip += 50) {
-    const res = await fetch(`${board(company)}/JobBoardView/LoadSearchResults`, {
+    const res = await politeFetch(`${board(company)}/JobBoardView/LoadSearchResults`, {
       method: "POST",
-      headers: { "content-type": "application/json", accept: "application/json", "user-agent": "Mozilla/5.0 (compatible; DSCareersBot/0.1; portfolio project)" },
+      headers: { "content-type": "application/json", accept: "application/json" },
       body: JSON.stringify({
         opportunitySearch: {
           Top: 50, Skip: skip, QueryString: "",

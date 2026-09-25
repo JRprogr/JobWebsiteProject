@@ -1,3 +1,4 @@
+import { politeFetch } from "./http.ts";
 import { mapPool, sleep } from "../pool.ts";
 import { decodeEntities, extractElement, htmlToText } from "../text.ts";
 import { gkn, gknDetail } from "./gkn.ts";
@@ -8,10 +9,9 @@ import { safran, safranDetail } from "./safran.ts";
 import { wixBoard, wixBoardDetail } from "./wixboard.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
 
-const USER_AGENT = "Mozilla/5.0 (compatible; DSCareersBot/0.1; portfolio project)";
 
 async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url, { headers: { "user-agent": USER_AGENT }, signal: AbortSignal.timeout(20_000) });
+  const res = await politeFetch(url, { signal: AbortSignal.timeout(20_000) });
   if (!res.ok) throw new Error(`${res.status} for ${url}`);
   return res.text();
 }

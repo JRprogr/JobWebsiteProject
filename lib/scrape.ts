@@ -1,18 +1,26 @@
 import { adapterFor } from "./adapters/index.ts";
-import { sql } from "./db.ts";
+import { retryDb, sql } from "./db.ts";
 import { extractExperience, type Experience } from "./experience.ts";
 import { parseLocation } from "./location.ts";
 import type { Company, NormalizedJob } from "./types.ts";
 
+// "partial" = the source answered but so much of the board vanished that the removals were held back (see the guard below)
 export type ScrapeResult = {
   slug: string;
-  status: "success" | "failed";
+  status: "success" | "partial" | "failed";
   found: number;
   added: number;
   removed: number;
   detailed: number;
+  seconds: number;
   error?: string;
 };
+
+// Result guard: a run that would remove more than 30% of a company's active jobs (or all of them) is probably a broken or
+// blocked source, not a hiring stop. The jobs it did see are still upserted, but nothing is marked removed until the next
+// run reports (nearly) the same reduced count, which is what a real drop looks like.
+const GUARD_MIN_ACTIVE = 10;
+const GUARD_MAX_DROP = 0.3;
 
 const UPSERT = `
 with input as (
@@ -60,16 +68,31 @@ function dedupe(jobs: NormalizedJob[]): NormalizedJob[] {
   return [...new Map(jobs.map((j) => [j.external_id, j])).values()];
 }
 
-export async function scrapeCompany(company: Company, opts: { backfill?: boolean } = {}): Promise<ScrapeResult> {
-  const db = sql();
-  const startedAt = new Date().toISOString();
-  const [{ id: runId }] = await db.query(
-    "insert into scrape_runs (company_id, started_at) values ($1, $2) returning id",
-    [company.id, startedAt],
+// True when the previous finished run was held back by the guard and saw about as many jobs as this one does
+async function dropConfirmed(companyId: string, runId: string, found: number): Promise<boolean> {
+  const [prev] = await retryDb(() =>
+    sql().query(
+      "select status, jobs_found from scrape_runs where company_id = $1 and id <> $2 and finished_at is not null order by started_at desc limit 1",
+      [companyId, runId],
+    ),
   );
+  return prev?.status === "partial" && Math.abs(Number(prev.jobs_found) - found) <= Math.max(2, Math.round(found * 0.05));
+}
 
+// `force` skips the guard, for a deliberate change such as a rewritten adapter that legitimately finds far fewer jobs
+export async function scrapeCompany(company: Company, opts: { backfill?: boolean; force?: boolean } = {}): Promise<ScrapeResult> {
+  const db = sql();
+  const q = (text: string, params: unknown[] = []) => retryDb(() => db.query(text, params));
+  const t0 = Date.now();
+  const startedAt = new Date(t0).toISOString();
+  let runId: string | null = null;
+
+  // Never throws: whatever goes wrong (source, database) ends up as a "failed" result, so one company cannot take a whole run down
   try {
-    const knownRows = await db.query(
+    const [run] = await q("insert into scrape_runs (company_id, started_at) values ($1, $2) returning id", [company.id, startedAt]);
+    runId = String(run.id);
+
+    const knownRows = await q(
       "select external_id, title from jobs where company_id = $1 and details_checked_at is not null",
       [company.id],
     );
@@ -87,15 +110,13 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
     });
     const checked = jobs.map((j) => j.description !== null && j.description !== undefined);
 
-    const [{ n: activeBefore }] = await db.query(
-      "select count(*)::int as n from jobs where company_id = $1 and removed_at is null",
-      [company.id],
-    );
-    if (jobs.length === 0 && activeBefore > 0) {
-      throw new Error(`source returned 0 jobs but ${activeBefore} are active; refusing to mark them removed`);
-    }
+    const active = await q("select external_id from jobs where company_id = $1 and removed_at is null", [company.id]);
+    const seen = new Set(jobs.map((j) => j.external_id));
+    const missing = active.filter((r) => !seen.has(String(r.external_id))).length;
+    const suspicious = missing > 0 && (jobs.length === 0 || (active.length >= GUARD_MIN_ACTIVE && missing > active.length * GUARD_MAX_DROP));
+    const hold = suspicious && !opts.force && !(await dropConfirmed(company.id, runId, jobs.length));
 
-    const [upserted, removedRows] = await db.transaction([
+    const queries = [
       db.query(UPSERT, [
         company.id,
         jobs.map((j) => j.external_id),
@@ -119,53 +140,82 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
         checked,
         loc.map((l) => l.cities.join(",")),
       ]),
-      db.query(
-        "update jobs set removed_at = $2::timestamptz where company_id = $1 and removed_at is null and last_seen_at < $2::timestamptz returning id",
-        [company.id, startedAt],
-      ),
-      db.query("update jobs set posted_at = first_seen_at where company_id = $1 and posted_at is null", [company.id]),
-    ]);
+    ];
+    if (!hold) {
+      queries.push(
+        db.query(
+          "update jobs set removed_at = $2::timestamptz where company_id = $1 and removed_at is null and last_seen_at < $2::timestamptz returning id",
+          [company.id, startedAt],
+        ),
+      );
+    }
+    queries.push(db.query("update jobs set posted_at = first_seen_at where company_id = $1 and posted_at is null", [company.id]));
+    const [upserted, removedRows] = await retryDb(() => db.transaction(queries));
 
     const added = upserted.filter((r) => r.inserted === true).length;
-    const removed = removedRows.length;
-    await db.query(
+    const removed = hold ? 0 : removedRows.length;
+    const detailed = checked.filter(Boolean).length;
+    const seconds = (Date.now() - t0) / 1000;
+    if (hold) {
+      const error = `held back: ${missing} of ${active.length} active jobs are missing from this result, removals apply once the next run confirms it`;
+      await q(
+        "update scrape_runs set finished_at = now(), status = 'partial', jobs_found = $2, jobs_added = $3, jobs_removed = 0, error = $4 where id = $1",
+        [runId, jobs.length, added, error],
+      );
+      return { slug: company.slug, status: "partial", found: jobs.length, added, removed: 0, detailed, seconds, error };
+    }
+    await q(
       "update scrape_runs set finished_at = now(), status = 'success', jobs_found = $2, jobs_added = $3, jobs_removed = $4 where id = $1",
       [runId, jobs.length, added, removed],
     );
-    return { slug: company.slug, status: "success", found: jobs.length, added, removed, detailed: checked.filter(Boolean).length };
+    return { slug: company.slug, status: "success", found: jobs.length, added, removed, detailed, seconds };
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
-    await db.query("update scrape_runs set finished_at = now(), status = 'failed', error = $2 where id = $1", [runId, error]);
-    return { slug: company.slug, status: "failed", found: 0, added: 0, removed: 0, detailed: 0, error };
+    // best effort: if the database itself is the problem the run stays unfinished and is retried after RETRY_MIN
+    if (runId) await q("update scrape_runs set finished_at = now(), status = 'failed', error = $2 where id = $1", [runId, error]).catch(() => undefined);
+    return { slug: company.slug, status: "failed", found: 0, added: 0, removed: 0, detailed: 0, seconds: (Date.now() - t0) / 1000, error };
   }
 }
 
 export async function loadCompanies(slugs: string[]): Promise<Company[]> {
   const rows = slugs.length
-    ? await sql().query("select * from companies where slug = any($1::text[])", [slugs])
-    : await sql().query("select * from companies where active order by name");
+    ? await retryDb(() => sql().query("select * from companies where slug = any($1::text[])", [slugs]))
+    : await retryDb(() => sql().query("select * from companies where active order by name"));
   return rows as Company[];
 }
 
 const CONCURRENCY = 4;
 
-export type DueOptions = { budgetMs: number; minAgeMs: number };
+// Companies are scraped hourly unless source_config.every_hours says otherwise (big boards: 6). A run counts as on time
+// with SLACK_MIN to spare, so an hourly cron that drifts by a few minutes never skips a whole cycle. After a failed,
+// held-back or interrupted run the company is tried again after RETRY_MIN, whatever its own interval.
+const SLACK_MIN = 10;
+const RETRY_MIN = 50;
 
-export async function scrapeDue({ budgetMs, minAgeMs }: DueOptions) {
+export async function scrapeDue({ budgetMs, onResult }: { budgetMs: number; onResult?: (result: ScrapeResult) => void }) {
   const deadline = Date.now() + budgetMs;
-  const due = (await sql().query(
+  const due = (await retryDb(() => sql().query(
     `select c.* from companies c
+     left join lateral (
+       select r.started_at, r.status from scrape_runs r where r.company_id = c.id order by r.started_at desc limit 1
+     ) last on true
      where c.active
-       and coalesce((select max(r.started_at) from scrape_runs r where r.company_id = c.id), 'epoch') < now() - make_interval(secs => $1)
-     order by coalesce((select max(r.started_at) from scrape_runs r where r.company_id = c.id), 'epoch'), c.name`,
-    [minAgeMs / 1000],
-  )) as Company[];
+       and (last.started_at is null
+            or last.started_at < now() - interval '1 minute' * (
+                 case when last.status = 'success'
+                      then greatest(coalesce((c.source_config->>'every_hours')::float8, 1) * 60 - $1::float8, $2::float8)
+                      else $2::float8 end))
+     order by coalesce(last.started_at, 'epoch'::timestamptz), c.name`,
+    [SLACK_MIN, RETRY_MIN],
+  ))) as Company[];
 
   const results: ScrapeResult[] = [];
   const queue = [...due];
   const worker = async () => {
     for (let company = queue.shift(); company && Date.now() < deadline; company = queue.shift()) {
-      results.push(await scrapeCompany(company));
+      const result = await scrapeCompany(company);
+      results.push(result);
+      onResult?.(result);
     }
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));

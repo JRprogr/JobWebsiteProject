@@ -19,8 +19,7 @@ Non-commercial. Solo build, ~2 weeks.
 - Next.js (App Router, TypeScript) — SSR/ISR for indexable job + company pages
 - Tailwind — styling
 - Postgres via Neon — serverless, scale-to-zero, no realtime/auth needed
-- Vercel — hosting + Vercel Cron (or GitHub Actions cron if Hobby tier
-  interval limits become a problem) to trigger scrape runs
+- Vercel — hosting only (Hobby, no scraping: its fair-use rules forbid it); GitHub Actions cron runs the scraper
 - Claude Code — primary build driver reading this file
 
 ## Data model (get this right before writing any adapter)
@@ -234,11 +233,20 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 
 ## Deployment (Batch 1 of the pre-deploy plan)
 - `npm run build` = `node scripts/predeploy.mts && next build`. `scripts/predeploy.mts` runs `migrate.mts` and `seed.mts` only when `VERCEL_ENV === "production"`, so a push to main ships code and database together and a failing migration stops the deploy; preview and local builds never touch a database. Consequence: `db/seed/companies.json` is the source of truth for the company list in production too (the seed does not delete companies, remove those by hand).
-- `vercel.json` pins the function region to `fra1` (next to Neon in Frankfurt) and has no crons: scraping must not run on Vercel (its fair-use page lists scrapers under "Never fair use"), it moves to GitHub Actions in batch 2. `.github/workflows/scrape.yml` is `workflow_dispatch` only until then. `package.json` `engines.node` is `24.x` (the scripts rely on Node's built-in TypeScript stripping).
+- `vercel.json` pins the function region to `fra1` (next to Neon in Frankfurt) and has no crons: scraping must not run on Vercel (its fair-use page lists scrapers under "Never fair use"), it runs on GitHub Actions (see "Scraper runtime"). `package.json` `engines.node` is `24.x` (the scripts rely on Node's built-in TypeScript stripping).
 - `SITE_URL` (`lib/site.ts`): `NEXT_PUBLIC_SITE_URL`, else `https://$VERCEL_PROJECT_PRODUCTION_URL`, else localhost. Trial domain: `jw-project-eight.vercel.app` (temporary, no own domain yet).
-- Environment: `DATABASE_URL` (Vercel Production + GitHub secret = the production Neon branch; local `.env.local` points at the Neon `dev` branch), `OPERATOR_NAME` and `OPERATOR_ADDRESS` (Impressum; address lines separated by `|`), `NEXT_PUBLIC_SITE_URL` (optional), `CRON_SECRET` (only while `/api/cron/scrape` exists). `.env.example` documents them; every other `.env*` file is gitignored.
+- Environment: `DATABASE_URL` (Vercel Production + GitHub secret = the production Neon branch; local `.env.local` points at the Neon `dev` branch), `OPERATOR_NAME` and `OPERATOR_ADDRESS` (Impressum; address lines separated by `|`), `NEXT_PUBLIC_SITE_URL` (optional). `.env.example` documents them; every other `.env*` file is gitignored.
 - The operator's name and address are deliberately NOT in the repository: `lib/site.ts` reads them from the environment (placeholder text when unset), `scripts/predeploy.mts` fails a production build without them, and they were scrubbed from the git history before the repo went public. Never write them into a file, a commit message or a memory note.
 - Commits use the GitHub noreply address (repo-local git config), never a personal mailbox.
+
+## Scraper runtime (Batch 2 of the pre-deploy plan)
+- Scraping runs in `.github/workflows/scrape.yml` (cron `17 * * * *` plus manual dispatch with optional `slugs` and `backfill` inputs; `concurrency` group so runs never overlap; 30 minute timeout; Node 24, `npm ci --omit=dev`). It runs `node scripts/scrape.mts --due`. Secret `DATABASE_URL` = production Neon branch (repo Settings > Secrets and variables > Actions), repository variable `SITE_URL` = the public address (goes into the bot's user agent). The old `/api/cron/scrape` route, `CRON_SECRET` and the Vercel cron are gone.
+- `scripts/scrape.mts`: no argument = every active company sequentially; slugs = just those; `--due` = `scrapeDue()` (four at a time, 25 minute budget, prints one line per company and GitHub `::warning` annotations for failed/held-back ones); `--backfill` reads many more listing texts; `--force` skips the result guard. The run exits 1 only when at least five companies were scraped and more than half failed (blocked IP, network), one broken source never fails it.
+- **Cadence tiers**: `scrapeDue()` treats a company as due when its last run is older than `source_config.every_hours` (default 1, minus 10 minutes of slack so cron drift never skips a cycle). Nine big boards have `every_hours: 6` in the seed (blue-origin, honeywell, boeing-space, leonardo, lockheed-martin, rtx, vantor, safran, airbus-defence-and-space). After a failed, held-back or interrupted run any company is retried after 50 minutes. New companies are due immediately. The key is scheduling only, adapters ignore it.
+- **Result guard** (`scrapeCompany` in `lib/scrape.ts`): if a run would remove more than 30% of a company's active jobs (only when it has at least 10), or all of them, the found jobs are still upserted but nothing is marked removed; the run is stored as status `partial` with the reason in `error`. The next run applies the removals only if the previous finished run was `partial` and found about the same number of jobs (within max(2, 5%)); a source that recovers simply carries on. `--force` bypasses it (use after a deliberate adapter rewrite that legitimately finds far fewer jobs). Statistics and the footer only count `success` runs.
+- `politeFetch()` (`lib/adapters/http.ts`) is the only way adapters fetch: it sets the user agent unless one is given and retries HTTP 429/502/503/504 (Retry-After honoured, capped at 20 s, three attempts) and dropped connections. Never call `fetch` directly in an adapter.
+- **User agent**: `Mozilla/5.0 (compatible; DSCareersBot/0.1; +<SITE_URL>/faq; <CONTACT_EMAIL>)` (only the mailbox when `SITE_URL` is localhost). The Q&A page has an entry "Which bot visits employer pages, and how can an employer opt out?" (runs from GitHub's servers, at most hourly, public pages only, opt-out by email). Employers' robots.txt is not evaluated.
+- The details endpoint `/api/jobs/[id]/details` still fetches from employers on demand from Vercel until batch 3 stores listing text at scrape time.
 
 ## Bug log 8 notes
 - **Search** (`where()` in `lib/jobs.ts`): every word of the query must match the job title or one of its cities (`location_city`, `location_cities`), so "embedded engineer munich" works.

@@ -1,6 +1,6 @@
 import { decodeEntities, htmlToText } from "../text.ts";
 import type { Adapter, Company, DetailFetcher } from "../types.ts";
-import { configString, getText, USER_AGENT } from "./http.ts";
+import { configString, getText, politeFetch } from "./http.ts";
 import { runBoard, strip, type Row } from "./board.ts";
 
 // Intervieweb / zinrec career sites (Avio): <base>/en/career renders the first page of vacancies, later pages come from a POST to a
@@ -44,7 +44,7 @@ export const interviewebDetail: DetailFetcher = async (_company, job) => (await 
 
 async function listAll(company: Company): Promise<Row[]> {
   const home = `${base(company)}/en/career`;
-  const first = await fetch(home, { headers: { "user-agent": USER_AGENT }, signal: AbortSignal.timeout(30_000) });
+  const first = await politeFetch(home, { signal: AbortSignal.timeout(30_000) });
   if (!first.ok) throw new Error(`${first.status} for ${home}`);
   const html = await first.text();
   const cookie = (first.headers.getSetCookie?.() ?? []).map((c) => c.split(";")[0]).join("; ");
@@ -55,9 +55,9 @@ async function listAll(company: Company): Promise<Row[]> {
   const section = /'section':\s*'([^']+)'/.exec(html)?.[1];
   if (pages > 1 && endpoint && section) {
     for (let page = 2; page <= Math.min(pages, 20); page++) {
-      const res = await fetch(decodeEntities(endpoint), {
+      const res = await politeFetch(decodeEntities(endpoint), {
         method: "POST",
-        headers: { "user-agent": USER_AGENT, cookie, "x-requested-with": "XMLHttpRequest", "content-type": "application/x-www-form-urlencoded" },
+        headers: { cookie, "x-requested-with": "XMLHttpRequest", "content-type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ act1: "vacancyListCareer", section, order: "name", page: String(page), country: "", region: "", function: "", project: "", text: "", division: "", company: "" }),
         signal: AbortSignal.timeout(30_000),
       });

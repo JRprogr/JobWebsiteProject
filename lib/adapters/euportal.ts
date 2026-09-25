@@ -1,6 +1,6 @@
 import { htmlToText } from "../text.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
-import { configString, defaultCountry, getText, USER_AGENT } from "./http.ts";
+import { configString, defaultCountry, getText, politeFetch } from "./http.ts";
 
 // The "Job Opportunities" portal EU agencies run for their vacancies (vacancies.euspa.europa.eu): a Kendo grid fed by
 // POST /Home/Index_Binding?showOnly=current, and /Jobs/VacancyDetails/<id> pages. Only rows marked open for applications are listed,
@@ -10,9 +10,9 @@ type Vacancy = { Id: number; Title: string; ReferenceNumber?: string; TypeOfCont
 const base = (company: { slug: string; source_config: Record<string, unknown> }) => configString(company.source_config, "base", company.slug).replace(/\/$/, "");
 
 async function open(root: string): Promise<Vacancy[]> {
-  const res = await fetch(`${root}/Home/Index_Binding?showOnly=current`, {
+  const res = await politeFetch(`${root}/Home/Index_Binding?showOnly=current`, {
     method: "POST",
-    headers: { "user-agent": USER_AGENT, "x-requested-with": "XMLHttpRequest", "content-type": "application/x-www-form-urlencoded" },
+    headers: { "x-requested-with": "XMLHttpRequest", "content-type": "application/x-www-form-urlencoded" },
     body: "sort=&page=1&pageSize=100&group=&filter=",
     signal: AbortSignal.timeout(30_000),
   });

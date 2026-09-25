@@ -100,7 +100,8 @@
         "f5811cef9cb5012009b35b134e0a2d5f",
         "f5811cef9cb5011710494e134e0ae55e",
         "f5811cef9cb501d030d457134e0a185f"
-      ]
+      ],
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://ag.wd3.myworkdayjobs.com/Airbus",
@@ -265,7 +266,8 @@
       "tenant": "blueorigin",
       "host": "wd5",
       "site": "BlueOrigin",
-      "default_country": "US"
+      "default_country": "US",
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://blueorigin.wd5.myworkdayjobs.com/en-US/BlueOrigin",
@@ -280,7 +282,8 @@
     "source_config": {
       "tenant": "leonardocompany",
       "host": "wd3",
-      "site": "LeonardoCareerSite"
+      "site": "LeonardoCareerSite",
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://leonardocompany.wd3.myworkdayjobs.com/de-DE/LeonardoCareerSite",
@@ -313,7 +316,8 @@
       "tenant": "globalhr",
       "host": "wd5",
       "site": "REC_RTX_Ext_Gateway",
-      "exclude_locations_regex": "^(AE|AU|CA|CL|CN|CO|HK|IN|JO|JP|KR|KW|MX|MY|NZ|PH|QA|SA|SG|TW|US|VN|XX)-|Bangalore"
+      "exclude_locations_regex": "^(AE|AU|CA|CL|CN|CO|HK|IN|JO|JP|KR|KW|MX|MY|NZ|PH|QA|SA|SG|TW|US|VN|XX)-|Bangalore",
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://globalhr.wd5.myworkdayjobs.com/de-DE/REC_RTX_Ext_Gateway",
@@ -329,7 +333,8 @@
       "tenant": "maxar",
       "host": "wd1",
       "site": "Vantor",
-      "default_country": "US"
+      "default_country": "US",
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://maxar.wd1.myworkdayjobs.com/Vantor",
@@ -924,7 +929,8 @@
         "Switzerland",
         "Austria",
         "Ireland"
-      ]
+      ],
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://lockheedmartin.eightfold.ai/careers?start=0&location=England&pid=996476677863&sort_by=distance&filter_include_remote=1&filter_include_relocation=0",
@@ -994,7 +1000,8 @@
       "base": "https://jobs.boeing.com",
       "keywords": "Defence, Space, Security",
       "organization_ids": "185",
-      "default_country": "US"
+      "default_country": "US",
+      "every_hours": 6
     },
     "active": true,
     "careers_url": "https://jobs.boeing.com/search-jobs?k=Defence%2C+Space%2C+Security&orgIds=185",
@@ -1589,7 +1596,8 @@
         "627-safran-electronics-defense-avionics-usa",
         "3556-safran-trusted-4d",
         "687-safran-vectronix-ag"
-      ]
+      ],
+      "every_hours": 6
     },
     "active": true,
     "logo_url": "/logos/safran.png"
@@ -1623,7 +1631,8 @@
       "host": "icfcjb.fa.ocs.oraclecloud.com",
       "site": "Aerospace",
       "site_number": "CX_4001",
-      "default_country": "US"
+      "default_country": "US",
+      "every_hours": 6
     },
     "active": true,
     "logo_url": "/logos/honeywell.png"

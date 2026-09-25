@@ -1,7 +1,7 @@
 import { mapPool } from "../pool.ts";
 import { decodeEntities, htmlToText } from "../text.ts";
 import type { Adapter, AdapterContext, Company, DetailFetcher, NormalizedJob } from "../types.ts";
-import { isEvergreen } from "./http.ts";
+import { isEvergreen, politeFetch } from "./http.ts";
 
 type GhJob = {
   id: number;
@@ -19,7 +19,7 @@ type GhDepartment = { name: string; jobs?: { id: number }[]; children?: GhDepart
 const BULK_THRESHOLD = 40;
 
 async function getJson<T>(url: string): Promise<T> {
-  const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(30_000) });
+  const res = await politeFetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(30_000) });
   if (!res.ok) throw new Error(`greenhouse ${res.status} for ${url}`);
   return (await res.json()) as T;
 }

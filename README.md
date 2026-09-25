@@ -48,7 +48,8 @@ npm run dev
 | --- | --- |
 | `npm run db:migrate` | Applies `db/migrations/*.sql` in order (tracked in `_migrations`) |
 | `npm run db:seed` | Upserts `db/seed/companies.json` into `companies` |
-| `npm run scrape -- [slug…] [--backfill]` | Scrapes the given companies (all if none); `--backfill` reads many more listing texts |
+| `npm run scrape -- [slug…] [--backfill] [--force]` | Scrapes the given companies (all if none); `--backfill` reads many more listing texts, `--force` skips the result guard |
+| `npm run scrape -- --due` | Scrapes only the companies whose interval has elapsed, which is what the GitHub workflow runs every hour |
 | `npm run logos -- [slug…]` | Rebuilds `public/logos/*.png`, see CLAUDE.md |
 | `npm run build` | On a Vercel production deploy: migrate + seed, then `next build`. Elsewhere just `next build` |
 
@@ -64,9 +65,22 @@ Environment variables (see `.env.example`):
 
 | Variable | Where | Purpose |
 | --- | --- | --- |
-| `DATABASE_URL` | Vercel (Production), GitHub secret | Neon connection string of the **production** branch |
+| `DATABASE_URL` | Vercel (Production), GitHub Actions secret | Neon connection string of the **production** branch |
 | `OPERATOR_NAME`, `OPERATOR_ADDRESS` | Vercel, `.env.local` | Person responsible for the site (Impressum, Privacy page); address lines separated by `\|`. Kept out of the repository, and a production build fails without them |
-| `NEXT_PUBLIC_SITE_URL` | Vercel, optional | Canonical URL; defaults to the Vercel production URL |
+| `NEXT_PUBLIC_SITE_URL` | Vercel, optional; GitHub Actions variable `SITE_URL` | Canonical URL (defaults to the Vercel production URL); the scraper's user agent points to it |
+
+### Scraping
+
+Scraping does not run on Vercel. `.github/workflows/scrape.yml` runs every hour and scrapes the companies that are due:
+hourly by default, every six hours for the big career sites (`source_config.every_hours`). A run that would remove more than
+30% of a company's jobs is held back until the next run confirms it, so a blocked or broken source cannot wipe a board.
+Add the production connection string as the Actions secret `DATABASE_URL` and the public address as the Actions variable
+`SITE_URL`. The workflow can also be started by hand for chosen companies, with optional backfill.
+
+The bot identifies itself as `DSCareersBot` with the site address and a contact mailbox; employers can ask for removal via
+the Q&A page.
+
+### Site
 
 Pushing to `main` deploys on Vercel (region `fra1`, see `vercel.json`). The production build first runs
 `scripts/predeploy.mts`, which applies pending migrations and syncs the company list, so a failing migration stops the
