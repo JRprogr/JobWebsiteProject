@@ -15,6 +15,9 @@ type MapCountry = {
   label: [number, number] | null;
 };
 
+// Slight country outlines around the dot-matrix countries (bug log 11). One switch: false turns them off again.
+const SHOW_BORDERS = true;
+
 const map = mapJson as unknown as { w: number; h: number; graticule: string; countries: MapCountry[] };
 
 // EU only lights the 27 members, Europe adds the rest of the EEA, UK, Switzerland and the Balkans (Russia, Turkey, Ukraine,
@@ -50,6 +53,10 @@ export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, 
   return (
     <svg viewBox={`0 0 ${map.w} ${map.h}`} className="block h-full w-full" role="group" aria-label="Map of Europe. Select countries to filter roles.">
       <path d={map.graticule} fill="none" stroke="var(--map-grat)" strokeWidth={0.7} />
+      {/* country outlines, drawn under the dots; to revert: set SHOW_BORDERS to false (or delete this block and the .map-border rule in globals.css) */}
+      {SHOW_BORDERS
+        ? map.countries.map((c) => <path key={`border-${c.iso}`} className="map-border" d={c.hit} aria-hidden="true" />)
+        : null}
       {map.countries.map((c) => {
         const count = counts[c.iso] ?? 0;
         const active = selected.has(c.iso) || highlighted.has(c.iso);
@@ -92,8 +99,8 @@ export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, 
               x={c.label![0]}
               y={c.label![1] + 3}
               textAnchor="middle"
-              fill="var(--map-label)"
-              opacity={active ? 1 : lit ? 0.65 : 0.28}
+              fill="var(--map-ticker)"
+              opacity={active ? 1 : lit ? 0.85 : 0.35}
               className="pointer-events-none select-none font-mono"
               style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}
             >

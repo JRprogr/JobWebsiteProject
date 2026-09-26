@@ -271,6 +271,13 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 - **Accessibility** (`docs/ACCESSIBILITY.md` has the audit script and results): search field focus ring, 24 px targets, desktop skip links to `#region-filter` / `#role-preview`, live announcements, and Esc inside the listing dialog no longer clears the selection (it removed the opener and dropped focus). Open items belong to the design batch (map tickers ~3.9:1 in the light theme).
 - Load facts: the overview page runs about nine database queries per uncached view; any view keeps the Neon compute awake for five minutes, and 100 free compute-hours are about 55% of a month at 0.25 CU, so an uptime monitor must not poll `/api/health` every few minutes (each call queries the database). Hourly is fine.
 
+## Bug log 11 notes (visual)
+- Dark theme yellow is `#feda49` (was `#ffcc00`; also in the icons and the share image). Light theme terminal colour is orange `#cc5500` (`--map*` tokens in `app/globals.css`); the map's small text (`--map-label`, `--map-ui`) is a darker orange `rgb(168 69 0)` because `#cc5500` itself only reaches about 4:1 on the light background.
+- Map intensity: active-listing countries `--map-eu`/`--map-europe` are about 20% stronger than before, countries without listings (`data-empty`, opacity 0.41) about 10% stronger, greyed-out and selected ones unchanged.
+- Country tickers use `--map-ticker` (dark: the page's yellow, light: a lighter blue `#2a55c5`).
+- Country outlines: one switch, `SHOW_BORDERS` in `components/EuMap.tsx` (+ the `.map-border` rule and `--map-border` in `globals.css`); delete those three to revert.
+- OHB Sweden (`ohb-sweden`, teamtailor `careers.ohb-sweden.se`, satellites, SE) added.
+
 ## Bug log 10 notes
 - **Known jobs keep their place.** A source that does not re-read a known job's page (link-list, detail-gated adapters) reports no `location_raw` for it; `scrapeCompany` then passes no location at all instead of the source's `default_country` hint, and the upsert keeps the stored `location_raw`, countries and cities. Before, the hint overwrote them on the second run (Esyen's Madrid job turned Italian). Rows damaged that way heal when their page is read again: `update jobs set details_checked_at = null` for the company, then a scrape.
 - `lib/location.ts` also reads "City (Country)" and "City/Hybrid (Country)" and splits comma lists of countries ("Italy, France, Germany, Spain") or of known cities ("Prague, Munich") into separate places.

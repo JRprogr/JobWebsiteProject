@@ -952,6 +952,20 @@
     "logo_url": "/logos/ohb.png"
   },
   {
+    "name": "OHB Sweden",
+    "slug": "ohb-sweden",
+    "classification": "satellites",
+    "source_type": "teamtailor",
+    "source_config": {
+      "host": "careers.ohb-sweden.se",
+      "default_country": "SE"
+    },
+    "active": true,
+    "careers_url": "https://careers.ohb-sweden.se/jobs",
+    "hq_country": "SE",
+    "logo_url": "/logos/ohb-sweden.png"
+  },
+  {
     "name": "GMV",
     "slug": "gmv",
     "classification": "services",
