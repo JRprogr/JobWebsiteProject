@@ -32,8 +32,10 @@
   /* light theme: the map sits on a grey field (and the whole card is tinted grey) so the orange terminal contrasts with it */
   --map-panel: #b1b5b9;
   --map-card-bg: linear-gradient(135deg, rgba(205, 209, 213, 0.8), rgba(177, 181, 185, 0.5));
-  /* faint glow around the terminal dots (none in the dark theme) */
+  /* faint glow around the terminal dots (both themes, in their own colour) */
   --map-glow: drop-shadow(0 0 2.5px rgba(251, 85, 3, 0.55));
+  /* the same glow, a bit weaker, on the map card's texts, buttons and switch */
+  --map-ui-glow: drop-shadow(0 0 3px rgba(251, 85, 3, 0.35));
   /* country codes on the map: the page's text colour, a tad lighter than --fg in this theme; country outlines (see SHOW_BORDERS in EuMap.tsx) */
   --map-ticker: #2a55c5;
   --map-border: rgba(251, 85, 3, 0.32);
@@ -77,6 +79,9 @@
   --map-grat: rgba(51, 255, 153, 0.16);
   --map-label: rgba(51, 255, 153, 0.95);
   --map-panel: rgba(0, 12, 6, 0.55);
+  --map-card-bg: var(--glass-bg);
+  --map-glow: drop-shadow(0 0 2.5px rgba(51, 255, 153, 0.55));
+  --map-ui-glow: drop-shadow(0 0 3px rgba(51, 255, 153, 0.35));
   --map-ticker: var(--fg);
   --map-border: rgba(51, 255, 153, 0.28);
   --scanline: rgba(51, 255, 153, 0.06);
@@ -194,6 +199,13 @@ body {
 
 .map-card {
   background: var(--map-card-bg, var(--glass-bg));
+}
+
+/* the terminal-coloured texts and controls of the map card glow very slightly, like the dots on the map */
+.map-card h2,
+.map-card p,
+.map-card button {
+  filter: var(--map-ui-glow, none);
 }
 
 /* Listing bars: extend on hover, grey out the rest once a role is selected */
