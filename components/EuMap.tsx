@@ -106,7 +106,7 @@ export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, 
               fill="var(--map-ticker)"
               opacity={active ? 1 : lit ? 0.85 : 0.35}
               className="pointer-events-none select-none font-mono"
-              style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}
+              style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", stroke: "var(--map-ticker-outline, none)", strokeWidth: 2.4, paintOrder: "stroke", strokeLinejoin: "round" }}
             >
               {c.iso}
             </text>
