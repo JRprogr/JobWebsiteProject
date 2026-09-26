@@ -18,6 +18,10 @@ type MapCountry = {
 // Slight country outlines around the dot-matrix countries (bug log 11). One switch: false turns them off again.
 const SHOW_BORDERS = true;
 
+// Country codes are written on countries above this map area, plus these smaller ones
+const TICKER_MIN_AREA = 380;
+const TICKER_ALSO = new Set(["NL", "BE"]);
+
 const map = mapJson as unknown as { w: number; h: number; graticule: string; countries: MapCountry[] };
 
 // EU only lights the 27 members, Europe adds the rest of the EEA, UK, Switzerland and the Balkans (Russia, Turkey, Ukraine,
@@ -89,7 +93,7 @@ export function EuMap({ scope, counts, selected, highlighted, hovered, onHover, 
         <circle key={`hit-${c.iso}`} cx={c.label![0]} cy={c.label![1]} r={tinyRadius(c)} className="map-hit" aria-hidden="true" {...pointer(c.iso)} />
       ))}
       {map.countries
-        .filter((c) => c.area > 380 && c.label)
+        .filter((c) => (c.area > TICKER_MIN_AREA || TICKER_ALSO.has(c.iso)) && c.label)
         .map((c) => {
           const active = selected.has(c.iso) || highlighted.has(c.iso);
           const lit = active || isLit(c.tier, scope);

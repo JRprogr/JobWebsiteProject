@@ -958,7 +958,8 @@
     "source_type": "teamtailor",
     "source_config": {
       "host": "careers.ohb-sweden.se",
-      "default_country": "SE"
+      "default_country": "SE",
+      "place_aliases": { "Kista": "Stockholm" }
     },
     "active": true,
     "careers_url": "https://careers.ohb-sweden.se/jobs",

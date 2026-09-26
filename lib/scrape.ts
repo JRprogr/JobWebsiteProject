@@ -135,7 +135,10 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
     );
     const known = new Map<string, string>(knownRows.map((r) => [String(r.external_id), String(r.title)]));
 
-    const jobs = dedupe(await adapterFor(company)(company, { known, backfill: opts.backfill ?? false }));
+    // source_config.place_aliases renames places a source uses for a district ({"Kista": "Stockholm"}), so listings show the city
+    const aliases = Object.entries((company.source_config.place_aliases ?? {}) as Record<string, string>);
+    const rename = (raw: string | null) => (raw ? aliases.reduce((s, [from, to]) => s.split(from).join(to), raw) : raw);
+    const jobs = dedupe(await adapterFor(company)(company, { known, backfill: opts.backfill ?? false })).map((j) => ({ ...j, location_raw: rename(j.location_raw) }));
     const defaultCountry =
       typeof company.source_config.default_country === "string" ? company.source_config.default_country : null;
     // A known job whose page was not read again this run comes without a place; the source's default country must not overwrite what

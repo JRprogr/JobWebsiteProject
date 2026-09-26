@@ -32,7 +32,7 @@
   --map-panel: rgba(255, 255, 255, 0.55);
   /* country codes on the map: the page's text colour, a tad lighter than --fg in this theme; country outlines (see SHOW_BORDERS in EuMap.tsx) */
   --map-ticker: #2a55c5;
-  --map-border: rgba(204, 85, 0, 0.4);
+  --map-border: rgba(204, 85, 0, 0.32);
   --scanline: rgba(204, 85, 0, 0.05);
   --grain: 0.13;
   --pulse: rgba(0, 51, 153, 0.5);
@@ -74,7 +74,7 @@
   --map-label: rgba(51, 255, 153, 0.95);
   --map-panel: rgba(0, 12, 6, 0.55);
   --map-ticker: var(--fg);
-  --map-border: rgba(51, 255, 153, 0.35);
+  --map-border: rgba(51, 255, 153, 0.28);
   --scanline: rgba(51, 255, 153, 0.06);
   --grain: 0.11;
   --pulse: rgba(254, 218, 73, 0.55);

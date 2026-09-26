@@ -276,7 +276,7 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 - Map intensity: active-listing countries `--map-eu`/`--map-europe` are about 20% stronger than before, countries without listings (`data-empty`, opacity 0.41) about 10% stronger, greyed-out and selected ones unchanged.
 - Country tickers use `--map-ticker` (dark: the page's yellow, light: a lighter blue `#2a55c5`).
 - Country outlines: one switch, `SHOW_BORDERS` in `components/EuMap.tsx` (+ the `.map-border` rule and `--map-border` in `globals.css`); delete those three to revert.
-- OHB Sweden (`ohb-sweden`, teamtailor `careers.ohb-sweden.se`, satellites, SE) added.
+- OHB Sweden (`ohb-sweden`, teamtailor `careers.ohb-sweden.se`, satellites, SE) added. Its feed says Kista; `source_config.place_aliases` (`{"Kista": "Stockholm"}`, applied to `location_raw` in `scrapeCompany`) makes the listings say Stockholm. Ticker codes: countries above `TICKER_MIN_AREA` plus `TICKER_ALSO` (NL, BE) in `EuMap.tsx`; the border colour is 20% fainter (`--map-border`).
 
 ## Bug log 10 notes
 - **Known jobs keep their place.** A source that does not re-read a known job's page (link-list, detail-gated adapters) reports no `location_raw` for it; `scrapeCompany` then passes no location at all instead of the source's `default_country` hint, and the upsert keeps the stored `location_raw`, countries and cities. Before, the hint overwrote them on the second run (Esyen's Madrid job turned Italian). Rows damaged that way heal when their page is read again: `update jobs set details_checked_at = null` for the company, then a scrape.
