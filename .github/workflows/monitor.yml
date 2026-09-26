@@ -25,7 +25,8 @@ jobs:
             exit 1
           fi
           for attempt in 1 2 3; do
-            code=$(curl -sS -o body.json -D headers.txt -w '%{http_code}' --max-time 30 "$SITE_URL/api/health" || true)
+            # -L: a redirect between the www and the bare address (HTTP 308) is not a failure, only the final answer counts
+            code=$(curl -sS -L --max-redirs 3 -o body.json -D headers.txt -w '%{http_code}' --max-time 30 "$SITE_URL/api/health" || true)
             if [ "$code" = "200" ]; then
               echo "healthy: $(cat body.json)"
               exit 0
