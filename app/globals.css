@@ -21,27 +21,31 @@
     radial-gradient(760px 520px at 96% 42%, rgba(0, 51, 153, 0.2), transparent 70%),
     radial-gradient(700px 480px at 30% 60%, rgba(255, 204, 0, 0.25), transparent 70%),
     radial-gradient(700px 420px at 24% 96%, rgba(255, 204, 0, 0.2), transparent 70%);
-  --map: #cc5500;
-  --map-europe: rgba(204, 85, 0, 0.77);
-  --map-eu: rgba(204, 85, 0, 0.96);
-  --map-near: rgba(204, 85, 0, 0.2);
-  --map-selected: #ff7a1f;
+  --map: #fb5503;
+  --map-europe: rgba(251, 85, 3, 0.77);
+  --map-eu: rgba(251, 85, 3, 0.96);
+  --map-near: rgba(251, 85, 3, 0.2);
+  --map-selected: #ffa04a;
   --map-hover: #6b2d00;
-  --map-grat: rgba(204, 85, 0, 0.16);
+  --map-grat: rgba(251, 85, 3, 0.16);
   --map-label: rgba(168, 69, 0, 0.95);
-  --map-panel: rgba(255, 255, 255, 0.55);
+  /* light theme: the map sits on a grey field (and the whole card is tinted grey) so the orange terminal contrasts with it */
+  --map-panel: #b1b5b9;
+  --map-card-bg: linear-gradient(135deg, rgba(205, 209, 213, 0.8), rgba(177, 181, 185, 0.5));
+  /* faint glow around the terminal dots (none in the dark theme) */
+  --map-glow: drop-shadow(0 0 2.5px rgba(251, 85, 3, 0.55));
   /* country codes on the map: the page's text colour, a tad lighter than --fg in this theme; country outlines (see SHOW_BORDERS in EuMap.tsx) */
   --map-ticker: #2a55c5;
-  --map-border: rgba(204, 85, 0, 0.32);
-  --scanline: rgba(204, 85, 0, 0.05);
+  --map-border: rgba(251, 85, 3, 0.32);
+  --scanline: rgba(251, 85, 3, 0.05);
   --grain: 0.13;
   --pulse: rgba(0, 51, 153, 0.5);
   --stripe-a: #003399;
   --stripe-b: #edf1fa;
   /* map panel controls: the map's terminal orange in the light theme (same as its labels), terminal green in the dark one */
   --map-ui: rgba(168, 69, 0, 0.95);
-  --map-ui-line: rgba(204, 85, 0, 0.3);
-  --map-ui-faint: rgba(204, 85, 0, 0.08);
+  --map-ui-line: rgba(251, 85, 3, 0.3);
+  --map-ui-faint: rgba(251, 85, 3, 0.08);
   --map-ui-on: #ffffff;
 }
 
@@ -188,6 +192,10 @@ body {
   box-shadow: var(--glass-shadow);
 }
 
+.map-card {
+  background: var(--map-card-bg, var(--glass-bg));
+}
+
 /* Listing bars: extend on hover, grey out the rest once a role is selected */
 .job-list {
   clip-path: inset(-80px -3px -80px -60px);
@@ -296,6 +304,7 @@ body {
   fill: none;
   stroke-linecap: round;
   stroke-width: 2.4;
+  filter: var(--map-glow, none);
   transition: stroke 160ms ease;
 }
 

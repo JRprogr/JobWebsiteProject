@@ -39,7 +39,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
       tabIndex={-1}
       data-open={open}
       aria-label="Region filter"
-      className="glass flex flex-col gap-3 rounded-[22px] p-4 lg:p-5 max-lg:fixed max-lg:inset-x-3 max-lg:top-[104px] md:max-lg:top-20 max-lg:z-40 max-lg:max-h-[calc(100dvh-9.5rem)] md:max-lg:max-h-[calc(100dvh-8rem)] max-lg:overflow-y-auto max-lg:transition-[transform,visibility] max-lg:duration-300 max-lg:data-[open=false]:invisible max-lg:data-[open=false]:-translate-y-[120%]"
+      className="glass map-card flex flex-col gap-3 rounded-[22px] p-4 lg:p-5 max-lg:fixed max-lg:inset-x-3 max-lg:top-[104px] md:max-lg:top-20 max-lg:z-40 max-lg:max-h-[calc(100dvh-9.5rem)] md:max-lg:max-h-[calc(100dvh-8rem)] max-lg:overflow-y-auto max-lg:transition-[transform,visibility] max-lg:duration-300 max-lg:data-[open=false]:invisible max-lg:data-[open=false]:-translate-y-[120%]"
     >
       {/* The header's height must never depend on the readout text: it changes on every hover, and a header that wraps
           or grows under a long country name shifts the map away from the pointer, which then flickers in and out. */}
