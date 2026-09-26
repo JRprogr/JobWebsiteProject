@@ -21,33 +21,35 @@
     radial-gradient(760px 520px at 96% 42%, rgba(0, 51, 153, 0.2), transparent 70%),
     radial-gradient(700px 480px at 30% 60%, rgba(255, 204, 0, 0.25), transparent 70%),
     radial-gradient(700px 420px at 24% 96%, rgba(255, 204, 0, 0.2), transparent 70%);
-  --map: #fb5503;
-  --map-europe: rgba(251, 85, 3, 0.77);
-  --map-eu: rgba(251, 85, 3, 0.96);
-  --map-near: rgba(251, 85, 3, 0.2);
-  --map-selected: #ffa04a;
-  --map-hover: #6b2d00;
-  --map-grat: rgba(251, 85, 3, 0.16);
-  --map-label: rgba(168, 69, 0, 0.95);
-  /* light theme: the map sits on a grey field (and the whole card is tinted grey) so the orange terminal contrasts with it */
-  --map-panel: #b1b5b9;
-  --map-card-bg: linear-gradient(135deg, rgba(205, 209, 213, 0.8), rgba(177, 181, 185, 0.5));
-  /* faint glow around the terminal dots (both themes, in their own colour) */
-  --map-glow: drop-shadow(0 0 2.5px rgba(251, 85, 3, 0.55));
-  /* the same glow, a bit weaker, on the map card's texts, buttons and switch */
-  --map-ui-glow: drop-shadow(0 0 3px rgba(251, 85, 3, 0.35));
-  /* country codes on the map: the page's text colour, a tad lighter than --fg in this theme; country outlines (see SHOW_BORDERS in EuMap.tsx) */
-  --map-ticker: #2a55c5;
-  --map-border: rgba(251, 85, 3, 0.32);
-  --scanline: rgba(251, 85, 3, 0.05);
+  /* light theme map: a vibrant terminal red on the glassy white card, glowing; pink country codes */
+  --map: #f5002a;
+  --map-europe: rgba(245, 0, 42, 0.77);
+  --map-eu: rgba(245, 0, 42, 0.96);
+  --map-near: rgba(245, 0, 42, 0.2);
+  --map-selected: #ff5c73;
+  --map-hover: #7a0012;
+  --map-grat: rgba(245, 0, 42, 0.16);
+  --map-label: rgba(160, 0, 24, 0.95);
+  --map-panel: rgba(255, 255, 255, 0.55);
+  --map-card-bg: var(--glass-bg);
+  /* glow around the terminal dots (both themes, in their own colour) */
+  --map-glow: drop-shadow(0 0 4px rgba(245, 0, 42, 0.8));
+  /* the same glow, weaker, on the map card's texts, buttons and switch */
+  --map-ui-glow: drop-shadow(0 0 3px rgba(245, 0, 42, 0.45));
+  /* glow around the map's inner frame */
+  --map-frame-glow: 0 0 8px rgba(245, 0, 42, 0.4), inset 0 0 8px rgba(245, 0, 42, 0.12);
+  /* country codes on the map (see SHOW_BORDERS in EuMap.tsx for the outlines) */
+  --map-ticker: #d40f74;
+  --map-border: rgba(245, 0, 42, 0.32);
+  --scanline: rgba(245, 0, 42, 0.05);
   --grain: 0.13;
   --pulse: rgba(0, 51, 153, 0.5);
   --stripe-a: #003399;
   --stripe-b: #edf1fa;
-  /* map panel controls: the map's terminal orange in the light theme (same as its labels), terminal green in the dark one */
-  --map-ui: rgba(168, 69, 0, 0.95);
-  --map-ui-line: rgba(251, 85, 3, 0.3);
-  --map-ui-faint: rgba(251, 85, 3, 0.08);
+  /* map panel controls: the map's terminal red in the light theme (same as its labels), terminal green in the dark one */
+  --map-ui: rgba(160, 0, 24, 0.95);
+  --map-ui-line: rgba(245, 0, 42, 0.4);
+  --map-ui-faint: rgba(245, 0, 42, 0.08);
   --map-ui-on: #ffffff;
 }
 
@@ -80,6 +82,7 @@
   --map-label: rgba(51, 255, 153, 0.95);
   --map-panel: rgba(0, 12, 6, 0.55);
   --map-card-bg: var(--glass-bg);
+  --map-frame-glow: none;
   --map-glow: drop-shadow(0 0 2.5px rgba(51, 255, 153, 0.55));
   --map-ui-glow: drop-shadow(0 0 3px rgba(51, 255, 153, 0.35));
   --map-ticker: var(--fg);
@@ -300,6 +303,7 @@ body {
 /* Sized from width only (never an independent max-height), so it can never mismatch its aspect ratio and letterbox. */
 .map-frame {
   --map-h-budget: 38dvh;
+  box-shadow: var(--map-frame-glow, none);
   width: min(100%, calc(var(--map-h-budget) * 440 / 400));
   aspect-ratio: 440 / 400;
   margin-inline: auto;
