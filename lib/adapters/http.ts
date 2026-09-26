@@ -1,4 +1,5 @@
 import { CONTACT_EMAIL, SITE_URL } from "../site.ts";
+import { countryName } from "../geo.ts";
 import { sleep } from "../pool.ts";
 
 // Employers can see who is fetching their page: the bot's name, a page that explains it and how to opt out, and a mailbox.
@@ -79,7 +80,20 @@ export const isEvergreen = (title: string) => EVERGREEN.test(title);
 
 // "Chennai, IN" / "Betzdorf, LU, L-6815": the two capitals after the city are an ISO country code, and the location parser would
 // read some of those as US states (IN = Indiana), so hand the code over as a hint and keep just the place name
+//
+// A list of places ("Frascati, IT • Paris, FR • Noordwijk, NL", ESA) must not be read as one place whose country is the last code:
+// each part keeps its own country, spelled out so the location parser cannot mistake the code for a US state.
 export function isoPlace(raw: string | null): { place: string | null; country: string | null } {
+  if (raw && /[•·]/.test(raw)) {
+    const parts = raw
+      .split(/\s*[•·]\s*/)
+      .filter(Boolean)
+      .map((part) => {
+        const one = isoPlace(part);
+        return one.country ? `${one.place}, ${countryName(one.country)}` : part;
+      });
+    return { place: parts.join("; "), country: null };
+  }
   const m = raw?.match(/^(.+?),\s*([A-Z]{2})(?:\s*,\s*[^,]*\d[^,]*)?$/);
   return m ? { place: m[1].trim(), country: m[2] } : { place: raw, country: null };
 }

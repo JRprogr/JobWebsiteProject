@@ -165,7 +165,7 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
 
   const remote = REMOTE_RE.test(raw);
   const segments = raw
-    .split(/;|\||\s[-–—]\s|\s\/\s/)
+    .split(/;|\||\s[-–—]\s|\s\/\s|\s*•\s*/)
     .map(clean)
     .filter((s) => s && !/^(remote|hybrid|on-?site)$/i.test(s))
     .map(tidySegment)
