@@ -141,6 +141,23 @@ function parseSegment(segment: string, hint: string | null, defaultCountry: stri
   return { country, city: firstIsCountry || isPlaceholder ? null : first, region };
 }
 
+// "Brunswick/Hybrid (Germany)" -> "Brunswick, Germany"; "Munich (Germany)" -> "Munich, Germany". Only a spelled-out country name counts as
+// the bracket content, so "(TX)" or "(Hybrid)" stay untouched.
+function tidySegment(segment: string): string {
+  const s = segment.replace(/\s*\/\s*(hybrid|remote|on-?site)\b/gi, "");
+  const m = /^(.+?)\s*\(([^()]+)\)$/.exec(s);
+  return m && COUNTRIES[m[2].trim().toLowerCase()] ? `${m[1].trim()}, ${m[2].trim()}` : s;
+}
+
+// "Italy, France, Germany, Spain" and "Prague, Munich" list several places in one string; a lone "City, Country" pair is not a list.
+function splitList(segment: string): string[] {
+  const parts = segment.split(",").map(clean).filter(Boolean);
+  if (parts.length < 2) return [segment];
+  if (parts.every((p) => COUNTRIES[p.toLowerCase()])) return parts;
+  if (parts.every((p) => cityLookup(p))) return parts;
+  return [segment];
+}
+
 export function parseLocation(raw: string | null, hint?: string | null, defaultCountry?: string | null): ParsedLocation {
   const empty: ParsedLocation = { countries: [], country: null, city: null, cities: [], region: null, remote: false };
   const hintCode = hint && ISO_CODES.has(hint.toUpperCase()) ? hint.toUpperCase() : null;
@@ -150,7 +167,9 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
   const segments = raw
     .split(/;|\||\s[-–—]\s|\s\/\s/)
     .map(clean)
-    .filter((s) => s && !/^(remote|hybrid|on-?site)$/i.test(s));
+    .filter((s) => s && !/^(remote|hybrid|on-?site)$/i.test(s))
+    .map(tidySegment)
+    .flatMap(splitList);
 
   const countries: string[] = [];
   const cities: string[] = [];

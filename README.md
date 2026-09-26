@@ -7,7 +7,7 @@ searchable, filterable feed with a country map, a company register and statistic
 It is a **non-commercial portfolio project**: no accounts, no ads, no employer tools. Every listing links back to the
 employer's own application page.
 
-Trial deployment: https://jw-project-eight.vercel.app (temporary address, will change with a proper domain).
+Live site: `https://<your-domain>` (set as `NEXT_PUBLIC_SITE_URL` on Vercel and as the `SITE_URL` variable on GitHub, see below).
 
 ## How it works
 
@@ -50,6 +50,7 @@ npm run dev
 | `npm run db:migrate` | Applies `db/migrations/*.sql` in order (tracked in `_migrations`) |
 | `npm run db:seed` | Upserts `db/seed/companies.json` into `companies` |
 | `npm run scrape -- [slug…] [--texts] [--backfill] [--force]` | Scrapes the given companies (all if none), four at a time; `--texts` also fetches every missing listing text (one-off catch-up), `--backfill` reads more listings per run for sources that fetch 30 at a time, `--force` skips the result guard |
+| `npm run scrape -- --reextract [slug…]` | Recomputes every open job's experience from the stored listing texts (after changing `lib/experience.ts`); contacts no employer |
 | `npm run scrape -- --due` | Scrapes only the companies whose interval has elapsed, which is what the GitHub workflow runs every hour |
 | `npm run logos -- [slug…]` | Rebuilds `public/logos/*.png`, see CLAUDE.md |
 | `npm run build` | On a Vercel production deploy: migrate + seed, then `next build`. Elsewhere just `next build` |

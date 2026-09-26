@@ -148,7 +148,7 @@ exhaustive).
 ## Schema additions since the original design
 - `jobs.location_region` and `jobs.location_countries text[]` (all countries a posting lists; `location_country` stays the primary).
 - `jobs.experience_min/max/kind` ('explicit' | 'estimated') extracted from listing text during scraping; `jobs.details_checked_at` marks jobs whose text was processed.
-- `job_details(job_id, body, fetched_at)`: the listing text of every open job, capped at 20k chars (about 4 KB on average). Since batch 3 it is filled by the scraper (see "Data lifecycle"), never by the web app. An empty body means "the source has no text for this job". Re-extracting experience means re-reading sources (`npm run scrape -- --backfill`).
+- `job_details(job_id, body, fetched_at)`: the listing text of every open job, capped at 20k chars (about 4 KB on average). Since batch 3 it is filled by the scraper (see "Data lifecycle"), never by the web app. An empty body means "the source has no text for this job". After a change to `lib/experience.ts` (its cases live in `scripts/check-experience.mts`), `npm run scrape -- --reextract [slugs]` recomputes experience from the stored texts without contacting any employer (workflow dispatch option "reextract"); re-reading sources (`--backfill`) is only needed for texts that were never stored.
 - `companies.careers_url` and `companies.hq_country`: shown on the Company Register page.
 
 ## Workday adapter (`lib/adapters/workday.ts`)
@@ -185,7 +185,7 @@ Logos supplied by hand (screenshots, brand-centre downloads) are listed in the `
 
 ## ATS adapters added in Phase 2 (`lib/adapters/{personio,teamtailor,recruitee,bamboohr,ashby}.ts`)
 All read the platform's public feed; helpers live in `lib/adapters/http.ts` (fetch with UA and timeout, `isEvergreen`) and `lib/xml.ts` (tiny tolerant XML reader).
-- **personio**: `source_config {subdomain, tld ("de"|"com"), default_country}` → `https://<subdomain>.jobs.personio.<tld>/xml` (full descriptions inline). Falls back to `/search.json` when the XML feed 404s (Polaris).
+- **personio**: `source_config {subdomain, tld ("de"|"com"), default_country}` → `https://<subdomain>.jobs.personio.<tld>/xml` (full descriptions inline). Falls back to `/search.json` when the XML feed 404s (Polaris). Some accounts leave `<jobDescriptions>` empty in the feed (Okapi Orbits); new jobs without text then get it from the job page's JobPosting JSON-LD (30 per run, 300 with `--backfill`).
 - **teamtailor**: `{host, default_country}` → `https://<host>/jobs.rss` (works on custom domains too). Job id = the number in the `/jobs/<id>-slug` URL.
 - **recruitee**: `{host, default_country}` → `https://<host>/api/offers/` (custom domains work).
 - **bamboohr**: `{subdomain}` → `/careers/list` has city/state but **no country or text**; the per-job `/careers/<id>/detail` gives both, so it follows the Workday pattern (30 details per cron run, `--backfill` does all; the upsert preserves an already-resolved country).
@@ -234,7 +234,7 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 ## Deployment (Batch 1 of the pre-deploy plan)
 - `npm run build` = `node scripts/predeploy.mts && next build`. `scripts/predeploy.mts` runs `migrate.mts` and `seed.mts` only when `VERCEL_ENV === "production"`, so a push to main ships code and database together and a failing migration stops the deploy; preview and local builds never touch a database. Consequence: `db/seed/companies.json` is the source of truth for the company list in production too (the seed does not delete companies, remove those by hand).
 - `vercel.json` pins the function region to `fra1` (next to Neon in Frankfurt) and has no crons: scraping must not run on Vercel (its fair-use page lists scrapers under "Never fair use"), it runs on GitHub Actions (see "Scraper runtime"). `package.json` `engines.node` is `24.x` (the scripts rely on Node's built-in TypeScript stripping).
-- `SITE_URL` (`lib/site.ts`): `NEXT_PUBLIC_SITE_URL`, else `https://$VERCEL_PROJECT_PRODUCTION_URL`, else localhost. Trial domain: `jw-project-eight.vercel.app` (temporary, no own domain yet).
+- `SITE_URL` (`lib/site.ts`): `NEXT_PUBLIC_SITE_URL`, else `https://$VERCEL_PROJECT_PRODUCTION_URL`, else localhost. The address itself is not written down anywhere in the repository; change it with the environment variable (Vercel) and the `SITE_URL` Actions variable (GitHub).
 - Environment: `DATABASE_URL` (Vercel Production + GitHub secret = the production Neon branch; local `.env.local` points at the Neon `dev` branch), `OPERATOR_NAME` and `OPERATOR_ADDRESS` (Impressum; address lines separated by `|`), `NEXT_PUBLIC_SITE_URL` (optional). `.env.example` documents them; every other `.env*` file is gitignored.
 - The operator's name and address are deliberately NOT in the repository: `lib/site.ts` reads them from the environment (placeholder text when unset), `scripts/predeploy.mts` fails a production build without them, and they were scrubbed from the git history before the repo went public. Never write them into a file, a commit message or a memory note.
 - Commits use the GitHub noreply address (repo-local git config), never a personal mailbox.
@@ -270,6 +270,11 @@ Small career pages share `lib/adapters/board.ts` (`runBoard`): an adapter turns 
 - Backup workflow masks its edited (non-pooled) connection string in the public logs with `::add-mask::`.
 - **Accessibility** (`docs/ACCESSIBILITY.md` has the audit script and results): search field focus ring, 24 px targets, desktop skip links to `#region-filter` / `#role-preview`, live announcements, and Esc inside the listing dialog no longer clears the selection (it removed the opener and dropped focus). Open items belong to the design batch (map tickers ~3.9:1 in the light theme).
 - Load facts: the overview page runs about nine database queries per uncached view; any view keeps the Neon compute awake for five minutes, and 100 free compute-hours are about 55% of a month at 0.25 CU, so an uptime monitor must not poll `/api/health` every few minutes (each call queries the database). Hourly is fine.
+
+## Bug log 10 notes
+- **Known jobs keep their place.** A source that does not re-read a known job's page (link-list, detail-gated adapters) reports no `location_raw` for it; `scrapeCompany` then passes no location at all instead of the source's `default_country` hint, and the upsert keeps the stored `location_raw`, countries and cities. Before, the hint overwrote them on the second run (Esyen's Madrid job turned Italian). Rows damaged that way heal when their page is read again: `update jobs set details_checked_at = null` for the company, then a scrape.
+- `lib/location.ts` also reads "City (Country)" and "City/Hybrid (Country)" and splits comma lists of countries ("Italy, France, Germany, Spain") or of known cities ("Prague, Munich") into separate places.
+- User-facing wording says "refresh", not "scrape" (site pages and footer); code, workflows, env names and docs keep the technical word.
 
 ## Bug log 8 notes
 - **Search** (`where()` in `lib/jobs.ts`): every word of the query must match the job title or one of its cities (`location_city`, `location_cities`), so "embedded engineer munich" works.

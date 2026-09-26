@@ -1,10 +1,15 @@
 export type Experience = { min: number; max: number | null; kind: "explicit" | "estimated" };
 
 const WORDS: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12, fifteen: 15 };
-const WORD_RE = new RegExp(`\\b(${Object.keys(WORDS).join("|")})\\b(?=\\s*\\+?\\s*[- ]?(?:years?|yrs?)\\b)`, "gi");
+const WORD_KEYS = Object.keys(WORDS).join("|");
+// "five years", "five (5) years" and "five or more years" all become digits first; "Ten or more years" becomes "10+ years"
+const WORD_PAREN_RE = new RegExp(`\\b(?:${WORD_KEYS})\\s*\\((\\d{1,2})\\)`, "gi");
+const WORD_RE = new RegExp(`\\b(${WORD_KEYS})\\b(?=\\s*\\+?\\s*[- ]?(?:or more\\s+)?(?:years?|yrs?)\\b)`, "gi");
+const OR_MORE_RE = /\b(\d{1,2})\s+or more\s+(?=years?|yrs?)/gi;
 
 const UNIT = "(?:years?|yrs?|jahre?n?|ans|années|años|anni|lat|lata|roku|rok)";
-const RANGE_RE = new RegExp(`(\\d{1,2})\\s*(?:-|–|—|to|bis|à|und|or)\\s*(\\d{1,2})\\s*\\+?\\s*[- ]?${UNIT}\\b`, "gi");
+// the first figure may carry a plus ("7+ to 10+ years")
+const RANGE_RE = new RegExp(`(\\d{1,2})\\s*\\+?\\s*(?:-|–|—|to|bis|à|und|or)\\s*(\\d{1,2})\\s*\\+?\\s*[- ]?${UNIT}\\b`, "gi");
 const SINGLE_RE = new RegExp(
   `(?:(at least|minimum(?: of)?|min\\.?|mindestens|au moins|almeno|co najmniej|over|more than|>)\\s*)?(\\d{1,2})\\s*(\\+)?\\s*[- ]?${UNIT}\\b`,
   "gi",
@@ -43,7 +48,10 @@ function fromTitle(title: string): Experience | null {
 
 export function extractExperience(text: string | null, title: string): Experience | null {
   if (text) {
-    const body = text.replace(WORD_RE, (w) => String(WORDS[w.toLowerCase()]));
+    const body = text
+      .replace(WORD_PAREN_RE, "$1")
+      .replace(WORD_RE, (w) => String(WORDS[w.toLowerCase()]))
+      .replace(OR_MORE_RE, "$1+ ");
     let best: Experience | null = null;
     let bestPreferred: Experience | null = null;
     const consider = (min: number, max: number | null, index: number, length: number) => {
@@ -66,7 +74,9 @@ export function extractExperience(text: string | null, title: string): Experienc
     }
     for (const m of body.matchAll(SINGLE_RE)) {
       if (rangeSpans.some(([s, e]) => m.index >= s && m.index < e)) continue;
-      consider(Number(m[2]), null, m.index, m[0].length);
+      // "up to 3 years" is a ceiling, not a minimum
+      if (/\bup to\s*$/i.test(body.slice(Math.max(0, m.index - 8), m.index))) consider(0, Number(m[2]), m.index, m[0].length);
+      else consider(Number(m[2]), null, m.index, m[0].length);
     }
     if (best) return best;
     if (bestPreferred) return bestPreferred;

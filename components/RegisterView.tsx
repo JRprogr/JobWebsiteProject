@@ -40,7 +40,7 @@ export function RegisterView({ companies, classifications, classification }: Pro
         {shown.map((c) => (
           <li key={c.slug} className="glass flex min-w-0 flex-col gap-5 rounded-[22px] p-5">
             {c.scraped ? null : (
-              <p className="-mb-2 self-end rounded border border-line px-2 py-0.5 font-mono text-[9px] tracking-[0.1em] text-dim">[ SCRAPE NOT AVAILABLE ]</p>
+              <p className="-mb-2 self-end rounded border border-line px-2 py-0.5 font-mono text-[9px] tracking-[0.1em] text-dim">[ REFRESH NOT AVAILABLE ]</p>
             )}
             <div className="flex items-start gap-3.5">
               <CompanyLogo name={c.name} logo={c.logo} className="size-12 text-lg" />
@@ -69,7 +69,7 @@ export function RegisterView({ companies, classifications, classification }: Pro
             </dl>
 
             <p className="font-mono text-[10px] tracking-[0.08em] text-dim">
-              {c.scraped ? `SOURCE: ${sourceLabel(c.source)} · ${c.checked ? `CHECKED ${c.checked.toUpperCase()}` : "NOT CHECKED YET"}` : "NO AUTOMATIC SCRAPE · OPEN ROLES ON THE COMPANY'S OWN PAGE"}
+              {c.scraped ? `SOURCE: ${sourceLabel(c.source)} · ${c.checked ? `CHECKED ${c.checked.toUpperCase()}` : "NOT CHECKED YET"}` : "NO AUTOMATIC REFRESH · OPEN ROLES ON THE COMPANY'S OWN PAGE"}
             </p>
 
             <div className="mt-auto flex gap-2.5">

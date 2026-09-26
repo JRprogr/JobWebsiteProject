@@ -9,7 +9,7 @@ const shoulders = Big_Shoulders({ variable: "--font-shoulders", subsets: ["latin
 const textMe = Text_Me_One({ variable: "--font-textme", subsets: ["latin"], weight: "400" });
 
 const TITLE = "DS[Careers] — Space & Defence jobs in Europe";
-const DESCRIPTION = "Open roles at space and defence companies, refreshed on every scrape. Europe first, everywhere else one click away.";
+const DESCRIPTION = "Open roles at space and defence companies, refreshed on a schedule. Europe first, everywhere else one click away.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

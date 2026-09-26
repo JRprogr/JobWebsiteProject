@@ -16,6 +16,10 @@ on:
         description: "Catch-up: also fetch the listing text of every open job that has none (slow, up to a few hours for all companies)"
         type: boolean
         default: false
+      reextract:
+        description: "After a change to the experience extraction: recompute experience from the stored listing texts (no employer is contacted, takes a minute)"
+        type: boolean
+        default: false
 
 # One run at a time: a slow run must never overlap the next hourly one
 concurrency:
@@ -45,8 +49,11 @@ jobs:
           NODE_EXTRA_CA_CERTS: ${{ github.workspace }}/certs/intermediates.pem
           SLUGS: ${{ inputs.slugs }}
           BACKFILL: ${{ inputs.backfill }}
+          REEXTRACT: ${{ inputs.reextract }}
         run: |
-          if [ "$BACKFILL" = "true" ]; then
+          if [ "$REEXTRACT" = "true" ]; then
+            node scripts/scrape.mts --reextract $SLUGS
+          elif [ "$BACKFILL" = "true" ]; then
             node scripts/scrape.mts --texts $SLUGS
           elif [ -n "$SLUGS" ]; then
             node scripts/scrape.mts $SLUGS

@@ -43,7 +43,7 @@ select $1::uuid, external_id, title, location_raw, location_country, coalesce(st
 from input
 on conflict (company_id, external_id) do update set
   title = excluded.title,
-  location_raw = excluded.location_raw,
+  location_raw = coalesce(excluded.location_raw, jobs.location_raw),
   -- A source whose country/city only comes from a per-job detail fetch (e.g. Workday) reports none of that for a
   -- job it didn't re-fetch this run; keep the last resolved value instead of blanking it out.
   location_country = coalesce(excluded.location_country, jobs.location_country),
@@ -138,7 +138,11 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
     const jobs = dedupe(await adapterFor(company)(company, { known, backfill: opts.backfill ?? false }));
     const defaultCountry =
       typeof company.source_config.default_country === "string" ? company.source_config.default_country : null;
-    const loc = jobs.map((j) => parseLocation(j.location_raw, j.country_hint, defaultCountry));
+    // A known job whose page was not read again this run comes without a place; the source's default country must not overwrite what
+    // its first read resolved (Esyen's Madrid job would turn Italian), so it reports no location and the upsert keeps the stored one.
+    const loc = jobs.map((j) =>
+      known.has(j.external_id) && !j.location_raw ? parseLocation(null) : parseLocation(j.location_raw, j.country_hint, defaultCountry),
+    );
 
     // Only jobs with fresh text (or brand-new ones, from the title alone) get an experience value; known jobs keep theirs.
     const exp: (Experience | null)[] = jobs.map((j) => {

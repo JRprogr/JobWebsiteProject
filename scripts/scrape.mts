@@ -1,5 +1,6 @@
 import { housekeeping } from "../lib/housekeeping.ts";
 import { loadCompanies, scrapeDue, scrapeMany, type ScrapeResult } from "../lib/scrape.ts";
+import { reextractExperience } from "../lib/texts.ts";
 
 // npm run scrape                     every active company
 // npm run scrape -- <slug> [slug…]   just those companies
@@ -8,7 +9,14 @@ import { loadCompanies, scrapeDue, scrapeMany, type ScrapeResult } from "../lib/
 // --backfill  read many more listing texts per company in one go (Workday, BambooHR, … only fetch 30 per run otherwise)
 // --force     skip the result guard (after a deliberate adapter change)
 // Companies run four at a time.
+// --reextract recomputes every open job's experience from the stored listing texts (no employer is contacted); use it after a
+//             change to lib/experience.ts, optionally for just some slugs
 const args = process.argv.slice(2);
+if (args.includes("--reextract")) {
+  const done = await reextractExperience(args.filter((a) => !a.startsWith("--")));
+  console.log(`experience re-read from stored texts: ${done.checked} jobs checked, ${done.changed} changed`);
+  process.exit(0);
+}
 const texts = args.includes("--texts");
 const backfill = args.includes("--backfill") || texts;
 const force = args.includes("--force");

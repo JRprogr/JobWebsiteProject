@@ -52,7 +52,7 @@ const PAD = { l: 44, r: 12, t: 12, b: 24 };
 
 function Timeline({ points }: { points: DayPoint[] }) {
   if (points.length < 2) {
-    return <p className="font-mono text-xs leading-7 tracking-[0.06em] text-dim">HISTORY STARTS WITH THE FIRST SCRAPE. THE CHART FILLS IN DAY BY DAY.</p>;
+    return <p className="font-mono text-xs leading-7 tracking-[0.06em] text-dim">HISTORY STARTS WITH THE FIRST REFRESH. THE CHART FILLS IN DAY BY DAY.</p>;
   }
   const max = Math.max(...points.map((p) => p.open));
   const min = Math.min(...points.map((p) => p.eu));
@@ -129,7 +129,7 @@ export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
         <Kpi name="OPEN ROLES" value={fmt(o.open)} sub={`${o.companies} COMPANIES TRACKED`} />
         <Kpi name="IN EUROPE" value={fmt(o.europe)} sub={`${fmt(o.eu)} IN THE EU`} />
         <Kpi name={`ADDED · ${window}`} value={signed(o.added)} sub={`NET ${signed(net)}`} />
-        <Kpi name={`REMOVED · ${window}`} value={signed(-o.removed)} sub={o.lastScrape ? "SINCE THE FIRST SCRAPE OF EACH COMPANY" : "NO SCRAPE YET"} tone="down" />
+        <Kpi name={`REMOVED · ${window}`} value={signed(-o.removed)} sub={o.lastScrape ? "SINCE THE FIRST REFRESH OF EACH COMPANY" : "NO REFRESH YET"} tone="down" />
       </div>
 
       <Card title="OPEN ROLES OVER TIME" note={activity === 0 ? "NO CHANGES RECORDED YET" : "DAILY, END OF DAY"}>

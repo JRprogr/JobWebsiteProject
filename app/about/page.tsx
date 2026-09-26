@@ -25,7 +25,7 @@ export default function AboutPage() {
           nationals, a growing base of joint defence programmes, and companies, customers and suppliers that
           increasingly work across borders rather than within just one country and a growing demand for sovereignty faciliting innovation. This project&apos;s aim is to match
           talent with roles inside that European context specifically, not to rank Europe above anywhere else.
-          Nothing is hidden: every country a tracked company publishes listings for is still scraped and searchable; Europe
+          Nothing is hidden: every country a tracked company publishes listings for is still refreshed and searchable; Europe
           is just the starting lens, not the only one. Ofcourse we acknowledge Russia, Turkey, Ukraine, Belarus and Moldova as
           part of continental Europe geographically &mdash; they&apos;re on the map and one filter away too, yet still we have
           to consider the current geopolitical situation and the fact that many of the companies tracked here are not allowed to do business with those countries.
@@ -38,7 +38,7 @@ export default function AboutPage() {
           A scheduled refresh checks each company&apos;s public career page or applicant tracking system, compares
           what it finds against what we saw last time, and records what was added, what disappeared, and
           what&apos;s still open. That comparison is also what powers the Statistics page &mdash; there&apos;s no
-          separate tracking system behind it, just the history of each scrape.
+          separate tracking system behind it, just the history of each refresh.
         </p>
         <p>
           Experience level is estimated from each listing&apos;s own text where it isn&apos;t stated outright. That
@@ -53,7 +53,7 @@ export default function AboutPage() {
           <a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer">
             Claude
           </a>{" "}
-          . That includes everything regarding scraping and diffing pipeline, database and the UI design itself.
+          . That includes everything regarding the refresh and diffing pipeline, database and the UI design itself.
         </p>
       </LegalSection>
 

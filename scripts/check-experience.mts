@@ -29,6 +29,11 @@ const cases: [string, string, string | null][] = [
   ["Almeno 5 anni di esperienza nel settore aerospaziale", "Ingegnere", "5+ explicit"],
   ["Great team.", "Stage - Tecnologo lavorazioni meccaniche", "0 estimated"],
   ["Great team.", "Tirocinio ingegneria", "0 estimated"],
+  ["a minimum of ten (10) years of relevant experience", "Program Manager", "10+ explicit"],
+  ["Ten or more years of payroll experience", "Manager", "10+ explicit"],
+  ["at least five (5) years of relevant experience", "Specialist", "5+ explicit"],
+  ["for Senior Engineer, 7+ to 10+ years of relevant industry experience is preferred", "Senior Engineer", "7-10 explicit"],
+  ["a degree, with up to 3 years of relevant experience", "Analyst", "0-3 explicit"],
 ];
 
 let bad = 0;

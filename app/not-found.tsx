@@ -16,7 +16,7 @@ export default function NotFound() {
           Nothing at this coordinate.
         </h1>
         <p className="mt-4 max-w-lg text-[15px] leading-7 text-dim">
-          The page you&apos;re looking for doesn&apos;t exist, or the listing behind it was removed on a later scrape.
+          The page you&apos;re looking for doesn&apos;t exist, or the listing behind it was removed on a later refresh.
         </p>
         <Link
           href="/"

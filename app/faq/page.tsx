@@ -14,7 +14,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Why the focus on Europe?",
-    a: "Company-wise, “Europe” here means companies primarily active in the EEA, the UK, Switzerland and the Balkans — roughly where a work visa is easier to get and continental relocation is realistic. Some international companies and countries are still scraped and stay available under the Global filter, but the focus, and the default view, is said region of Europe. Russia, Ukraine, Belarus, Moldova and Turkey are acknowledged aspart of the European continent too, but geopolitical uncertainties often make them unsuitable for the general job search. That moved us to define them to sit outside of our main “Europe” filter, which shall not be read as a motive to systematically disparage these countries.",
+    a: "Company-wise, “Europe” here means companies primarily active in the EEA, the UK, Switzerland and the Balkans — roughly where a work visa is easier to get and continental relocation is realistic. Some international companies and countries are still refreshed and stay available under the Global filter, but the focus, and the default view, is said region of Europe. Russia, Ukraine, Belarus, Moldova and Turkey are acknowledged aspart of the European continent too, but geopolitical uncertainties often make them unsuitable for the general job search. That moved us to define them to sit outside of our main “Europe” filter, which shall not be read as a motive to systematically disparage these countries.",
   },
   {
     q: "Where does the data come from?",
@@ -22,7 +22,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "How often is it updated?",
-    a: "“Live” means it reflects the most recent scrape, not a real-time push. Companies are checked on a schedule; the Statistics page shows when each one was last checked.",
+    a: "“Live” means it reflects the most recent refresh, not a real-time push. Companies are checked on a schedule; the Statistics page shows when each one was last checked.",
   },
   {
     q: "Which bot visits employer pages, and how can an employer opt out?",
@@ -34,7 +34,7 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "How is the experience level worked out?",
-    a: "It's read from the listing text at scrape time: an explicit range like “5+ years”, or an estimate from cues like “several years of experience” or a senior/junior title. A ~ in front of a value marks an estimate.",
+    a: "It's read from the listing text when it is refreshed: an explicit range like “5+ years”, or an estimate from cues like “several years of experience” or a senior/junior title. A ~ in front of a value marks an estimate.",
   },
   {
     q: "Can I apply through DS[Careers]?",

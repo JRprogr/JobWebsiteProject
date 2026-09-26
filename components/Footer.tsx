@@ -19,7 +19,7 @@ export async function Footer() {
     <footer className="mx-auto mt-16 w-full max-w-[1440px] px-4 pb-10 md:px-12">
       <div className="border border-line font-mono text-[11px] tracking-[0.08em]">
         <div className="flex flex-col divide-y divide-line border-b border-line sm:flex-row sm:divide-x sm:divide-y-0">
-          <p className={`${cell} flex-1 text-dim`}>DATA REFRESHES ON EACH SCRAPE RUN. NO PUSH FEED.</p>
+          <p className={`${cell} flex-1 text-dim`}>DATA REFRESHES ON A SCHEDULE. NO PUSH FEED.</p>
           <p className={`${cell} flex-1 text-dim`}>SOURCES · EMPLOYERS&apos; OWN CAREER PAGES AND ATS FEEDS</p>
         </div>
 
@@ -43,7 +43,7 @@ export async function Footer() {
               <br />
               {stamp?.lastScrape ? (
                 <>
-                  LAST SCRAPE
+                  LAST REFRESH
                   <br />
                   <time dateTime={stamp.lastScrape} className="text-fg">
                     {utcStamp(stamp.lastScrape)}
@@ -52,7 +52,7 @@ export async function Footer() {
                   {stamp.companies} EMPLOYERS
                 </>
               ) : (
-                <>NO SCRAPE YET</>
+                <>NO REFRESH YET</>
               )}
             </p>
           </div>

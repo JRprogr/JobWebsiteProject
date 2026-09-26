@@ -1,4 +1,5 @@
-import { htmlToText } from "../text.ts";
+import { mapPool } from "../pool.ts";
+import { htmlToText, parseJsonLd } from "../text.ts";
 import { blocks, tagText } from "../xml.ts";
 import type { Adapter, Company, DetailFetcher, NormalizedJob } from "../types.ts";
 import { configString, defaultCountry, getJson, getText, isEvergreen } from "./http.ts";
@@ -57,28 +58,55 @@ async function positions(company: Company): Promise<Position[]> {
   }
 }
 
+// Some accounts publish the feed without descriptions (Okapi Orbits: `<jobDescriptions></jobDescriptions>` on most positions) while
+// the job's own page still carries the whole text in schema.org JobPosting JSON-LD.
+async function pageText(root: string, id: string): Promise<string | null> {
+  const html = await getText(`${root}/job/${id}`);
+  for (const m of html.matchAll(/<script[^>]*ld\+json[^>]*>([\s\S]*?)<\/script>/g)) {
+    try {
+      const j = parseJsonLd(m[1]) as { "@type"?: string; description?: string };
+      if (j["@type"] === "JobPosting") return j.description ? htmlToText(j.description) || null : null;
+    } catch {
+      // not the JSON-LD we want
+    }
+  }
+  return null;
+}
+
 export const personioDetail: DetailFetcher = async (company, job) => {
   const position = (await positions(company)).find((p) => p.id === job.external_id);
-  return position?.body || null;
+  return position?.body || (await pageText(base(company), job.external_id));
 };
 
 export const personio: Adapter = async (company, ctx) => {
   const root = base(company);
   const hint = defaultCountry(company.source_config);
-  return (await positions(company))
-    .filter((p) => !isEvergreen(p.title))
-    .map((p): NormalizedJob => ({
-      external_id: p.id,
-      title: p.title,
-      location_raw: [...new Set(p.offices)].join("; ") || null,
-      remote: p.offices.some((o) => /remote/i.test(o)),
-      department: p.department,
-      url: `${root}/job/${p.id}`,
-      salary_min: null,
-      salary_max: null,
-      salary_currency: null,
-      posted_at: p.createdAt,
-      country_hint: hint,
-      description: ctx.known.has(p.id) ? null : p.body,
-    }));
+  const list = (await positions(company)).filter((p) => !isEvergreen(p.title));
+  // only jobs that are new to us and came without text; the rest of the text top-up is the details fetcher's job (lib/texts.ts)
+  const missing = list.filter((p) => !p.body && !ctx.known.has(p.id)).slice(0, ctx.backfill ? 300 : 30);
+  // a position still without text after this loop (page unreachable, or beyond the cap) reports `null` = not processed yet, so
+  // the details top-up tries again; an empty string would mean "this source has no text"
+  const unread = new Set(list.filter((p) => !p.body).map((p) => p.id));
+  await mapPool(missing, 3, async (p) => {
+    try {
+      p.body = (await pageText(root, p.id)) ?? "";
+      unread.delete(p.id);
+    } catch {
+      // stays unread
+    }
+  });
+  return list.map((p): NormalizedJob => ({
+    external_id: p.id,
+    title: p.title,
+    location_raw: [...new Set(p.offices)].join("; ") || null,
+    remote: p.offices.some((o) => /remote/i.test(o)),
+    department: p.department,
+    url: `${root}/job/${p.id}`,
+    salary_min: null,
+    salary_max: null,
+    salary_currency: null,
+    posted_at: p.createdAt,
+    country_hint: hint,
+    description: ctx.known.has(p.id) || unread.has(p.id) ? null : p.body,
+  }));
 };

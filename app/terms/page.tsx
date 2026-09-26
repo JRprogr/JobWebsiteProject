@@ -26,7 +26,7 @@ export default function TermsPage() {
           Listings are gathered automatically from each employer&apos;s own career page or applicant tracking system,
           on a schedule, not in real time. A listing shown here can be outdated, incomplete, or already filled before
           our next check. <b>Always treat the employer&apos;s own listing as the source of truth</b>, and apply there —
-          every <b>Apply</b> or <b>Full listing</b> button links directly to it.
+          every <b>Apply</b> button links directly to it.
         </p>
       </LegalSection>
 
