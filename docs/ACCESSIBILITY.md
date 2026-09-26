@@ -27,11 +27,27 @@ body (focus now returns to that button).
 Also in place from earlier: skip link to the content, `prefers-reduced-motion` honoured, `aria-current` on the navigation,
 `aria-pressed` on the toggle buttons, one `h1` per page, no horizontal scrolling at 375 px width.
 
+## Re-check after the design changes (2026-09-27, live site)
+
+The script below ran on the overview, statistics, company register, about, Q&A, impressum, privacy and terms pages in the
+dark theme and on the overview, statistics, register, privacy and terms pages in the light theme (about, Q&A and impressum
+share the same components): no issues, no contrast failures. Checked by hand because the script cannot see SVG fills or
+gradients:
+
+- Map country codes: light theme yellow `#ffd21f` with a dark red outline (`#7a0012`), about 7.9:1 between letter and
+  outline and 10.8:1 between outline and the white card; dark theme yellow `#feda49` on near black, above 10:1. Greyed-out
+  countries are drawn at 35% opacity (inactive, exempt from the contrast rule; their count is in the label and the readout).
+- Map text and controls (red `rgb(160 0 24)` on the white card about 7.6:1; green `#33ff99` on dark far above 4.5:1).
+- Country dots: red at 77% opacity on white about 4.0:1 (graphical objects need 3:1). Countries without roles are lighter
+  on purpose; the number of roles is always in the accessible name and the readout.
+- Keyboard focus on a country draws a solid full-strength outline, visible in both themes.
+- Selected countries differ from unselected ones by a lighter tone, a slightly thicker stroke and a glow, and `aria-pressed`
+  for screen readers. Visually that is a subtle cue; it is on the list for the design leftovers (multi-select states).
+
 ## Known gaps (for the design batch)
 
-- The country codes drawn on the map are faint: about 3.9:1 (11 px text, needs 4.5:1) in the light theme for the countries
-  with roles, far lower for greyed-out ones. They are decoration, the same numbers are in the readout above the map and
-  in the country list under Advanced, but they should be readable.
+- The selected, hovered and multi-select states of the map could be told apart more clearly than by tone alone. (The faint
+  country codes that used to be listed here are fixed, see the re-check above.)
 - The country shapes on the map are small click targets (Luxembourg, Malta, Kosovo …). Every country can also be chosen from the
   Advanced country list, which is the equivalent control WCAG 2.5.8 asks for.
 - The footer text is 10 px. It passes the contrast check but is small.
