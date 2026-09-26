@@ -40,7 +40,7 @@ export default function TermsPage() {
 
       <LegalSection title="THIRD-PARTY LINKS">
         <p>
-          Applying, viewing a full listing, or opening a company&apos;s careers page takes you to a site we don&apos;t
+          Applying or opening a company&apos;s careers page takes you to a site we don&apos;t
           control. We aren&apos;t responsible for the content, accuracy, or practices of those sites.
         </p>
       </LegalSection>
