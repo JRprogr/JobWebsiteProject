@@ -1,0 +1,41 @@
+name: monitor
+
+# Asks the site's health endpoint every hour whether the database answers and a scrape finished in the last three hours.
+# A failed run makes GitHub email you. A site that is paused on Vercel on purpose ("Pause Project") is recognised and skipped.
+# GitHub switches scheduled workflows off after 60 days without any commit to a public repository, and that would silence
+# this check too, so an independent uptime monitor on /api/health is worth adding (README, section "Monitoring").
+on:
+  schedule:
+    - cron: "47 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  health:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check /api/health
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "::error::the repository variable SITE_URL is not set"
+            exit 1
+          fi
+          for attempt in 1 2 3; do
+            code=$(curl -sS -o body.json -D headers.txt -w '%{http_code}' --max-time 30 "$SITE_URL/api/health" || true)
+            if [ "$code" = "200" ]; then
+              echo "healthy: $(cat body.json)"
+              exit 0
+            fi
+            if grep -qi '^x-vercel-error: DEPLOYMENT_PAUSED' headers.txt; then
+              echo "::notice::the site is paused on Vercel, nothing to check"
+              exit 0
+            fi
+            echo "attempt $attempt: HTTP $code $(cat body.json 2>/dev/null)"
+            sleep 20
+          done
+          echo "::error::health check failed: HTTP $code $(cat body.json 2>/dev/null)"
+          exit 1

@@ -110,6 +110,17 @@ The workflow uses the `DATABASE_URL` secret. A read-only role is safer: in the N
 `create role backup_reader login password '…'; grant pg_read_all_data to backup_reader;` and store its connection string
 as the Actions secret `BACKUP_DATABASE_URL`.
 
+## Monitoring
+
+`/api/health` answers 200 when the database is reachable and a scrape finished within the last three hours, and 503
+otherwise (`down` or `stale`). `.github/workflows/monitor.yml` calls it every hour and fails, which makes GitHub email
+you, when it does not answer 200 three times in a row. It needs the Actions variable `SITE_URL`. A site that is paused on
+Vercel ("Pause Project") is recognised by its `x-vercel-error: DEPLOYMENT_PAUSED` header and skipped.
+
+GitHub switches scheduled workflows off after 60 days without a commit to a public repository, which would silence the
+scrape, the backup and this monitor together. An independent uptime monitor closes that gap: create a free HTTP monitor
+(UptimeRobot, Better Stack, …) for `<SITE_URL>/api/health` that alerts on anything but 200.
+
 ## Contact
 
 Questions, corrections or requests to remove an employer: info.dscareers@proton.me
