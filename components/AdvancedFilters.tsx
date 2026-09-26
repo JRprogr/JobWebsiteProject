@@ -39,7 +39,7 @@ function PickList({ items, selected, placeholder, onToggle }: { items: Item[]; s
         onChange={(e) => setQuery(e.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="rounded-lg border border-line bg-faint px-3 py-2 font-mono text-xs outline-none placeholder:text-dim"
+        className="rounded-lg border border-line bg-faint px-3 py-2 font-mono text-xs placeholder:text-dim"
       />
       <ul className="scroll-thin grid max-h-52 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2 xl:grid-cols-3">
         {shown.map((item) => {

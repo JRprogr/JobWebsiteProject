@@ -35,6 +35,8 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
 
   return (
     <section
+      id="region-filter"
+      tabIndex={-1}
       data-open={open}
       aria-label="Region filter"
       className="glass flex flex-col gap-3 rounded-[22px] p-4 lg:p-5 max-lg:fixed max-lg:inset-x-3 max-lg:top-[104px] md:max-lg:top-20 max-lg:z-40 max-lg:max-h-[calc(100dvh-9.5rem)] md:max-lg:max-h-[calc(100dvh-8rem)] max-lg:overflow-y-auto max-lg:transition-[transform,visibility] max-lg:duration-300 max-lg:data-[open=false]:invisible max-lg:data-[open=false]:-translate-y-[120%]"
@@ -76,7 +78,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
       </div>
 
       <div className="flex items-center justify-between gap-3 font-mono text-xs tracking-[0.06em]">
-        <button type="button" role="switch" aria-checked={multi} onClick={() => onMulti(!multi)} className="flex items-center gap-2.5 text-map-ui">
+        <button type="button" role="switch" aria-checked={multi} onClick={() => onMulti(!multi)} className="flex min-h-8 items-center gap-2.5 text-map-ui">
           <span
             className="relative block h-[22px] w-10 rounded-full border bg-map-ui-faint transition-[border-color,box-shadow] duration-200"
             style={multi ? { borderColor: "var(--map)", boxShadow: "0 0 8px var(--map), inset 0 0 6px var(--map-grat)" } : { borderColor: "var(--map-ui-line)" }}
@@ -88,7 +90,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
           </span>
           SELECT MULTIPLE
         </button>
-        <button type="button" onClick={onClear} disabled={selected.length === 0} className="flex items-center gap-2 text-map-ui disabled:opacity-40">
+        <button type="button" onClick={onClear} disabled={selected.length === 0} className="flex min-h-8 items-center gap-2 text-map-ui disabled:opacity-40">
           {/* Circle and cross share one 22x22 drawing, so the cross sits exactly on the centre (11, 11) whatever the layout does around it */}
           <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" className="block shrink-0">
             <circle cx="11" cy="11" r="11" className="fill-map-ui" />

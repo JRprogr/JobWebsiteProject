@@ -25,6 +25,8 @@ jobs:
         run: |
           # pg_dump must be at least as new as the server (Neon runs PostgreSQL 18) and wants a direct, not a pooled, connection
           export PGURL="${DATABASE_URL/-pooler/}"
+          # GitHub only masks the secret as stored; this edited copy of it must be hidden from the (public) logs as well
+          echo "::add-mask::$PGURL"
           docker run --rm -e PGURL postgres:18 sh -c 'pg_dump "$PGURL" --format=custom --no-owner --no-privileges --exclude-table-data=job_details' > backup.dump
           ls -l backup.dump
           # the file must be readable and hold the tables that matter

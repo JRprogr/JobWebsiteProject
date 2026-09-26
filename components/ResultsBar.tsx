@@ -16,7 +16,7 @@ type Props = {
 export function ResultsBar({ total, summary, sort, limit, onSort, onLimit }: Props) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 font-mono text-[11px] tracking-[0.08em]">
-      <span className="text-dim">
+      <span className="text-dim" role="status">
         {total.toLocaleString("en")} {total === 1 ? "ROLE" : "ROLES"} · {summary}
       </span>
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -39,7 +39,7 @@ export function ResultsBar({ total, summary, sort, limit, onSort, onLimit }: Pro
           <select
             value={sort}
             onChange={(e) => onSort(e.target.value as Sort)}
-            className="rounded-md border border-line bg-transparent px-2 py-1 font-mono text-[11px] tracking-[0.08em] outline-none"
+            className="rounded-md border border-line bg-transparent px-2 py-1 font-mono text-[11px] tracking-[0.08em]"
           >
             {SORTS.map((s) => (
               <option key={s.value} value={s.value} className="bg-bg text-fg">

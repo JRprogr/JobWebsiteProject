@@ -50,7 +50,9 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      // Esc inside the full-listing dialog only closes the dialog; clearing the selection as well would remove the button that
+      // opened it and leave keyboard focus nowhere
+      if (e.key === "Escape" && !document.querySelector("dialog[open]")) {
         setSelectedId(null);
         setMapOpen(false);
       }
@@ -92,6 +94,10 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
   return (
     <div className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-8 md:px-12 md:pt-10">
       {pending ? <div className="pending-bar" role="status" aria-label="Updating roles" /> : null}
+      {/* always mounted so that screen readers hear the change when a role is picked; the preview panel itself is not a live region */}
+      <p className="sr-only" role="status">
+        {selectedJob ? `Preview: ${selectedJob.title} at ${selectedJob.company}` : ""}
+      </p>
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_470px]">
         <section aria-label="Open roles" className={`flex min-w-0 flex-col gap-5 ${selectedJob ? "max-lg:pb-44" : ""}`}>
           <div className="flex flex-col gap-3.5">
@@ -104,6 +110,16 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
               <br />
               Space &amp; defence.
             </h1>
+          </div>
+
+          {/* the list can be long, so keyboard users get a way past it to the map and the preview (desktop only, both are hidden on phones) */}
+          <div className="max-lg:hidden">
+            <a href="#region-filter" className="skip-link">
+              SKIP TO REGION FILTER
+            </a>
+            <a href="#role-preview" className="skip-link">
+              SKIP TO ROLE PREVIEW
+            </a>
           </div>
 
           <SearchBar key={searchKey} query={filters.q} />

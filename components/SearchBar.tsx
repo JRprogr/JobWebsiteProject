@@ -21,7 +21,7 @@ export function SearchBar({ query }: { query: string }) {
   }, [text]);
 
   return (
-    <label className="glass flex h-12 items-center gap-3 rounded-xl px-4">
+    <label className="glass flex h-12 items-center gap-3 rounded-xl px-4 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-fg">
       <SearchIcon className="shrink-0 text-dim" />
       <input
         type="search"
@@ -29,7 +29,7 @@ export function SearchBar({ query }: { query: string }) {
         onChange={(e) => setText(e.target.value)}
         placeholder="Search job titles or cities"
         aria-label="Search job titles or cities"
-        className="min-w-0 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-dim"
+        className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-dim"
       />
     </label>
   );

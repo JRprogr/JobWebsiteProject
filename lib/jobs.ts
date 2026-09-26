@@ -68,7 +68,7 @@ function where(f: Filters, skip: Skip = {}) {
 
   // every word of the search must match the title or a city of the listing ("systems engineer munich")
   for (const word of f.q.split(/\s+/).filter(Boolean).slice(0, 6)) {
-    const like = add(`%${word.replace(/[%_\\]/g, (ch) => `\\${ch}`)}%`);
+    const like = add(`%${word.slice(0, 40).replace(/[%_\\]/g, (ch) => `\\${ch}`)}%`);
     clauses.push(`(j.title ilike ${like} or j.location_city ilike ${like} or exists (select 1 from unnest(j.location_cities) city where city ilike ${like}))`);
   }
   if (f.classification) clauses.push(`c.classification = ${add(f.classification)}`);

@@ -63,7 +63,7 @@ export async function Footer() {
           <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and info">
             {PAGES.map((p) => (
               <li key={p.href}>
-                <Link href={p.href} className="hover:text-fg">
+                <Link href={p.href} className="inline-flex min-h-6 items-center hover:text-fg">
                   [ {p.label} ]
                 </Link>
               </li>

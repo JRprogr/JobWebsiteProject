@@ -10,7 +10,7 @@ export function AboutButton() {
     <Link
       href="/about"
       aria-current={current ? "page" : undefined}
-      className={`whitespace-nowrap font-mono text-[11px] tracking-[0.08em] hover:text-fg ${current ? "font-bold text-fg" : "text-dim"}`}
+      className={`inline-flex min-h-6 items-center whitespace-nowrap font-mono text-[11px] tracking-[0.08em] hover:text-fg ${current ? "font-bold text-fg" : "text-dim"}`}
     >
       [ ABOUT ]
     </Link>

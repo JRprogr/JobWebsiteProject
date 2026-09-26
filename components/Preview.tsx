@@ -29,7 +29,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
 
   if (!job) {
     return (
-      <section aria-label="Role preview" className={`relative grid min-h-40 place-items-center rounded-[22px] border border-line p-6 ${wrapper}`}>
+      <section id="role-preview" tabIndex={-1} aria-label="Role preview" className={`relative grid min-h-40 place-items-center rounded-[22px] border border-line p-6 ${wrapper}`}>
         <span className="absolute left-5 top-5 size-3.5 border-l border-t border-fg" aria-hidden="true" />
         <span className="absolute right-5 top-5 size-3.5 border-r border-t border-fg" aria-hidden="true" />
         <span className="absolute bottom-5 left-5 size-3.5 border-b border-l border-fg" aria-hidden="true" />
@@ -47,7 +47,7 @@ export function Preview({ job, onClose }: { job: JobView | null; onClose: () => 
   const experience = job.experience ? formatExperience(job.experience.min, job.experience.max, job.experience.kind) : null;
 
   return (
-    <section aria-label="Role preview" className={`glass flex flex-col gap-3 rounded-[22px] p-5 lg:gap-3 lg:p-4 ${wrapper}`}>
+    <section id="role-preview" tabIndex={-1} aria-label="Role preview" className={`glass flex flex-col gap-3 rounded-[22px] p-5 lg:gap-3 lg:p-4 ${wrapper}`}>
       <div className="flex items-start gap-3.5">
         <CompanyLogo name={job.company} logo={job.logo} className="size-11 text-xl" />
         <div className="flex min-w-0 flex-1 flex-col gap-1">

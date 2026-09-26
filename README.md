@@ -119,7 +119,63 @@ Vercel ("Pause Project") is recognised by its `x-vercel-error: DEPLOYMENT_PAUSED
 
 GitHub switches scheduled workflows off after 60 days without a commit to a public repository, which would silence the
 scrape, the backup and this monitor together. An independent uptime monitor closes that gap: create a free HTTP monitor
-(UptimeRobot, Better Stack, …) for `<SITE_URL>/api/health` that alerts on anything but 200.
+(UptimeRobot, Better Stack, …) for `<SITE_URL>/api/health` that alerts on anything but 200. Set the interval to an hour or
+more: every call queries the database, and a check every few minutes would keep the Neon compute awake around the clock and
+use up the free compute-hours.
+
+## Security and cost safety
+
+**Nothing here can send you an invoice** as long as no payment method is attached: Vercel is on Hobby, Neon on Free, and the
+repository is public. Overuse blocks a feature, it does not bill (provider documentation, September 2026):
+
+- **Vercel Hobby** has no billing cycle; a limit that is exceeded (100 GB transfer, 1M function calls, 4 CPU-hours, …) blocks
+  that feature for 30 days. DDoS mitigation is always on, and Attack Mode (Firewall, Bot Management) is free and its blocked
+  requests do not count towards the limits.
+- **Neon Free** suspends the compute when the 100 compute-hours or 5 GB of transfer per month are used up and refuses writes
+  beyond 0.5 GB. It never deletes data.
+- **GitHub Actions** minutes are free for public repositories on standard runners. If the repository is ever made private, the
+  free quota is 2,000 minutes a month and the hourly scrape alone would use most of it.
+- **No AI or other metered service** is called anywhere: the only dependencies are Next.js, React, the Neon driver and a PDF
+  reader; there are no API keys besides the database connection.
+
+Check once, by hand, that this stays true: Vercel Settings, Billing shows Hobby (not a Pro trial); Neon Billing shows Free;
+GitHub Settings, Billing has no payment method. The Neon project that the Vercel integration created (if it still exists) is
+not needed and can be deleted.
+
+**How the site keeps its own load small**: the three pages that read the database (overview, register, statistics) are cached
+by the CDN for five minutes (`next.config.ts`), the listing texts and the health check are cached as well, logos are plain
+static files (no paid image optimisation), everything a visitor can type is length- and format-limited, and no request goes
+to a third party. Security headers (CSP, frame, referrer, permissions, nosniff) are set for every response.
+
+**Switch on by hand** (settings that code cannot change):
+
+- Vercel, project, Firewall, Configure, New Rule: one rate-limit rule (Hobby allows one). Match the pages that read the
+  database (path `/`, `/companies`, `/statistics`, `/api/…`, not `/_next/` or `/logos/`), for example 100 requests per 60 seconds per
+  IP, first with the action Log for a few days, then Deny. During an attack turn on Firewall, Bot Management, Attack Mode.
+- Vercel, Settings, Notifications: keep "Usage limit reached" and the anomaly alerts on (they are on by default).
+- GitHub, repository, Settings, Code security: enable Dependabot alerts, Secret scanning and Push protection (both free for
+  public repositories). Settings, Actions, General: require approval for workflows from outside contributors, and keep the
+  default token permission read-only. Settings, Rules (or Branches): block force pushes and deletion of `main`.
+- Neon: keep the Data API and Neon Auth switched off (they expose tables over HTTP).
+
+**Least-privilege database role.** The running site only reads. Run this once in the Neon SQL editor (not with "Add role" in
+the console: roles made there are members of `neon_superuser`, which can write everything):
+
+```sql
+create role site_reader login password '<a long random password>';
+grant pg_read_all_data to site_reader;
+```
+
+Put that role's connection string into Vercel as `DATABASE_URL` and the owner's into Vercel as `DATABASE_ADMIN_URL`: a
+production build uses the admin string for migrations and the company sync (`scripts/predeploy.mts`), the running site never
+does. The same read-only string works as the `BACKUP_DATABASE_URL` Actions secret. Without `DATABASE_ADMIN_URL` the build
+fails safely when `DATABASE_URL` is read-only. The scrape workflow keeps using the owner string as its `DATABASE_URL` secret.
+
+**Secrets**: none are in the repository or its history (checked); they live in Vercel's environment settings (mark
+`DATABASE_URL` Sensitive) and in GitHub's Actions secrets. The workflows run only on a schedule or by hand, never on pull
+requests, so forks cannot reach the secrets. Report anything else to the address in [SECURITY.md](SECURITY.md).
+
+**Accessibility** is documented, with the check that was run, in [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md).
 
 ## Contact
 
