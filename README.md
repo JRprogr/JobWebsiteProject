@@ -113,16 +113,26 @@ as the Actions secret `BACKUP_DATABASE_URL`.
 
 ## Monitoring
 
-`/api/health` answers 200 when the database is reachable and a scrape finished within the last three hours, and 503
-otherwise (`down` or `stale`). `.github/workflows/monitor.yml` calls it every hour and fails, which makes GitHub email
+`/api/health` answers 200 when the database is reachable and a scrape finished within the last twelve hours, and 503
+otherwise (`down` or `stale`). `.github/workflows/monitor.yml` calls it hourly and fails, which makes GitHub email
 you, when it does not answer 200 three times in a row. It needs the Actions variable `SITE_URL`. A site that is paused on
 Vercel ("Pause Project") is recognised by its `x-vercel-error: DEPLOYMENT_PAUSED` header and skipped.
 
-GitHub switches scheduled workflows off after 60 days without a commit to a public repository, which would silence the
-scrape, the backup and this monitor together. An independent uptime monitor closes that gap: create a free HTTP monitor
-(UptimeRobot, Better Stack, …) for `<SITE_URL>/api/health` that alerts on anything but 200. Set the interval to an hour or
-more: every call queries the database, and a check every few minutes would keep the Neon compute awake around the clock and
-use up the free compute-hours.
+**GitHub's own scheduler, not this project, sets the real cadence.** Both `scrape.yml`'s and `monitor.yml`'s `cron` fire
+hourly on paper, but GitHub only promises to run a scheduled workflow "around" that time, more so under load, and for this
+repo that has meant delays of a few minutes up to around 8.5 hours on almost every run since the schedule went live — a
+documented GitHub limitation, worse for lower-traffic public repos, not something a workflow file can fix. `/api/health`'s
+threshold has margin above the worst delay seen so far. If you want the scrape to actually run close to hourly, the only
+real fix is triggering it from outside GitHub: a free external scheduler (the same kind of service as the uptime monitor
+below) that calls `POST https://api.github.com/repos/<you>/<repo>/actions/workflows/scrape.yml/dispatches` with
+`{"ref":"main"}` on its own timer, using a fine-grained GitHub token scoped to just this repository's Actions. That means
+handing a token to a third-party service, so it is worth deciding deliberately rather than adding by default.
+
+GitHub also switches scheduled workflows off entirely after 60 days without a commit to a public repository, which would
+silence the scrape, the backup and this monitor together. An independent uptime monitor closes that gap: create a free
+HTTP monitor (UptimeRobot, Better Stack, …) for `<SITE_URL>/api/health` that alerts on anything but 200. Set the interval
+to an hour or more: every call queries the database, and a check every few minutes would keep the Neon compute awake
+around the clock and use up the free compute-hours.
 
 ## Security and cost safety
 
