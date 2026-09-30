@@ -20,7 +20,10 @@ const RETRY_EMPTY_DAYS = 7;
 export const storesText = (company: Pick<Company, "source_config">) => company.source_config.store_text !== false;
 
 // After a change to the experience extractor (lib/experience.ts): recompute every open job's experience from the text already
-// stored, without asking a single employer. `npm run scrape -- --reextract [slugs]`. A job whose text yields nothing keeps its value.
+// stored, without asking a single employer. `npm run scrape -- --reextract [slugs]`. Unlike a normal scrape run (which only
+// ever fills in a value it actually found, never blanking one out because this run happened not to re-read the text), this
+// command always has the job's complete stored text to work from, so a fresh "nothing here" is trusted and clears a value
+// that an older, now-fixed bug had extracted wrongly.
 export async function reextractExperience(slugs: string[] = []): Promise<{ checked: number; changed: number }> {
   let checked = 0;
   let changed = 0;
@@ -39,16 +42,19 @@ export async function reextractExperience(slugs: string[] = []): Promise<{ check
     const ids: string[] = [];
     const mins: (number | null)[] = [];
     const maxs: (number | null)[] = [];
-    const kinds: string[] = [];
+    const kinds: (string | null)[] = [];
     for (const r of rows) {
       after = String(r.id);
       checked++;
       const e = extractExperience(String(r.body), String(r.title));
-      if (!e || (e.min === r.experience_min && e.max === r.experience_max && e.kind === r.experience_kind)) continue;
+      const same = e
+        ? e.min === r.experience_min && e.max === r.experience_max && e.kind === r.experience_kind
+        : r.experience_min === null;
+      if (same) continue;
       ids.push(after);
-      mins.push(e.min);
-      maxs.push(e.max);
-      kinds.push(e.kind);
+      mins.push(e?.min ?? null);
+      maxs.push(e?.max ?? null);
+      kinds.push(e?.kind ?? null);
     }
     if (ids.length > 0) {
       await retryDb(() =>

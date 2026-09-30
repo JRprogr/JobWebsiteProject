@@ -136,6 +136,18 @@ export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
         <Timeline points={stats.timeline} />
       </Card>
 
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <Card title="TOP COUNTRIES" note="OPEN ROLES">
+          <BarList items={stats.countries} format={(b) => `${b.key} · ${countryName(b.key)}`} />
+        </Card>
+        <Card title="EXPERIENCE" note="READ FROM LISTING TEXT">
+          <BarList items={stats.experience} />
+        </Card>
+        <Card title="CLASSIFICATIONS" note="OPEN ROLES">
+          <BarList items={stats.classifications} />
+        </Card>
+      </div>
+
       <Card title="COMPANY LEADERBOARD" note={window}>
         <div className="scroll-thin overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse font-mono text-[11px] tracking-[0.06em]">
@@ -170,18 +182,6 @@ export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
           </table>
         </div>
       </Card>
-
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <Card title="TOP COUNTRIES" note="OPEN ROLES">
-          <BarList items={stats.countries} format={(b) => `${b.key} · ${countryName(b.key)}`} />
-        </Card>
-        <Card title="EXPERIENCE" note="READ FROM LISTING TEXT">
-          <BarList items={stats.experience} />
-        </Card>
-        <Card title="CLASSIFICATIONS" note="OPEN ROLES">
-          <BarList items={stats.classifications} />
-        </Card>
-      </div>
     </>
   );
 }

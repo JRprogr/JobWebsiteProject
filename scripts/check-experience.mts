@@ -34,6 +34,13 @@ const cases: [string, string, string | null][] = [
   ["at least five (5) years of relevant experience", "Specialist", "5+ explicit"],
   ["for Senior Engineer, 7+ to 10+ years of relevant industry experience is preferred", "Senior Engineer", "7-10 explicit"],
   ["a degree, with up to 3 years of relevant experience", "Analyst", "0-3 explicit"],
+  ["Must Haves: 3–5 years in FP&A, management control, or related work.", "Jr. FP&A Analyst", "3-5 explicit"],
+  [
+    "Building on more than 20 years of electro-optical innovation, Optical Systems delivers solutions.\nWhat you bring: Bachelor's degree with 12+ years of experience.",
+    "Principal Algorithm Engineer",
+    "12+ explicit",
+  ],
+  ["Interested in working with people who have 20+ years of AOCS/GNC experience? Then apply.", "AOCS/GNC Analyst", null],
 ];
 
 let bad = 0;

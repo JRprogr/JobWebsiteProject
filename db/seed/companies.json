@@ -959,7 +959,9 @@
     "source_config": {
       "host": "careers.ohb-sweden.se",
       "default_country": "SE",
-      "place_aliases": { "Kista": "Stockholm" }
+      "place_aliases": {
+        "Kista": "Stockholm"
+      }
     },
     "active": true,
     "careers_url": "https://careers.ohb-sweden.se/jobs",
@@ -1863,5 +1865,98 @@
     },
     "active": true,
     "logo_url": "/logos/arx-robotics.png"
+  },
+  {
+    "name": "AIKO",
+    "slug": "aiko",
+    "classification": "services",
+    "source_type": "personio",
+    "source_config": {
+      "subdomain": "aiko-1",
+      "tld": "com",
+      "default_country": "FR"
+    },
+    "active": true,
+    "careers_url": "https://aiko-1.jobs.personio.com/",
+    "hq_country": "FR",
+    "logo_url": null
+  },
+  {
+    "name": "Tumbleweed",
+    "slug": "tumbleweed",
+    "classification": "satellites",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://tumbleweed.com/careers",
+      "link_regex": "href=\"(/careers/[^\"/]+)\"",
+      "location_regex": "<span class=\"bg-sky/15 text-sky border border-sky/25 px-4 py-1\\.5 rounded-full text-xs font-semibold\">([^<]+)</span><span class=\"bg-sky/15 text-sky border border-sky/25 px-4 py-1\\.5 rounded-full text-xs font-semibold\">[^<]+</span></div>",
+      "body_marker": "class=\"text-off-white/70 text-sm md:text-base leading-relaxed space-y-10\"",
+      "default_country": "NL"
+    },
+    "active": true,
+    "careers_url": "https://tumbleweed.com/careers",
+    "hq_country": "NL",
+    "logo_url": "/logos/tumbleweed.png"
+  },
+  {
+    "name": "ESSP",
+    "slug": "essp",
+    "classification": "space-ops",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.essp-sas.eu/human-resources/careers/",
+      "link_regex": "href=\"(/communication/vacancies/[^\"/]+/)\"",
+      "title_tag": true,
+      "location_regex": "Location:\\s*([^<]+)",
+      "body_marker": "class=\"rich-tex",
+      "default_country": "FR"
+    },
+    "active": true,
+    "careers_url": "https://www.essp-sas.eu/human-resources/careers/",
+    "hq_country": "FR",
+    "logo_url": null
+  },
+  {
+    "name": "Exostaff",
+    "slug": "exostaff",
+    "classification": "services",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://exostaff.de/vacancies/",
+      "link_regex": "href=\"(https://exostaff\\.de/vacancies/(?!feed/)[^\"/]+/)\"",
+      "title_tag": true,
+      "title_skip": "^Vacancies$",
+      "location_regex": "Location of work:</h2>[\\s\\S]{0,1600}?<h2[^>]*>([^<]+)</h2>",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://exostaff.de/vacancies/",
+    "hq_country": "DE",
+    "logo_url": "/logos/exostaff.png"
+  },
+  {
+    "name": "Starion",
+    "slug": "starion",
+    "classification": "services",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "BE",
+    "careers_url": "https://www.stariongroup.eu/careers/job-search/",
+    "source_config": {},
+    "logo_url": "/logos/starion.png"
+  },
+  {
+    "name": "EJR-Quartz",
+    "slug": "ejr-quartz",
+    "classification": "services",
+    "source_type": "none",
+    "active": false,
+    "hq_country": "NL",
+    "careers_url": "https://www.ejr-quartz.com/who-we-are/work-with-us/",
+    "source_config": {},
+    "logo_url": "/logos/ejr-quartz.png"
   }
 ]

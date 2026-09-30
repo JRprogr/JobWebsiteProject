@@ -19,15 +19,17 @@ export default function AboutPage() {
 
       <LegalSection title="WHY EUROPE FIRST">
         <p>
-          As a European citizen myself, I am ofcourse strongly interested in our joint development. The continent, especially the EU has a unique position in the defence and space sectors. Work visas, security clearance
+          As a European citizen myself, I am of course strongly interested in our joint development. The continent, and
+          especially the EU, has a unique position in the defence and space sectors. Work visas, security clearance
           requirements, and export-control rules often favour hiring within a shared economic or defence bloc.
           Taken as a whole, Europe has real advantages here: easier cross-border movement for EU/EEA
-          nationals, a growing base of joint defence programmes, and companies, customers and suppliers that
-          increasingly work across borders rather than within just one country and a growing demand for sovereignty faciliting innovation. This project&apos;s aim is to match
+          nationals, a growing base of joint defence programmes, companies, customers and suppliers that
+          increasingly work across borders rather than within just one country, and a growing demand for sovereignty that
+          is facilitating innovation. This project&apos;s aim is to match
           talent with roles inside that European context specifically, not to rank Europe above anywhere else.
           Nothing is hidden: every country a tracked company publishes listings for is still refreshed and searchable; Europe
-          is just the starting lens, not the only one. Ofcourse we acknowledge Russia, Turkey, Ukraine, Belarus and Moldova as
-          part of continental Europe geographically &mdash; they&apos;re on the map and one filter away too, yet still we have
+          is just the starting lens, not the only one. Of course we acknowledge Russia, Turkey, Ukraine, Belarus and Moldova as
+          part of continental Europe geographically &mdash; they&apos;re on the map and one filter away too, yet we still have
           to consider the current geopolitical situation and the fact that many of the companies tracked here are not allowed to do business with those countries.
           The project is open to expanding coverage to other regions in the future, but for now, this part of Europe is the focus.
         </p>

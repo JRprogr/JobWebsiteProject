@@ -72,7 +72,14 @@ const CITIES: Record<string, string> = {
   bangalore: "IN", bengaluru: "IN", delhi: "IN", hyderabad: "IN", mexico: "MX",
 };
 
-const REMOTE_RE = /\bremote\b|\bhome[- ]?office\b|\bwork from home\b/i;
+// "Home office"/"Homeoffice" is stripped out of a segment like the other two (it is never itself a place name), but on its
+// own it is ambiguous: German employers mostly use it to mean "this role also allows working from home sometimes", listed
+// next to a real office, not that the role is fully remote (bug log 12, Indra Avitech: almost every posting lists its real
+// office plus "Homeoffice"). Only "remote" and "work from home" are treated as a firm signal; a bare "Homeoffice" only
+// counts when the whole location comes down to nothing else, i.e. there is no real office to be hybrid with.
+const REMOTE_STRIP_RE = /\bremote\b|\bhome[- ]?office\b|\bwork from home\b/i;
+const REMOTE_FIRM_RE = /\bremote\b|\bwork from home\b/i;
+const HOME_OFFICE_RE = /\bhome[- ]?office\b/i;
 
 // Some sources (e.g. Workday) append a generic suffix to a bare city name ("Toulouse Area", "Getafe-Area").
 function cityLookup(token: string): string | null {
@@ -163,7 +170,6 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
   const hintCode = hint && ISO_CODES.has(hint.toUpperCase()) ? hint.toUpperCase() : null;
   if (!raw || !raw.trim()) return hintCode ? { ...empty, countries: [hintCode], country: hintCode } : empty;
 
-  const remote = REMOTE_RE.test(raw);
   const segments = raw
     .split(/;|\||\s[-–—]\s|\s\/\s|\s*•\s*/)
     .map(clean)
@@ -176,7 +182,7 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
   let region: string | null = null;
   for (const seg of segments) {
     // "Remote (United States)" leaves "(United States)" once the remote marker is gone
-    const cleaned = clean(clean(seg.replace(REMOTE_RE, "")).replace(/^\((.*)\)$/, "$1"));
+    const cleaned = clean(clean(seg.replace(REMOTE_STRIP_RE, "")).replace(/^\((.*)\)$/, "$1"));
     if (!cleaned) continue;
     const p = parseSegment(cleaned, segments.length === 1 ? hintCode : null, defaultCountry?.toUpperCase() ?? null);
     if (p.country && !countries.includes(p.country)) countries.push(p.country);
@@ -184,5 +190,8 @@ export function parseLocation(raw: string | null, hint?: string | null, defaultC
     region ??= p.region;
   }
   if (countries.length === 0 && hintCode) countries.push(hintCode);
+  // A bare "Homeoffice"/"home office" only counts as remote when nothing else on the listing resolved to a real city —
+  // otherwise it is a hybrid option alongside that city, not the role's primary arrangement.
+  const remote = REMOTE_FIRM_RE.test(raw) || (HOME_OFFICE_RE.test(raw) && cities.length === 0);
   return { countries, country: countries[0] ?? null, city: cities[0] ?? null, cities, region, remote };
 }

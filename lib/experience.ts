@@ -17,8 +17,13 @@ const SINGLE_RE = new RegExp(
 
 // A year figure only counts when it sits next to talk of experience, so "founded 15 years ago" is ignored.
 const CONTEXT_RE = /experience|erfahrung|expérience|experiencia|esperienza|doświadczeni|staż pracy|background|track record|professional|proven|practical|working (?:in|with|as)|berufs/i;
+// "Must Haves: 3-5 years in FP&A" never says "experience" outright; a preposition right after the unit already implies
+// it ("years in/with/as/within <field>"), so it counts as its own context signal (bug log 12, Loft Orbital). "of" is left
+// out on purpose: "years of X" is also the going way to state a company's heritage ("20 years of innovation"), which the
+// NOISE_BEFORE_RE cues below catch when they can, but "of" alone is too common in that wording to trust blindly.
+const AFTER_IMPLIES_RE = /^\s*(?:in|with|as|within)\b/i;
 const NOISE_AFTER_RE = /^\W{0,3}(?:ago|old|of age|alt\b|d['’]âge|since|in the|on the market)/i;
-const NOISE_BEFORE_RE = /(?:last|past|previous|next|within|over the|for the last|founded|since|in the past)\s*$/i;
+const NOISE_BEFORE_RE = /(?:last|past|previous|next|within|over the|for the last|founded|since|in the past|more than|building on|backed by|with over|boasts?|who (?:have|has))\s*$/i;
 
 const PREFERRED_RE = /preferred|nice to have|nice-to-have|bonus|desirable|a plus\b|wünschenswert|von vorteil|idealerweise|souhaité|appreciated/gi;
 const REQUIRED_RE = /basic qualifications?|minimum qualifications?|required qualifications?|requirements?|must have|must-have|you have|you bring|what you.ll need|mindestens|voraussetzungen|ihr profil|anforderungen|profil recherché/gi;
@@ -57,7 +62,7 @@ export function extractExperience(text: string | null, title: string): Experienc
     const consider = (min: number, max: number | null, index: number, length: number) => {
       if (min > 25 || (max !== null && (max > 30 || max < min))) return;
       const window = body.slice(Math.max(0, index - 110), index + length + 110);
-      if (!CONTEXT_RE.test(window)) return;
+      if (!CONTEXT_RE.test(window) && !AFTER_IMPLIES_RE.test(body.slice(index + length, index + length + 20))) return;
       if (NOISE_AFTER_RE.test(body.slice(index + length, index + length + 16))) return;
       if (NOISE_BEFORE_RE.test(body.slice(Math.max(0, index - 20), index))) return;
       if (inPreferredSection(body, index)) {
