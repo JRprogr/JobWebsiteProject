@@ -1916,7 +1916,7 @@
     "active": true,
     "careers_url": "https://www.essp-sas.eu/human-resources/careers/",
     "hq_country": "FR",
-    "logo_url": null
+    "logo_url": "/logos/essp.png"
   },
   {
     "name": "Exostaff",
@@ -1958,5 +1958,21 @@
     "careers_url": "https://www.ejr-quartz.com/who-we-are/work-with-us/",
     "source_config": {},
     "logo_url": "/logos/ejr-quartz.png"
+  },
+  {
+    "name": "Liebherr Aerospace",
+    "slug": "liebherr-aerospace",
+    "classification": "components",
+    "source_type": "liebherr",
+    "source_config": {
+      "division_id": "2248246747",
+      "company_prefix": "Liebherr-Aerospace",
+      "detail_page_id": "4294646",
+      "default_country": "DE"
+    },
+    "active": true,
+    "careers_url": "https://www.liebherr.com/en-us/careers/job-vacancies-4294645?filter=2248246747",
+    "hq_country": "DE",
+    "logo_url": "/logos/liebherr-aerospace.png"
   }
 ]

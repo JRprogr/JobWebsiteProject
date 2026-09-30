@@ -134,6 +134,8 @@ const LOCAL: Record<string, Local> = {
   "arx-robotics": { bg: "#000000", size: 128 },
   // the brand-centre logotype (blue): only the roundel and "esa", not the line of text below them
   esa: { crop: { left: 1150, top: 1150, width: 3700, height: 1450 }, size: 116 },
+  // supplied by the user: a wide wordmark+ribbon lockup on white
+  essp: { key: true, size: 110 },
 };
 
 // Turns the solid background (the top-left pixel's colour) transparent. Edge pixels are blends of mark and background, so their

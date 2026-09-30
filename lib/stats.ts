@@ -18,6 +18,12 @@ export function parseRange(value: string | undefined): Range {
 const BASELINE = "(select company_id, min(finished_at) as at from scrape_runs where status = 'success' group by company_id)";
 const ADDED = "j.first_seen_at > b.at";
 
+// The chart's earliest day is never before this, so the ramp-up while companies were still being added one by one (the
+// site went live 2026-09-25) doesn't dwarf the day-to-day change once the full company list was in place — a few
+// thousand roles appearing over the first days makes every later day's real change look flat by comparison. Once more
+// than 30 days have passed since this date it stops doing anything, since the 30-day window moves past it on its own.
+const CHART_FLOOR = "2026-09-25";
+
 export type Overview = { open: number; europe: number; eu: number; companies: number; added: number; removed: number; lastScrape: string | null };
 
 export type CompanyStat = { slug: string; name: string; classification: string | null; open: number; europe: number; added: number; removed: number };
@@ -67,7 +73,7 @@ export async function loadStats(range: Range): Promise<Stats> {
     ),
     db.query(
       `with span as (
-         select greatest((min(first_seen_at))::date, current_date - 29) as from_day from jobs
+         select greatest((min(first_seen_at))::date, current_date - 29, $2::date) as from_day from jobs
        ), days as (
          select d::date as day from span, generate_series(span.from_day, current_date, interval '1 day') d
        )
@@ -79,7 +85,7 @@ export async function loadStats(range: Range): Promise<Stats> {
          count(*) filter (where j.removed_at::date = days.day)::int as removed
        from days cross join jobs j left join ${BASELINE} b on b.company_id = j.company_id
        group by days.day order by days.day`,
-      [eu],
+      [eu, CHART_FLOOR],
     ),
     db.query(
       `select cc as key, count(*)::int as n from jobs j join companies c on c.id = j.company_id and c.active, unnest(j.location_countries) cc

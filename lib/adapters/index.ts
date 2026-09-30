@@ -4,6 +4,7 @@ import { clarityloop, clarityloopDetail } from "./clarityloop.ts";
 import { oraclecloud, oraclecloudDetail } from "./oraclecloud.ts";
 import { hron, hronDetail } from "./hron.ts";
 import { intervieweb, interviewebDetail } from "./intervieweb.ts";
+import { liebherr, liebherrDetail } from "./liebherr.ts";
 import { peopleforce, peopleforceDetail } from "./peopleforce.ts";
 import { clinch, clinchDetail } from "./clinch.ts";
 import { cornerstone, cornerstoneDetail } from "./cornerstone.ts";
@@ -30,7 +31,7 @@ import { workday, workdayDetail } from "./workday.ts";
 
 // "none": listed in the company register only; there is nothing to scrape (bot wall, script-rendered page, no open roles)
 const none: Adapter = async () => [];
-const adapters: Record<Company["source_type"], Adapter> = { greenhouse, lever, custom, workday, personio, teamtailor, recruitee, bamboohr, ashby, successfactors, factorial, hibob, skeeled, odoo, clinch, cornerstone, eightfold, jibe, talentbrew, talentsoft, ultipro, workable, peopleforce, hron, intervieweb, clarityloop, oraclecloud, adp, none };
+const adapters: Record<Company["source_type"], Adapter> = { greenhouse, lever, custom, workday, personio, teamtailor, recruitee, bamboohr, ashby, successfactors, factorial, hibob, skeeled, odoo, clinch, cornerstone, eightfold, jibe, talentbrew, talentsoft, ultipro, workable, peopleforce, hron, intervieweb, clarityloop, oraclecloud, adp, liebherr, none };
 const details: Record<Company["source_type"], DetailFetcher> = {
   greenhouse: greenhouseDetail,
   lever: leverDetail,
@@ -60,6 +61,7 @@ const details: Record<Company["source_type"], DetailFetcher> = {
   clarityloop: clarityloopDetail,
   oraclecloud: oraclecloudDetail,
   adp: adpDetail,
+  liebherr: liebherrDetail,
   none: async () => null,
 };
 
