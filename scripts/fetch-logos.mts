@@ -136,6 +136,8 @@ const LOCAL: Record<string, Local> = {
   esa: { crop: { left: 1150, top: 1150, width: 3700, height: 1450 }, size: 116 },
   // supplied by the user: a wide wordmark+ribbon lockup on white
   essp: { key: true, size: 110 },
+  // already a square icon with its own gradient background, not padding to remove
+  aiko: { size: 120 },
 };
 
 // Turns the solid background (the top-left pixel's colour) transparent. Edge pixels are blends of mark and background, so their
