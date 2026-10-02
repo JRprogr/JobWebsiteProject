@@ -27,6 +27,13 @@ jobs:
           export PGURL="${DATABASE_URL/-pooler/}"
           # GitHub only masks the secret as stored; this edited copy of it must be hidden from the (public) logs as well
           echo "::add-mask::$PGURL"
+          # a failing pg_dump quotes the host and user name, not the whole string, so the password and host are masked on
+          # their own as well
+          PGPASS=$(printf '%s' "$PGURL" | sed -E 's#^[a-z]+://[^:/@]+:([^@]+)@.*#\1#')
+          PGHOST=$(printf '%s' "$PGURL" | sed -E 's#^[a-z]+://[^@]+@([^/:?]+).*#\1#')
+          for part in "$PGPASS" "$PGHOST"; do
+            if [ -n "$part" ] && [ "$part" != "$PGURL" ]; then echo "::add-mask::$part"; fi
+          done
           docker run --rm -e PGURL postgres:18 sh -c 'pg_dump "$PGURL" --format=custom --no-owner --no-privileges --exclude-table-data=job_details' > backup.dump
           ls -l backup.dump
           # the file must be readable and hold the tables that matter

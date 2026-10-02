@@ -4,18 +4,9 @@ import { timeAgo } from "./format.ts";
 import { EU_COUNTRIES, EUROPE_COUNTRIES, type Scope } from "./geo.ts";
 import { sortClassifications } from "./classifications.ts";
 
-export type Sort = "latest" | "oldest" | "az" | "za";
+import { parseSort, type Sort } from "./sorts.ts";
 
-export const SORTS: { value: Sort; label: string }[] = [
-  { value: "latest", label: "LATEST" },
-  { value: "oldest", label: "OLDEST" },
-  { value: "az", label: "A–Z" },
-  { value: "za", label: "Z–A" },
-];
-
-export function parseSort(value: string | undefined): Sort {
-  return SORTS.some((s) => s.value === value) ? (value as Sort) : "latest";
-}
+export { parseSort, type Sort };
 
 // Alphabetical key: skips leading bracketed tags and symbols, so "(Senior) Project Manager" sits with "Project Manager"
 const TITLE_KEY = "lower(coalesce(nullif(regexp_replace(j.title, '^([[:space:]]*[([][^])]*[])])*[^[:alnum:]]*', ''), ''), j.title))";

@@ -1,6 +1,6 @@
 "use client";
 
-import { SORTS, type Sort } from "@/lib/jobs";
+import { SORTS, type Sort } from "@/lib/sorts";
 
 export const PAGE_SIZES = [20, 50, 100] as const;
 

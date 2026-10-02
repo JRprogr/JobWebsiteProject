@@ -34,7 +34,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ inputs.backfill && 300 || 30 }}
     steps:
+      # the workflow token is not needed after the checkout; without this it stays in .git/config for every later step, and
+      # the scrape step runs dependency code with the database secret in its environment
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: 24
