@@ -1,7 +1,9 @@
 import { adapterFor } from "./adapters/index.ts";
 import { retryDb, sql } from "./db.ts";
 import { extractExperience, type Experience } from "./experience.ts";
+import { detectLanguage } from "./language.ts";
 import { parseLocation } from "./location.ts";
+import { roleType } from "./roles.ts";
 import { fillTexts, storesText } from "./texts.ts";
 import { MAX_DETAIL_CHARS } from "./text.ts";
 import type { Company, NormalizedJob } from "./types.ts";
@@ -29,17 +31,17 @@ const UPSERT = `
 with input as (
   select * from unnest(
     $2::text[], $3::text[], $4::text[], $5::text[], $6::text[], $7::text[], $8::boolean[], $9::text[], $10::text[],
-    $11::int[], $12::int[], $13::text[], $14::text[], $17::int[], $18::int[], $19::text[], $20::boolean[], $21::text[]
+    $11::int[], $12::int[], $13::text[], $14::text[], $17::int[], $18::int[], $19::text[], $20::boolean[], $21::text[], $22::text[], $23::text[]
   ) as t(external_id, title, location_raw, location_country, location_countries, location_city, remote, department, url,
-         salary_min, salary_max, salary_currency, posted_at, experience_min, experience_max, experience_kind, checked, location_cities)
+         salary_min, salary_max, salary_currency, posted_at, experience_min, experience_max, experience_kind, checked, location_cities, language, role_type)
 )
 insert into jobs (company_id, external_id, title, location_raw, location_country, location_countries, location_city, remote,
                   department, url, salary_min, salary_max, salary_currency, posted_at, source_type, last_seen_at,
-                  experience_min, experience_max, experience_kind, details_checked_at, location_cities)
+                  experience_min, experience_max, experience_kind, details_checked_at, location_cities, language, role_type)
 select $1::uuid, external_id, title, location_raw, location_country, coalesce(string_to_array(nullif(location_countries, ''), ','), '{}'::text[]),
        location_city, remote, department, url, salary_min, salary_max, salary_currency, posted_at::timestamptz, $15, $16::timestamptz,
        experience_min, experience_max, experience_kind, case when checked then $16::timestamptz end,
-       coalesce(string_to_array(nullif(location_cities, ''), ','), '{}'::text[])
+       coalesce(string_to_array(nullif(location_cities, ''), ','), '{}'::text[]), language, role_type
 from input
 on conflict (company_id, external_id) do update set
   title = excluded.title,
@@ -63,7 +65,10 @@ on conflict (company_id, external_id) do update set
   experience_min = case when excluded.experience_kind is not null then excluded.experience_min else jobs.experience_min end,
   experience_max = case when excluded.experience_kind is not null then excluded.experience_max else jobs.experience_max end,
   experience_kind = coalesce(excluded.experience_kind, jobs.experience_kind),
-  details_checked_at = coalesce(excluded.details_checked_at, jobs.details_checked_at)
+  details_checked_at = coalesce(excluded.details_checked_at, jobs.details_checked_at),
+  -- the type comes from the title and department alone; the language only changes when a text was read this run
+  role_type = excluded.role_type,
+  language = coalesce(excluded.language, jobs.language)
 returning (xmax = 0) as inserted
 `;
 
@@ -153,6 +158,11 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
       return known.has(j.external_id) ? null : extractExperience(null, j.title);
     });
     const checked = jobs.map((j) => j.description !== null && j.description !== undefined);
+    // Language: from the fresh text, or for a brand-new job without one from its title; a known job keeps the language it has.
+    const lang = jobs.map((j) => {
+      if (j.description !== null && j.description !== undefined) return detectLanguage(j.description, j.title);
+      return known.has(j.external_id) ? null : detectLanguage(null, j.title);
+    });
 
     const active = await q("select external_id from jobs where company_id = $1 and removed_at is null", [company.id]);
     const seen = new Set(jobs.map((j) => j.external_id));
@@ -183,6 +193,8 @@ export async function scrapeCompany(company: Company, opts: { backfill?: boolean
         exp.map((e) => e?.kind ?? null),
         checked,
         loc.map((l) => l.cities.join(",")),
+        lang,
+        jobs.map((j) => roleType(j.title, j.department)),
       ]),
     ];
     if (!hold) {

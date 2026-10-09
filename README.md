@@ -50,7 +50,7 @@ npm run dev
 | `npm run db:migrate` | Applies `db/migrations/*.sql` in order (tracked in `_migrations`) |
 | `npm run db:seed` | Upserts `db/seed/companies.json` into `companies` |
 | `npm run scrape -- [slug…] [--texts] [--backfill] [--force]` | Scrapes the given companies (all if none), four at a time; `--texts` also fetches every missing listing text (one-off catch-up), `--backfill` reads more listings per run for sources that fetch 30 at a time, `--force` skips the result guard |
-| `npm run scrape -- --reextract [slug…]` | Recomputes every open job's experience from the stored listing texts (after changing `lib/experience.ts`); contacts no employer |
+| `npm run scrape -- --reextract [slug…]` | Recomputes every open job's experience, language and role type from the stored listing texts (after changing `lib/experience.ts`, `lib/language.ts` or `lib/roles.ts`); contacts no employer |
 | `npm run scrape -- --due` | Scrapes only the companies whose interval has elapsed, which is what the GitHub workflow runs every hour |
 | `npm run logos -- [slug…]` | Rebuilds `public/logos/*.png`, see CLAUDE.md |
 | `npm run build` | On a Vercel production deploy: migrate + seed, then `next build`. Elsewhere just `next build` |

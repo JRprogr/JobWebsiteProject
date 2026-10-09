@@ -201,7 +201,11 @@ export const linkList: Adapter = async (company, ctx) => {
     textPlace
       ? jobs.map((j) => {
           const found = j.description ? textPlace.exec(j.description)?.[1] : undefined;
-          return found ? { ...j, location_raw: found.replace(/\s+[–—-]\s+/g, ", ").trim() } : j;
+          if (!found) return j;
+          // "Munich – Germany" -> "Munich, Germany"; "Vilnius, Lithuania or London, UK." -> two places, no closing full stop
+          let place = found.replace(/\s+[–—-]\s+/g, ", ").replace(/\s+or\s+/gi, "; ").replace(/[.\s]+$/, "");
+          if (strippedPlace) place = place.replace(strippedPlace, "").trim();
+          return place ? { ...j, location_raw: place } : j;
         })
       : jobs;
   if (k.item) return withTextPlace(await runBoard(company, ctx, tidy(await fromItems(k)), (r) => readUrl(r.url, k.body)));

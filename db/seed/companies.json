@@ -1489,7 +1489,8 @@
       "item_regex": "<h3 class=\"wp-block-heading\"><a href=\"(?<url>[^\"]*\\.pdf)\">(?<title>[^<]*)</a></h3>",
       "item_end": "Unsolicited Applications",
       "fetch_text": true,
-      "default_country": "LU"
+      "text_location_regex": "Job Location:\\s*([^\\n]+)",
+      "location_strip": "\\s+(?:city center|old town)\\b"
     },
     "active": true,
     "logo_url": "/logos/blackswan-space.png"
@@ -1974,5 +1975,119 @@
     "careers_url": "https://www.liebherr.com/en-us/careers/job-vacancies-4294645?filter=2248246747",
     "hq_country": "DE",
     "logo_url": "/logos/liebherr-aerospace.png"
+  },
+  {
+    "active": true,
+    "name": "cosine",
+    "slug": "cosine",
+    "classification": "components",
+    "source_type": "custom",
+    "hq_country": "NL",
+    "careers_url": "https://www.cosine.eu/careers/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.cosine.eu/careers/",
+      "item_regex": "<h4 class=\"entry-title\"><a href=\"(?<url>[^\"]*)\"[^>]*>(?<title>[^<]*)</a></h4>[\\s\\S]*?taxonomy-job_office\"[^>]*>(?<location>[^<]*)</span>",
+      "fetch_text": true,
+      "id_regex": "-(\\d+)/?$"
+    },
+    "logo_url": "/logos/cosine.png"
+  },
+  {
+    "active": false,
+    "name": "Space Cargo Unlimited",
+    "slug": "space-cargo-unlimited",
+    "classification": "space-ops",
+    "source_type": "none",
+    "hq_country": "LU",
+    "careers_url": "https://space-cu.com/",
+    "source_config": {},
+    "logo_url": "/logos/space-cargo-unlimited.png"
+  },
+  {
+    "active": true,
+    "name": "Covenant",
+    "slug": "covenant",
+    "classification": "defence",
+    "source_type": "comeet",
+    "hq_country": "US",
+    "careers_url": "https://www.comeet.com/jobs/covenantindustries/3B.00F",
+    "source_config": {
+      "url": "https://www.comeet.com/jobs/covenantindustries/3B.00F",
+      "default_country": "US"
+    },
+    "logo_url": "/logos/covenant.png"
+  },
+  {
+    "active": true,
+    "name": "OhmSpace",
+    "slug": "ohmspace",
+    "classification": "propulsion",
+    "source_type": "custom",
+    "hq_country": "IT",
+    "careers_url": "https://ohm.space/careers/",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://ohm.space/careers/",
+      "item_regex": "<h4 class=\"job-title\"><a href=\"(?<url>[^\"]*)\">(?<title>[^<]*)</a></h4>\\s*<p class=\"job-location\">(?<location>[^<]*)</p>",
+      "fetch_text": true,
+      "default_country": "IT",
+      "place_countries": {
+        "Southampton": "GB"
+      }
+    },
+    "logo_url": "/logos/ohmspace.png"
+  },
+  {
+    "active": true,
+    "name": "QSR Consulting",
+    "slug": "qsr-consulting",
+    "classification": "services",
+    "source_type": "custom",
+    "hq_country": "PT",
+    "careers_url": "https://www.qsr.consulting/opportunities",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.qsr.consulting/opportunities",
+      "item_regex": "wixui-rich-text__text\">(?<title>[^<]+)</span></span></span></span></span></span></p></div><!--/\\$--><!--\\$--><div[^>]*><p[^>]*><span[^>]*><span[^>]*><span[^>]*><span[^>]*><span[^>]*>Location:</span></span></span></span></span></p>\\s*<p[^>]*>(?<location>[^<]*)</p>",
+      "item_end": "linkedin.com/company/qsr",
+      "place_aliases": {
+        "Alemanha": "Germany",
+        "Portugal (Coimbra)": "Coimbra, Portugal"
+      }
+    },
+    "logo_url": "/logos/qsr-consulting.png"
+  },
+  {
+    "active": true,
+    "name": "Axiom Space",
+    "slug": "axiom-space",
+    "classification": "space-ops",
+    "source_type": "workday",
+    "hq_country": "US",
+    "careers_url": "https://axiomspace.wd5.myworkdayjobs.com/External_Career_Site",
+    "source_config": {
+      "tenant": "axiomspace",
+      "host": "wd5",
+      "site": "External_Career_Site",
+      "default_country": "US"
+    },
+    "logo_url": "/logos/axiom-space.png"
+  },
+  {
+    "active": true,
+    "name": "EDGX",
+    "slug": "edgx",
+    "classification": "components",
+    "source_type": "custom",
+    "hq_country": "BE",
+    "careers_url": "https://www.edgx.space/about#vacancies",
+    "source_config": {
+      "kind": "link-list",
+      "list_url": "https://www.edgx.space/about",
+      "item_regex": "href=\"(?<url>/jobs/[^\"]+)\"[^>]*class=\"job_header[^\"]*\"><div><h4 class=\"h4\">(?<title>[^<]*)</h4><div>(?<location>[^<]*)</div>",
+      "fetch_text": true
+    },
+    "logo_url": "/logos/edgx.png"
   }
 ]

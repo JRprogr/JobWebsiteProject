@@ -3,6 +3,8 @@ import { EXPERIENCE_BUCKETS, type ExperienceBucket } from "./experience.ts";
 import { timeAgo } from "./format.ts";
 import { EU_COUNTRIES, EUROPE_COUNTRIES, type Scope } from "./geo.ts";
 import { sortClassifications } from "./classifications.ts";
+import type { Language } from "./language.ts";
+import type { RoleType } from "./roles.ts";
 
 import { parseSort, type Sort } from "./sorts.ts";
 
@@ -25,6 +27,8 @@ export type Filters = {
   countries: string[];
   companies: string[];
   experience: ExperienceBucket | null;
+  roleTypes: RoleType[];
+  languages: Language[];
   sort: Sort;
   remote: boolean;
   newOnly: boolean;
@@ -50,7 +54,7 @@ export type JobView = {
   ago: string;
 };
 
-type Skip = { countries?: boolean; companies?: boolean };
+type Skip = { countries?: boolean; companies?: boolean; roleTypes?: boolean; languages?: boolean };
 
 function where(f: Filters, skip: Skip = {}) {
   const params: unknown[] = [];
@@ -66,6 +70,8 @@ function where(f: Filters, skip: Skip = {}) {
   if (f.remote) clauses.push("j.remote");
   if (f.newOnly) clauses.push("j.first_seen_at > now() - interval '24 hours'");
   if (!skip.companies && f.companies.length > 0) clauses.push(`c.slug = any(${add(f.companies)}::text[])`);
+  if (!skip.roleTypes && f.roleTypes.length > 0) clauses.push(`j.role_type = any(${add(f.roleTypes)}::text[])`);
+  if (!skip.languages && f.languages.length > 0) clauses.push(`j.language = any(${add(f.languages)}::text[])`);
   if (f.experience) {
     const { lo, hi } = EXPERIENCE_BUCKETS[f.experience];
     clauses.push(`j.experience_min is not null and j.experience_min <= ${add(hi)} and coalesce(j.experience_max, 99) >= ${add(lo)}`);
@@ -156,6 +162,19 @@ export type CompanyFacet = { slug: string; name: string; n: number };
 export async function companyFacets(f: Filters): Promise<CompanyFacet[]> {
   const rows = await facet(f, { companies: true }, "c.slug, c.name, count(*)::int as n", JOINED, "c.slug, c.name");
   return rows.map((r) => ({ slug: String(r.slug), name: String(r.name), n: r.n as number })).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+}
+
+export type Facet = { key: string; n: number };
+
+// Roles per type / language under every filter except that one's own selection (so the other choices keep their counts)
+export async function roleTypeFacets(f: Filters): Promise<Facet[]> {
+  const rows = await facet(f, { roleTypes: true }, "coalesce(j.role_type, 'other') as key, count(*)::int as n", JOINED, "1");
+  return rows.map((r) => ({ key: String(r.key), n: r.n as number }));
+}
+
+export async function languageFacets(f: Filters): Promise<Facet[]> {
+  const rows = await facet(f, { languages: true }, "j.language as key, count(*)::int as n", JOINED, "1");
+  return rows.filter((r) => r.key !== null).map((r) => ({ key: String(r.key), n: r.n as number })).sort((a, b) => b.n - a.n);
 }
 
 export async function classifications(): Promise<string[]> {

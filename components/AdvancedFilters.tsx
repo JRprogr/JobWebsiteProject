@@ -4,10 +4,12 @@ import { useMemo, useState } from "react";
 import { EXPERIENCE_BUCKETS, type ExperienceBucket } from "@/lib/experience";
 import { classificationLabel } from "@/lib/classifications";
 import { countryName } from "@/lib/geo";
-import type { CompanyFacet } from "@/lib/jobs";
+import type { CompanyFacet, Facet } from "@/lib/jobs";
+import { LANGUAGES } from "@/lib/language";
+import { ROLE_TYPES } from "@/lib/roles";
 import { ChevronIcon } from "./icons";
 
-type Section = "country" | "company" | "classification" | "experience";
+type Section = "country" | "company" | "classification" | "role" | "language" | "experience";
 
 type Props = {
   countries: string[];
@@ -17,6 +19,10 @@ type Props = {
   classification: string | null;
   classifications: string[];
   experience: ExperienceBucket | null;
+  roleTypes: string[];
+  roleFacets: Facet[];
+  languages: string[];
+  languageFacets: Facet[];
   onChange: (patch: Record<string, string | null>) => void;
 };
 
@@ -64,7 +70,34 @@ function PickList({ items, selected, placeholder, onToggle }: { items: Item[]; s
   );
 }
 
-export function AdvancedFilters({ countries, countryFacets, companies, companyFacets, classification, classifications, experience, onChange }: Props) {
+function ChipPicker({ items, selected, onToggle, note, hideEmpty }: { items: Item[]; selected: string[]; onToggle: (key: string) => void; note: string; hideEmpty?: boolean }) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap gap-2">
+        {items
+          .filter((i) => !hideEmpty || i.n > 0 || selected.includes(i.key))
+          .map((i) => {
+            const on = selected.includes(i.key);
+            return (
+              <button
+                key={i.key}
+                type="button"
+                aria-pressed={on}
+                onClick={() => onToggle(i.key)}
+                className={`${chip} flex items-center gap-2 ${on ? "border-fg bg-faint font-bold" : "border-line"}`}
+              >
+                {i.label}
+                <span className="text-dim">{i.n.toLocaleString("en")}</span>
+              </button>
+            );
+          })}
+      </div>
+      <p className="font-mono text-[10px] leading-5 tracking-[0.06em] text-dim">{note}</p>
+    </div>
+  );
+}
+
+export function AdvancedFilters({ countries, countryFacets, companies, companyFacets, classification, classifications, experience, roleTypes, roleFacets, languages, languageFacets, onChange }: Props) {
   const [open, setOpen] = useState<Section | null>(null);
 
   const countryItems = useMemo(
@@ -132,6 +165,39 @@ export function AdvancedFilters({ countries, countryFacets, companies, companyFa
             </button>
           ))}
         </div>
+      ),
+    },
+    {
+      id: "role",
+      title: "ROLE TYPE",
+      badge: roleTypes.length ? String(roleTypes.length) : null,
+      body: (
+        <ChipPicker
+          items={ROLE_TYPES.map((r) => ({ key: r.key, label: r.label, n: roleFacets.find((f) => f.key === r.key)?.n ?? 0 }))}
+          selected={roleTypes}
+          onToggle={(key) => {
+            const next = toggle(roleTypes, key);
+            onChange({ role: next.length ? next.join(",") : null });
+          }}
+          note="DERIVED FROM THE JOB TITLE. SEVERAL TYPES CAN BE COMBINED."
+        />
+      ),
+    },
+    {
+      id: "language",
+      title: "LANGUAGE OF THE LISTING",
+      badge: languages.length ? String(languages.length) : null,
+      body: (
+        <ChipPicker
+          items={LANGUAGES.map((l) => ({ key: l.key, label: l.label, n: languageFacets.find((f) => f.key === l.key)?.n ?? 0 }))}
+          selected={languages}
+          hideEmpty
+          onToggle={(key) => {
+            const next = toggle(languages, key);
+            onChange({ lang: next.length ? next.join(",") : null });
+          }}
+          note="GUESSED FROM THE LISTING TEXT. ROLES WHOSE LANGUAGE COULD NOT BE TOLD ARE HIDDEN WHILE THIS FILTER IS ON."
+        />
       ),
     },
     {

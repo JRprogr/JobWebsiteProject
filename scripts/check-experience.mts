@@ -41,6 +41,20 @@ const cases: [string, string, string | null][] = [
     "12+ explicit",
   ],
   ["Interested in working with people who have 20+ years of AOCS/GNC experience? Then apply.", "AOCS/GNC Analyst", null],
+  // loose mode (bug log 13): no experience wording, but "N+ years" up to 10 reads as a requirement
+  ["Minimum Qualifications\n• 7+ years building and operating production software", "Sr. GRC Engineer", "7+ explicit"],
+  ["• 5+ years demonstrating performance in roles that include business planning", "Finance Analyst", "5+ explicit"],
+  ["• 3-5 years managing external contractors on installs", "Project Manager", "3-5 explicit"],
+  ["At least 4 years managing external contractors", "Project Manager", "4+ explicit"],
+  // ...but company heritage, contracts and residency rules do not
+  ["With over 25+ years developing flight software we are a leader.", "Engineer", null],
+  ["Our heritage reaches back in excess of 100 years.", "Chief Project Engineer", "10+ estimated"],
+  ["This role requires 5 years uninterrupted residency in the UK.", "Intern", "0 estimated"],
+  ["a minimum of 5 years permanent residency in the UK", "Manufacturing Engineer", null],
+  ["a minimum of 3 years’ residence in the UK over the last 5 years", "Propulsion Systems Engineer", null],
+  ["a fixed-term contract for 1 year; a Long-Term Assignment to Qatar for a minimum 2 years.", "Technician", null],
+  ["extending customer satellites' lifespans by 5 years; taking over AOCS for 5 years", "Engineer", null],
+  ["Duration: 4 years. The candidate will receive a 4-year research contract.", "PhD Position", null],
 ];
 
 let bad = 0;

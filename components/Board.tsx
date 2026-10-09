@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { EXPERIENCE_BUCKETS } from "@/lib/experience";
 import { countryName, type Scope } from "@/lib/geo";
 import { classificationLabel } from "@/lib/classifications";
-import type { CompanyFacet, Filters, JobView } from "@/lib/jobs";
+import type { CompanyFacet, Facet, Filters, JobView } from "@/lib/jobs";
+import { languageLabel } from "@/lib/language";
+import { roleTypeLabel } from "@/lib/roles";
 import { AdvancedFilters } from "./AdvancedFilters";
 import { ChevronIcon, CloseIcon, GlobeIcon } from "./icons";
 import { JobList } from "./JobList";
@@ -23,6 +25,8 @@ type Props = {
   globalFacets: Record<string, number>;
   companyFacets: CompanyFacet[];
   classifications: string[];
+  roleFacets: Facet[];
+  languageFacets: Facet[];
   headline: { roles: number; companies: number; updated: string | null };
 };
 
@@ -30,9 +34,9 @@ const chip = "rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.
 
 const SCOPE_LABEL: Record<Scope, string> = { europe: "EUROPE", eu: "EU ONLY", all: "GLOBAL" };
 
-const ADVANCED_RESET = { c: null, co: null, classification: null, exp: null };
+const ADVANCED_RESET = { c: null, co: null, classification: null, exp: null, role: null, lang: null };
 
-export function Board({ jobs, total, limit, filters, facets, globalFacets, companyFacets, classifications, headline }: Props) {
+export function Board({ jobs, total, limit, filters, facets, globalFacets, companyFacets, classifications, roleFacets, languageFacets, headline }: Props) {
   const { update, pending } = useFilterNav();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [multi, setMulti] = useState(false);
@@ -85,9 +89,25 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
     })),
     ...(filters.classification ? [{ key: "classification", label: classificationLabel(filters.classification), clear: () => update({ classification: null }) }] : []),
     ...(filters.experience ? [{ key: "exp", label: EXPERIENCE_BUCKETS[filters.experience].label, clear: () => update({ exp: null }) }] : []),
+    ...filters.roleTypes.map((r) => ({
+      key: `role-${r}`,
+      label: roleTypeLabel(r),
+      clear: () => {
+        const next = filters.roleTypes.filter((x) => x !== r);
+        update({ role: next.length ? next.join(",") : null });
+      },
+    })),
+    ...filters.languages.map((l) => ({
+      key: `lang-${l}`,
+      label: `${languageLabel(l)} LISTING`,
+      clear: () => {
+        const next = filters.languages.filter((x) => x !== l);
+        update({ lang: next.length ? next.join(",") : null });
+      },
+    })),
   ];
 
-  const advancedCount = filters.countries.length + filters.companies.length + (filters.classification ? 1 : 0) + (filters.experience ? 1 : 0);
+  const advancedCount = filters.countries.length + filters.companies.length + (filters.classification ? 1 : 0) + (filters.experience ? 1 : 0) + filters.roleTypes.length + filters.languages.length;
   const summary = filters.countries.length > 0 ? filters.countries.join(", ") : SCOPE_LABEL[filters.scope];
   const step = limit <= 20 ? 20 : 50;
 
@@ -193,6 +213,10 @@ export function Board({ jobs, total, limit, filters, facets, globalFacets, compa
                 classification={filters.classification}
                 classifications={classifications}
                 experience={filters.experience}
+                roleTypes={filters.roleTypes}
+                roleFacets={roleFacets}
+                languages={filters.languages}
+                languageFacets={languageFacets}
                 onChange={update}
               />
             ) : null}

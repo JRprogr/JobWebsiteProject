@@ -28,14 +28,36 @@ export type Overview = { open: number; europe: number; eu: number; companies: nu
 
 export type CompanyStat = { slug: string; name: string; classification: string | null; open: number; europe: number; added: number; removed: number };
 
-export type DayPoint = { day: string; open: number; eu: number; added: number; removed: number };
+export type DayPoint = { day: string; open: number; added: number; removed: number };
+
+// The regions the timeline chart can be switched between (null = no country filter); same three scopes as the overview filters
+export const REGIONS = [
+  { key: "global", label: "GLOBAL", countries: null as string[] | null },
+  { key: "europe", label: "EUROPE", countries: [...EUROPE_COUNTRIES] },
+  { key: "eu", label: "EUROPEAN UNION", countries: [...EU_COUNTRIES] },
+] as const;
+export type RegionKey = (typeof REGIONS)[number]["key"];
+
+// Per day: open roles at the end of the day, roles first seen that day (after their company's baseline) and roles closed that day
+const TIMELINE_SQL = `with span as (
+         select greatest((min(first_seen_at))::date, current_date - 29, $2::date) as from_day from jobs
+       ), days as (
+         select d::date as day from span, generate_series(span.from_day, current_date, interval '1 day') d
+       )
+       select to_char(days.day, 'YYYY-MM-DD') as day,
+         count(*) filter (where j.first_seen_at < days.day + 1 and (j.removed_at is null or j.removed_at >= days.day + 1))::int as open,
+         count(*) filter (where ${ADDED} and j.first_seen_at::date = days.day)::int as added,
+         count(*) filter (where j.removed_at::date = days.day)::int as removed
+       from days cross join jobs j left join ${BASELINE} b on b.company_id = j.company_id
+       where $1::text[] is null or j.location_countries && $1::text[]
+       group by days.day order by days.day`;
 
 export type Bar = { key: string; label: string; n: number };
 
 export type Stats = {
   overview: Overview;
   companies: CompanyStat[];
-  timeline: DayPoint[];
+  timeline: Record<RegionKey, DayPoint[]>;
   countries: Bar[];
   experience: Bar[];
   classifications: Bar[];
@@ -46,7 +68,7 @@ export async function loadStats(range: Range): Promise<Stats> {
   const europe = [...EUROPE_COUNTRIES];
   const eu = [...EU_COUNTRIES];
 
-  const [ov, perCompany, timeline, countries, experience, classifications] = await Promise.all([
+  const [ov, perCompany, ...rest] = await Promise.all([
     db.query(
       `select
          count(*) filter (where j.removed_at is null)::int as open,
@@ -71,22 +93,7 @@ export async function loadStats(range: Range): Promise<Stats> {
        where c.active group by c.slug, c.name, c.classification`,
       [europe, range],
     ),
-    db.query(
-      `with span as (
-         select greatest((min(first_seen_at))::date, current_date - 29, $2::date) as from_day from jobs
-       ), days as (
-         select d::date as day from span, generate_series(span.from_day, current_date, interval '1 day') d
-       )
-       select to_char(days.day, 'YYYY-MM-DD') as day,
-         count(*) filter (where j.first_seen_at < days.day + 1 and (j.removed_at is null or j.removed_at >= days.day + 1))::int as open,
-         count(*) filter (where j.first_seen_at < days.day + 1 and (j.removed_at is null or j.removed_at >= days.day + 1)
-                            and j.location_countries && $1::text[])::int as eu,
-         count(*) filter (where ${ADDED} and j.first_seen_at::date = days.day)::int as added,
-         count(*) filter (where j.removed_at::date = days.day)::int as removed
-       from days cross join jobs j left join ${BASELINE} b on b.company_id = j.company_id
-       group by days.day order by days.day`,
-      [eu, CHART_FLOOR],
-    ),
+    ...REGIONS.map((region) => db.query(TIMELINE_SQL, [region.countries, CHART_FLOOR])),
     db.query(
       `select cc as key, count(*)::int as n from jobs j join companies c on c.id = j.company_id and c.active, unnest(j.location_countries) cc
        where j.removed_at is null group by cc order by n desc limit 10`,
@@ -103,7 +110,9 @@ export async function loadStats(range: Range): Promise<Stats> {
        where j.removed_at is null group by 1 order by n desc`,
     ),
   ]);
+  const [timelineGlobal, timelineEurope, timelineEu, countries, experience, classifications] = rest;
 
+  const days = (rows: unknown): DayPoint[] => (rows as Row[]).map((r) => ({ day: String(r.day), open: num(r.open), added: num(r.added), removed: num(r.removed) }));
   const o = (ov as Row[])[0];
   const expLabel: Record<string, string> = {
     entry: EXPERIENCE_BUCKETS.entry.label,
@@ -126,7 +135,11 @@ export async function loadStats(range: Range): Promise<Stats> {
     companies: (perCompany as Row[])
       .map((r) => ({ slug: String(r.slug), name: String(r.name), classification: (r.classification as string | null) ?? null, open: num(r.open), europe: num(r.europe), added: num(r.added), removed: num(r.removed) }))
       .sort((a, b) => b.open - a.open),
-    timeline: (timeline as Row[]).map((r) => ({ day: String(r.day), open: num(r.open), eu: num(r.eu), added: num(r.added), removed: num(r.removed) })),
+    timeline: {
+      global: days(timelineGlobal),
+      europe: days(timelineEurope),
+      eu: days(timelineEu),
+    },
     countries: (countries as Row[]).map((r) => ({ key: String(r.key), label: String(r.key), n: num(r.n) })),
     experience: expOrder.map((k) => ({ key: k, label: expLabel[k], n: num((experience as Row[]).find((r) => r.key === k)?.n) })),
     classifications: (classifications as Row[]).map((r) => ({ key: String(r.key), label: classificationLabel(String(r.key)), n: num(r.n) })),

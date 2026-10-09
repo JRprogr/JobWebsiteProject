@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { countryName } from "@/lib/geo";
-import type { Bar, DayPoint, Range, Stats } from "@/lib/stats";
-import { RANGES } from "@/lib/stats";
+import { Timeline } from "@/components/Timeline";
+import type { Bar, Range, Stats } from "@/lib/stats";
+import { RANGES, REGIONS } from "@/lib/stats";
 
 const label = "font-mono text-[10px] tracking-[0.1em] text-dim";
 const fmt = (n: number) => n.toLocaleString("en");
@@ -46,68 +47,11 @@ function BarList({ items, format }: { items: Bar[]; format?: (b: Bar) => string 
   );
 }
 
-const W = 720;
-const H = 200;
-const PAD = { l: 44, r: 12, t: 12, b: 24 };
-
-function Timeline({ points }: { points: DayPoint[] }) {
-  if (points.length < 2) {
-    return <p className="font-mono text-xs leading-7 tracking-[0.06em] text-dim">HISTORY STARTS WITH THE FIRST REFRESH. THE CHART FILLS IN DAY BY DAY.</p>;
-  }
-  const max = Math.max(...points.map((p) => p.open));
-  const min = Math.min(...points.map((p) => p.eu));
-  const lo = Math.max(0, Math.floor((min * 0.9) / 100) * 100);
-  const hi = Math.max(lo + 1, Math.ceil(max / 100) * 100);
-  const x = (i: number) => PAD.l + (i / (points.length - 1)) * (W - PAD.l - PAD.r);
-  const y = (v: number) => PAD.t + (1 - (v - lo) / (hi - lo)) * (H - PAD.t - PAD.b);
-  const line = (pick: (p: DayPoint) => number) => points.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(pick(p)).toFixed(1)}`).join("");
-  const ticks = [lo, Math.round((lo + hi) / 2), hi];
-  const dayLabel = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en", { day: "numeric", month: "short", timeZone: "UTC" }).toUpperCase();
-
-  return (
-    <div className="flex flex-col gap-3">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Open roles per day, global and European Union">
-        {ticks.map((t) => (
-          <g key={t}>
-            <line x1={PAD.l} x2={W - PAD.r} y1={y(t)} y2={y(t)} stroke="var(--line)" strokeDasharray="2 4" />
-            <text x={PAD.l - 8} y={y(t) + 3} textAnchor="end" fontSize="10" className="font-mono" fill="var(--dim)">
-              {fmt(t)}
-            </text>
-          </g>
-        ))}
-        <path d={line((p) => p.open)} fill="none" stroke="var(--fg)" strokeWidth="2" strokeLinejoin="round" />
-        <path d={line((p) => p.eu)} fill="none" stroke="var(--map)" strokeWidth="2" strokeLinejoin="round" />
-        {points.map((p, i) => (
-          <g key={p.day}>
-            <circle cx={x(i)} cy={y(p.open)} r="3" fill="var(--fg)" />
-            <circle cx={x(i)} cy={y(p.eu)} r="3" fill="var(--map)" />
-            {i === 0 || i === points.length - 1 || i % Math.ceil(points.length / 6) === 0 ? (
-              <text x={x(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === points.length - 1 ? "end" : "middle"} fontSize="10" className="font-mono" fill="var(--dim)">
-                {dayLabel(p.day)}
-              </text>
-            ) : null}
-          </g>
-        ))}
-      </svg>
-      <p className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[10px] tracking-[0.1em]">
-        <span className="flex items-center gap-2">
-          <span className="h-0.5 w-5 bg-fg" aria-hidden="true" />
-          GLOBAL
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="h-0.5 w-5" style={{ background: "var(--map)" }} aria-hidden="true" />
-          EUROPEAN UNION
-        </span>
-      </p>
-    </div>
-  );
-}
-
 export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
   const { overview: o } = stats;
   const net = o.added - o.removed;
   const window = `LAST ${range} DAYS`;
-  const activity = stats.timeline.reduce((n, p) => n + p.added + p.removed, 0);
+  const activity = stats.timeline.global.reduce((n, p) => n + p.added + p.removed, 0);
 
   return (
     <>
@@ -132,8 +76,8 @@ export function StatsView({ stats, range }: { stats: Stats; range: Range }) {
         <Kpi name={`REMOVED · ${window}`} value={signed(-o.removed)} sub={o.lastScrape ? "SINCE THE FIRST REFRESH OF EACH COMPANY" : "NO REFRESH YET"} tone="down" />
       </div>
 
-      <Card title="OPEN ROLES OVER TIME" note={activity === 0 ? "NO CHANGES RECORDED YET" : "DAILY, END OF DAY"}>
-        <Timeline points={stats.timeline} />
+      <Card title="ROLES OVER TIME" note={activity === 0 ? "NO CHANGES RECORDED YET" : "DAILY, END OF DAY"}>
+        <Timeline regions={REGIONS.map(({ key, label }) => ({ key, label }))} timeline={stats.timeline} />
       </Card>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">

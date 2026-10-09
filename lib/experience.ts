@@ -9,9 +9,9 @@ const OR_MORE_RE = /\b(\d{1,2})\s+or more\s+(?=years?|yrs?)/gi;
 
 const UNIT = "(?:years?|yrs?|jahre?n?|ans|années|años|anni|lat|lata|roku|rok)";
 // the first figure may carry a plus ("7+ to 10+ years")
-const RANGE_RE = new RegExp(`(\\d{1,2})\\s*\\+?\\s*(?:-|–|—|to|bis|à|und|or)\\s*(\\d{1,2})\\s*\\+?\\s*[- ]?${UNIT}\\b`, "gi");
+const RANGE_RE = new RegExp(`(?<![\\d.,])(\\d{1,2})\\s*\\+?\\s*(?:-|–|—|to|bis|à|und|or)\\s*(\\d{1,2})\\s*\\+?\\s*[- ]?${UNIT}\\b`, "gi");
 const SINGLE_RE = new RegExp(
-  `(?:(at least|minimum(?: of)?|min\\.?|mindestens|au moins|almeno|co najmniej|over|more than|>)\\s*)?(\\d{1,2})\\s*(\\+)?\\s*[- ]?${UNIT}\\b`,
+  `(?:(at least|minimum(?: of)?|min\\.?|mindestens|au moins|almeno|co najmniej|over|more than|>)\\s*)?(?<![\\d.,])(\\d{1,2})\\s*(\\+)?\\s*[- ]?${UNIT}\\b`,
   "gi",
 );
 
@@ -22,6 +22,11 @@ const CONTEXT_RE = /experience|erfahrung|expérience|experiencia|esperienza|doś
 // out on purpose: "years of X" is also the going way to state a company's heritage ("20 years of innovation"), which the
 // NOISE_BEFORE_RE cues below catch when they can, but "of" alone is too common in that wording to trust blindly.
 const AFTER_IMPLIES_RE = /^\s*(?:in|with|as|within)\b/i;
+// Loose mode (see consider): a figure with no experience wording around it still counts when it is up to LOOSE_CAP years and written like a
+// requirement ("5+ years", "at least 3 years", "3-5 years"), unless a residency/contract word follows ("5+ years residency", "a 2 years assignment")
+const LOOSE_NOISE_BEFORE_RE = /(?:assignment|secondment|contract|fixed-term|placement|residen\w*)\b[^.\n]{0,40}$/i;
+const LOOSE_CAP = 10;
+const LOOSE_NOISE_AFTER_RE = /^['’]?[\s\-–]{0,3}(?:of\s+)?(?:uninterrupted|continuous|permanent|legal|ongoing)?\s*(?:residen|contract|assignment|secondment|warrant|lifespan|duration|term\b|lease|licen[cs]e|funding|funded|grant|visa|citizen)/i;
 const NOISE_AFTER_RE = /^\W{0,3}(?:ago|old|of age|alt\b|d['’]âge|since|in the|on the market)/i;
 const NOISE_BEFORE_RE = /(?:last|past|previous|next|within|over the|for the last|founded|since|in the past|more than|building on|backed by|with over|boasts?|who (?:have|has))\s*$/i;
 
@@ -59,10 +64,18 @@ export function extractExperience(text: string | null, title: string): Experienc
       .replace(OR_MORE_RE, "$1+ ");
     let best: Experience | null = null;
     let bestPreferred: Experience | null = null;
-    const consider = (min: number, max: number | null, index: number, length: number) => {
+    const consider = (min: number, max: number | null, index: number, length: number, strong: boolean) => {
       if (min > 25 || (max !== null && (max > 30 || max < min))) return;
       const window = body.slice(Math.max(0, index - 110), index + length + 110);
-      if (!CONTEXT_RE.test(window) && !AFTER_IMPLIES_RE.test(body.slice(index + length, index + length + 20))) return;
+      // Without any talk of experience around it a figure only counts in loose mode ("5+ years developing flight software"): listings state
+      // requirements like that up to LOOSE_CAP, while company heritage ("25+ years developing...") is nearly always larger
+      const framed = CONTEXT_RE.test(window) || AFTER_IMPLIES_RE.test(body.slice(index + length, index + length + 20));
+      const loose =
+        strong &&
+        min <= LOOSE_CAP &&
+        !LOOSE_NOISE_AFTER_RE.test(body.slice(index + length, index + length + 40)) &&
+        !LOOSE_NOISE_BEFORE_RE.test(body.slice(Math.max(0, index - 60), index));
+      if (!framed && !loose) return;
       if (NOISE_AFTER_RE.test(body.slice(index + length, index + length + 16))) return;
       if (NOISE_BEFORE_RE.test(body.slice(Math.max(0, index - 20), index))) return;
       if (inPreferredSection(body, index)) {
@@ -75,13 +88,13 @@ export function extractExperience(text: string | null, title: string): Experienc
       const a = Number(m[1]);
       const b = Number(m[2]);
       rangeSpans.push([m.index, m.index + m[0].length]);
-      consider(a, b, m.index, m[0].length);
+      consider(a, b, m.index, m[0].length, true);
     }
     for (const m of body.matchAll(SINGLE_RE)) {
       if (rangeSpans.some(([s, e]) => m.index >= s && m.index < e)) continue;
       // "up to 3 years" is a ceiling, not a minimum
-      if (/\bup to\s*$/i.test(body.slice(Math.max(0, m.index - 8), m.index))) consider(0, Number(m[2]), m.index, m[0].length);
-      else consider(Number(m[2]), null, m.index, m[0].length);
+      if (/\bup to\s*$/i.test(body.slice(Math.max(0, m.index - 8), m.index))) consider(0, Number(m[2]), m.index, m[0].length, false);
+      else consider(Number(m[2]), null, m.index, m[0].length, Boolean(m[1] || m[3]));
     }
     if (best) return best;
     if (bestPreferred) return bestPreferred;

@@ -9,12 +9,12 @@ import { reextractExperience } from "../lib/texts.ts";
 // --backfill  read many more listing texts per company in one go (Workday, BambooHR, … only fetch 30 per run otherwise)
 // --force     skip the result guard (after a deliberate adapter change)
 // Companies run four at a time.
-// --reextract recomputes every open job's experience from the stored listing texts (no employer is contacted); use it after a
-//             change to lib/experience.ts, optionally for just some slugs
+// --reextract recomputes every open job's experience, language and role type from the stored listing texts (no employer is contacted); use it after a
+//             change to lib/experience.ts, lib/language.ts or lib/roles.ts, optionally for just some slugs
 const args = process.argv.slice(2);
 if (args.includes("--reextract")) {
   const done = await reextractExperience(args.filter((a) => !a.startsWith("--")));
-  console.log(`experience re-read from stored texts: ${done.checked} jobs checked, ${done.changed} changed`);
+  console.log(`experience, language and role type re-read from stored texts: ${done.checked} jobs checked, ${done.changed} changed`);
   process.exit(0);
 }
 const texts = args.includes("--texts");
