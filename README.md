@@ -51,7 +51,7 @@ npm run dev
 | `npm run db:seed` | Upserts `db/seed/companies.json` into `companies` |
 | `npm run scrape -- [slug…] [--texts] [--backfill] [--force]` | Scrapes the given companies (all if none), four at a time; `--texts` also fetches every missing listing text (one-off catch-up), `--backfill` reads more listings per run for sources that fetch 30 at a time, `--force` skips the result guard |
 | `npm run scrape -- --reextract [slug…]` | Recomputes every open job's experience, language and role type from the stored listing texts (after changing `lib/experience.ts`, `lib/language.ts` or `lib/roles.ts`); contacts no employer |
-| `npm run scrape -- --due` | Scrapes only the companies whose interval has elapsed, which is what the GitHub workflow runs every hour |
+| `npm run scrape -- --due` | Scrapes only the companies whose interval has elapsed, which is what the GitHub workflow runs every three hours |
 | `npm run logos -- [slug…]` | Rebuilds `public/logos/*.png`, see CLAUDE.md |
 | `npm run build` | On a Vercel production deploy: migrate + seed, then `next build`. Elsewhere just `next build` |
 
@@ -73,8 +73,8 @@ Environment variables (see `.env.example`):
 
 ### Scraping
 
-Scraping does not run on Vercel. `.github/workflows/scrape.yml` runs every hour and scrapes the companies that are due:
-hourly by default, every six hours for the big career sites (`source_config.every_hours`). A run that would remove more than
+Scraping does not run on Vercel. `.github/workflows/scrape.yml` runs every three hours and scrapes the companies that are due:
+every three hours by default, every six hours for the big career sites (`source_config.every_hours`). A run that would remove more than
 30% of a company's jobs is held back until the next run confirms it, so a blocked or broken source cannot wipe a board.
 The same run stores listing texts and tidies the database (scrape history older than 60 days, texts of jobs closed for a
 month). Add the production connection string as the Actions secret `DATABASE_URL` and the public address as the Actions variable
@@ -118,11 +118,11 @@ otherwise (`down` or `stale`). `.github/workflows/monitor.yml` calls it hourly a
 you, when it does not answer 200 three times in a row. It needs the Actions variable `SITE_URL`. A site that is paused on
 Vercel ("Pause Project") is recognised by its `x-vercel-error: DEPLOYMENT_PAUSED` header and skipped.
 
-**GitHub's own scheduler, not this project, sets the real cadence.** Both `scrape.yml`'s and `monitor.yml`'s `cron` fire
-hourly on paper, but GitHub only promises to run a scheduled workflow "around" that time, more so under load, and for this
+**GitHub's own scheduler, not this project, sets the real cadence.** `scrape.yml`'s `cron` fires
+every three hours on paper, but GitHub only promises to run a scheduled workflow "around" that time, more so under load, and for this
 repo that has meant delays of a few minutes up to around 8.5 hours on almost every run since the schedule went live — a
 documented GitHub limitation, worse for lower-traffic public repos, not something a workflow file can fix. `/api/health`'s
-threshold has margin above the worst delay seen so far. If you want the scrape to actually run close to hourly, the only
+threshold has margin above the worst delay seen so far. If you want the scrape to actually run on time, the only
 real fix is triggering it from outside GitHub: a free external scheduler (the same kind of service as the uptime monitor
 below) that calls `POST https://api.github.com/repos/<you>/<repo>/actions/workflows/scrape.yml/dispatches` with
 `{"ref":"main"}` on its own timer, using a fine-grained GitHub token scoped to just this repository's Actions. That means
@@ -143,9 +143,12 @@ repository is public. Overuse blocks a feature, it does not bill (provider docum
   that feature for 30 days. DDoS mitigation is always on, and Attack Mode (Firewall, Bot Management) is free and its blocked
   requests do not count towards the limits.
 - **Neon Free** suspends the compute when the 100 compute-hours or 5 GB of transfer per month are used up and refuses writes
-  beyond 0.5 GB. It never deletes data.
+  beyond 0.5 GB. It never deletes data. This happened once (October 2026): every database page then fails until the quota resets,
+  and the scraper and the monitor fail with it. The scrape therefore runs every three hours, not hourly, and big one-off jobs
+  (`--reextract`, full backfills, long scans) are not run against the database without checking the usage page first. The usage
+  counts the whole project, the `dev` branch included.
 - **GitHub Actions** minutes are free for public repositories on standard runners. If the repository is ever made private, the
-  free quota is 2,000 minutes a month and the hourly scrape alone would use most of it.
+  free quota is 2,000 minutes a month and the scrape alone would use a large part of it.
 - **No AI or other metered service** is called anywhere: the only dependencies are Next.js, React, the Neon driver and a PDF
   reader; there are no API keys besides the database connection.
 

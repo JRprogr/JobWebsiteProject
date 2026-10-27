@@ -1,0 +1,33 @@
+name: company links
+
+# Refreshes the subcontract links on the Market Insight page from USAspending.gov (public US federal award data, no key) and
+# re-syncs the hand-curated links in db/seed/links.json. Run it by hand now and then; the data changes slowly.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: company-links
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --omit=dev
+      - name: Import links
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL }}
+          NODE_OPTIONS: --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
+        run: node scripts/links.mts

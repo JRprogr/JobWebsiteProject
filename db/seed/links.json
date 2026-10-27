@@ -1,0 +1,422 @@
+[
+  {
+    "from": "airbus-defence-and-space",
+    "to": "arianegroup",
+    "kind": "joint_venture",
+    "year": 2015,
+    "note": "ArianeGroup is owned 50/50 by Airbus and Safran.",
+    "source_url": "https://en.wikipedia.org/wiki/ArianeGroup"
+  },
+  {
+    "from": "safran",
+    "to": "arianegroup",
+    "kind": "joint_venture",
+    "year": 2015,
+    "note": "ArianeGroup is owned 50/50 by Airbus and Safran.",
+    "source_url": "https://en.wikipedia.org/wiki/ArianeGroup"
+  },
+  {
+    "from": "arianegroup",
+    "to": "maiaspace",
+    "kind": "ownership",
+    "note": "MaiaSpace is an ArianeGroup subsidiary.",
+    "source_url": "https://en.wikipedia.org/wiki/MaiaSpace"
+  },
+  {
+    "from": "Thales",
+    "to": "thales-alenia-space",
+    "kind": "ownership",
+    "note": "Thales holds 67%.",
+    "source_url": "https://en.wikipedia.org/wiki/Thales_Alenia_Space"
+  },
+  {
+    "from": "leonardo",
+    "to": "thales-alenia-space",
+    "kind": "ownership",
+    "note": "Leonardo holds 33%.",
+    "source_url": "https://en.wikipedia.org/wiki/Thales_Alenia_Space"
+  },
+  {
+    "from": "leonardo",
+    "to": "telespazio",
+    "kind": "ownership",
+    "note": "Leonardo holds 67%, Thales 33%.",
+    "source_url": "https://en.wikipedia.org/wiki/Telespazio"
+  },
+  {
+    "from": "Thales",
+    "to": "telespazio",
+    "kind": "ownership",
+    "note": "Leonardo holds 67%, Thales 33%.",
+    "source_url": "https://en.wikipedia.org/wiki/Telespazio"
+  },
+  {
+    "from": "airbus-defence-and-space",
+    "to": "leonardo",
+    "kind": "partnership",
+    "year": 2025,
+    "note": "Project Bromo: Airbus, Thales and Leonardo signed a memorandum of understanding in October 2025 to combine their space businesses (35% / 32.5% / 32.5%). Pending regulatory approval.",
+    "source_url": "https://www.defenseone.com/business/2025/10/airbus-leonardo-thales-join-forces-reshape-european-space-landscape/409054"
+  },
+  {
+    "from": "airbus-defence-and-space",
+    "to": "Thales",
+    "kind": "partnership",
+    "year": 2025,
+    "note": "Project Bromo: Airbus, Thales and Leonardo signed a memorandum of understanding in October 2025 to combine their space businesses (35% / 32.5% / 32.5%). Pending regulatory approval.",
+    "source_url": "https://www.defenseone.com/business/2025/10/airbus-leonardo-thales-join-forces-reshape-european-space-landscape/409054"
+  },
+  {
+    "from": "leonardo",
+    "to": "Thales",
+    "kind": "partnership",
+    "year": 2025,
+    "note": "Project Bromo: Airbus, Thales and Leonardo signed a memorandum of understanding in October 2025 to combine their space businesses (35% / 32.5% / 32.5%). Pending regulatory approval.",
+    "source_url": "https://www.defenseone.com/business/2025/10/airbus-leonardo-thales-join-forces-reshape-european-space-landscape/409054"
+  },
+  {
+    "from": "airbus-defence-and-space",
+    "to": "sstl",
+    "kind": "ownership",
+    "year": 2009,
+    "note": "SSTL is majority-owned by Airbus.",
+    "source_url": "https://en.wikipedia.org/wiki/Surrey_Satellite_Technology"
+  },
+  {
+    "from": "ohb",
+    "to": "ohb-sweden",
+    "kind": "ownership",
+    "note": "OHB Sweden is part of the OHB group.",
+    "source_url": "https://en.wikipedia.org/wiki/OHB_SE"
+  },
+  {
+    "from": "boeing-space",
+    "to": "United Launch Alliance",
+    "kind": "joint_venture",
+    "year": 2006,
+    "note": "ULA is a 50/50 joint venture of Boeing and Lockheed Martin.",
+    "source_url": "https://en.wikipedia.org/wiki/United_Launch_Alliance"
+  },
+  {
+    "from": "lockheed-martin",
+    "to": "United Launch Alliance",
+    "kind": "joint_venture",
+    "year": 2006,
+    "note": "ULA is a 50/50 joint venture of Boeing and Lockheed Martin.",
+    "source_url": "https://en.wikipedia.org/wiki/United_Launch_Alliance"
+  },
+  {
+    "from": "viasat",
+    "to": "Inmarsat",
+    "kind": "ownership",
+    "year": 2023,
+    "note": "Viasat completed its acquisition of Inmarsat in May 2023.",
+    "source_url": "https://en.wikipedia.org/wiki/Inmarsat"
+  },
+  {
+    "from": "ses",
+    "to": "Intelsat",
+    "kind": "ownership",
+    "year": 2025,
+    "note": "SES completed its acquisition of Intelsat in 2025.",
+    "source_url": "https://en.wikipedia.org/wiki/Intelsat"
+  },
+  {
+    "from": "rocket-lab",
+    "to": "Mynaric",
+    "kind": "ownership",
+    "year": 2026,
+    "note": "Rocket Lab completed its acquisition of Mynaric AG (laser communication terminals) on 14 April 2026.",
+    "source_url": "https://rocketlabcorp.com/updates/rocket-lab-completes-mynaric-acquisition-adding-laser-optical-communications-to-growing-space-systems-portfolio/"
+  },
+  {
+    "from": "intuitive-machines",
+    "to": "Lanteris Space Systems",
+    "kind": "ownership",
+    "year": 2026,
+    "note": "Intuitive Machines completed its acquisition of Lanteris (formerly Maxar Space Systems) on 13 January 2026.",
+    "source_url": "https://www.satellitetoday.com/manufacturing/2026/01/13/intuitive-machines-completes-lanteris-space-systems-acquisition/"
+  },
+  {
+    "from": "mda-space",
+    "to": "SatixFy",
+    "kind": "ownership",
+    "year": 2025,
+    "note": "MDA Space completed its acquisition of SatixFy Communications on 2 July 2025.",
+    "source_url": "https://mda.space/article/mda-space-completes-acquisition-of-satixfy-communications"
+  },
+  {
+    "from": "rheinmetall",
+    "to": "iceye",
+    "kind": "joint_venture",
+    "year": 2025,
+    "note": "Rheinmetall ICEYE Space Solutions (Neuss), 60% Rheinmetall and 40% ICEYE; established in November 2025.",
+    "source_url": "https://www.iceye.com/newsroom/press-releases/rheinmetall-and-iceye-plan-to-establish-a-joint-venture"
+  },
+  {
+    "from": "leonardo",
+    "to": "rheinmetall",
+    "kind": "joint_venture",
+    "year": 2024,
+    "note": "Leonardo Rheinmetall Military Vehicles, a 50/50 joint venture for Italian army vehicles.",
+    "source_url": "https://en.wikipedia.org/wiki/Rheinmetall"
+  },
+  {
+    "from": "ast-spacemobile",
+    "to": "spacex",
+    "kind": "contract",
+    "note": "Launch services for BlueBird satellites on Falcon 9.",
+    "source_url": "https://en.wikipedia.org/wiki/AST_SpaceMobile"
+  },
+  {
+    "from": "ast-spacemobile",
+    "to": "blue-origin",
+    "kind": "contract",
+    "year": 2024,
+    "note": "Launch agreement for BlueBird satellites on New Glenn.",
+    "source_url": "https://en.wikipedia.org/wiki/AST_SpaceMobile"
+  },
+  {
+    "from": "axiom-space",
+    "to": "spacex",
+    "kind": "contract",
+    "note": "Axiom's private astronaut missions fly on SpaceX Crew Dragon.",
+    "source_url": "https://en.wikipedia.org/wiki/Axiom_Space"
+  },
+  {
+    "from": "axiom-space",
+    "to": "thales-alenia-space",
+    "kind": "contract",
+    "year": 2021,
+    "note": "Thales Alenia Space builds pressurised modules for the Axiom Station.",
+    "source_url": "https://en.wikipedia.org/wiki/Axiom_Space"
+  },
+  {
+    "from": "intuitive-machines",
+    "to": "spacex",
+    "kind": "contract",
+    "note": "Nova-C lunar landers launch on Falcon 9.",
+    "source_url": "https://en.wikipedia.org/wiki/Intuitive_Machines"
+  },
+  {
+    "from": "blue-origin",
+    "to": "lockheed-martin",
+    "kind": "partnership",
+    "year": 2019,
+    "note": "Lockheed Martin is part of the Blue Origin-led National Team for the Artemis lunar lander.",
+    "source_url": "https://en.wikipedia.org/wiki/Blue_Moon_(spacecraft)"
+  },
+  {
+    "from": "esa",
+    "to": "arianegroup",
+    "kind": "contract",
+    "note": "Ariane 6 development: ArianeGroup is the prime contractor of the launcher.",
+    "source_url": "https://en.wikipedia.org/wiki/Ariane_6"
+  },
+  {
+    "from": "esa",
+    "to": "avio",
+    "kind": "contract",
+    "note": "Vega-C launcher development with Avio as prime contractor.",
+    "source_url": "https://en.wikipedia.org/wiki/Vega-C"
+  },
+  {
+    "from": "esa",
+    "to": "airbus-defence-and-space",
+    "kind": "contract",
+    "year": 2021,
+    "note": "Galileo Second Generation: six satellites, signed 28 May 2021 for the EU (Airbus and Thales share about €1.47 billion). Also builds the European Service Module for NASA's Orion.",
+    "source_url": "https://www.esa.int/Applications/Satellite_navigation/ESA_signs_contract_for_new_generation_of_Galileo"
+  },
+  {
+    "from": "esa",
+    "to": "thales-alenia-space",
+    "kind": "contract",
+    "year": 2021,
+    "note": "Galileo Second Generation: six satellites, signed 28 May 2021 for the EU. Prime contractor of ExoMars. Phase 1 of the LEO cargo return service (about €25 million, 2024).",
+    "source_url": "https://www.esa.int/Applications/Satellite_navigation/ESA_signs_contract_for_new_generation_of_Galileo"
+  },
+  {
+    "from": "esa",
+    "to": "ohb",
+    "kind": "contract",
+    "note": "Prime contractor of the first-generation Galileo satellites; its challenge of the second-generation award was rejected in 2021.",
+    "source_url": "https://www.satellitetoday.com/imagery-and-sensing/2021/05/28/esa-finalizes-airbus-thales-nex-gen-galileo-contracts-after-court-ruling"
+  },
+  {
+    "from": "esa",
+    "to": "the-exploration-company",
+    "kind": "contract",
+    "year": 2025,
+    "note": "LEO cargo return service (ALADDIN): phase 1 of about €25 million in 2024, then a phase 2 contract of €760 million for the Nyx capsule demonstration (September 2025).",
+    "source_url": "https://europeanspaceflight.com/?p=7009"
+  },
+  {
+    "from": "esa",
+    "to": "clearspace",
+    "kind": "contract",
+    "year": 2020,
+    "note": "ClearSpace-1, the first active debris removal mission: a €86 million service contract with a team led by ClearSpace.",
+    "source_url": "https://www.startupticker.ch/en/news/esa-and-clearspace-sign-e86-million-contract-for-space-debris-removal"
+  },
+  {
+    "from": "esa",
+    "to": "isar-aerospace",
+    "kind": "contract",
+    "year": 2025,
+    "note": "One of five companies preselected in July 2025 for the European Launcher Challenge (launch services for ESA missions from 2026 and a flight demonstration; up to €169 million each from member states).",
+    "source_url": "https://militaryaerospace.com/commercial-aerospace/article/55301904/esa-announces-five-companies-selected-for-european-launch-challenge"
+  },
+  {
+    "from": "esa",
+    "to": "rocket-factory-augsburg",
+    "kind": "contract",
+    "year": 2025,
+    "note": "One of five companies preselected in July 2025 for the European Launcher Challenge (launch services for ESA missions from 2026 and a flight demonstration; up to €169 million each from member states).",
+    "source_url": "https://militaryaerospace.com/commercial-aerospace/article/55301904/esa-announces-five-companies-selected-for-european-launch-challenge"
+  },
+  {
+    "from": "esa",
+    "to": "pld-space",
+    "kind": "contract",
+    "year": 2025,
+    "note": "One of five companies preselected in July 2025 for the European Launcher Challenge (launch services for ESA missions from 2026 and a flight demonstration; up to €169 million each from member states).",
+    "source_url": "https://militaryaerospace.com/commercial-aerospace/article/55301904/esa-announces-five-companies-selected-for-european-launch-challenge"
+  },
+  {
+    "from": "esa",
+    "to": "maiaspace",
+    "kind": "contract",
+    "year": 2025,
+    "note": "One of five companies preselected in July 2025 for the European Launcher Challenge (launch services for ESA missions from 2026 and a flight demonstration; up to €169 million each from member states).",
+    "source_url": "https://militaryaerospace.com/commercial-aerospace/article/55301904/esa-announces-five-companies-selected-for-european-launch-challenge"
+  },
+  {
+    "from": "esa",
+    "to": "telespazio",
+    "kind": "contract",
+    "year": 2024,
+    "note": "Moonlight lunar communications and navigation services: €123 million first-phase contract signed 15 October 2024.",
+    "source_url": "https://www.lapresse.it/tecnologia/spazio/2024/10/15/telespazio-contratto-con-esa-per-programma-moonlight-da-123-milioni-in-future-missioni-lunari/"
+  },
+  {
+    "from": "telespazio",
+    "to": "thales-alenia-space",
+    "kind": "contract",
+    "year": 2025,
+    "note": "Moonlight: Thales Alenia Space develops the space segment of the lunar navigation system (four navigation satellites).",
+    "source_url": "https://europeanspaceflight.com/thales-alenia-space-to-build-esa-moonlight-satellites-for-telespazio/"
+  },
+  {
+    "from": "telespazio",
+    "to": "sstl",
+    "kind": "partnership",
+    "year": 2024,
+    "note": "Member of the Telespazio-led Moonlight consortium for ESA.",
+    "source_url": "https://www.lapresse.it/tecnologia/spazio/2024/10/15/telespazio-contratto-con-esa-per-programma-moonlight-da-123-milioni-in-future-missioni-lunari/"
+  },
+  {
+    "from": "telespazio",
+    "to": "viasat",
+    "kind": "partnership",
+    "year": 2024,
+    "note": "Member of the Telespazio-led Moonlight consortium for ESA.",
+    "source_url": "https://www.lapresse.it/tecnologia/spazio/2024/10/15/telespazio-contratto-con-esa-per-programma-moonlight-da-123-milioni-in-future-missioni-lunari/"
+  },
+  {
+    "from": "telespazio",
+    "to": "mda-space",
+    "kind": "partnership",
+    "year": 2024,
+    "note": "Member of the Telespazio-led Moonlight consortium for ESA.",
+    "source_url": "https://www.lapresse.it/tecnologia/spazio/2024/10/15/telespazio-contratto-con-esa-per-programma-moonlight-da-123-milioni-in-future-missioni-lunari/"
+  },
+  {
+    "from": "European Commission",
+    "to": "ses",
+    "kind": "contract",
+    "year": 2024,
+    "from_type": "agency",
+    "note": "IRIS²: 12-year concession for the EU secure satellite constellation, awarded to the SpaceRISE consortium of SES, Eutelsat and Hispasat; signed 16 December 2024.",
+    "source_url": "https://defence-industry-space.ec.europa.eu/iris2-european-commission-awards-concession-contract-spacerise-consortium-2024-10-31_en"
+  },
+  {
+    "from": "esa",
+    "to": "ses",
+    "kind": "contract",
+    "year": 2024,
+    "note": "IRIS²: ESA signed a separate contract with SpaceRISE on 16 December 2024.",
+    "source_url": "https://resilience.esa.int/?p=11576"
+  },
+  {
+    "from": "ses",
+    "to": "airbus-defence-and-space",
+    "kind": "partnership",
+    "year": 2024,
+    "note": "Industrial partner of the SpaceRISE consortium for the IRIS² constellation.",
+    "source_url": "https://defence-industry-space.ec.europa.eu/iris2-european-commission-awards-concession-contract-spacerise-consortium-2024-10-31_en"
+  },
+  {
+    "from": "ses",
+    "to": "thales-alenia-space",
+    "kind": "partnership",
+    "year": 2024,
+    "note": "Industrial partner of the SpaceRISE consortium for the IRIS² constellation.",
+    "source_url": "https://defence-industry-space.ec.europa.eu/iris2-european-commission-awards-concession-contract-spacerise-consortium-2024-10-31_en"
+  },
+  {
+    "from": "ses",
+    "to": "ohb",
+    "kind": "partnership",
+    "year": 2024,
+    "note": "Industrial partner of the SpaceRISE consortium for the IRIS² constellation.",
+    "source_url": "https://defence-industry-space.ec.europa.eu/iris2-european-commission-awards-concession-contract-spacerise-consortium-2024-10-31_en"
+  },
+  {
+    "from": "arianegroup",
+    "to": "beyond-gravity",
+    "kind": "contract",
+    "year": 2026,
+    "note": "Long-term supply of Ariane 6 payload fairings (27 fairings for flights 16 to 42, operational phase from the end of 2026).",
+    "source_url": "https://ariane.group/en/news/arianegroup-and-beyond-gravity-sign-major-contract-securing-the-long-term-supply-of-ariane-6-payload-fairings"
+  },
+  {
+    "from": "kongsberg",
+    "to": "KSAT",
+    "kind": "joint_venture",
+    "to_type": "company",
+    "note": "Kongsberg Satellite Services (KSAT) is owned 50/50 by Kongsberg Defence & Aerospace and Space Norway.",
+    "source_url": "https://www.kongsberg.com/what-we-do/space/satellite-services/"
+  },
+  {
+    "from": "space-norway",
+    "to": "KSAT",
+    "kind": "joint_venture",
+    "to_type": "company",
+    "note": "Kongsberg Satellite Services (KSAT) is owned 50/50 by Kongsberg Defence & Aerospace and Space Norway.",
+    "source_url": "https://www.kongsberg.com/what-we-do/space/satellite-services/"
+  },
+  {
+    "from": "ses",
+    "to": "boeing-space",
+    "kind": "contract",
+    "note": "Boeing built the O3b mPOWER satellites for SES.",
+    "source_url": "https://en.wikipedia.org/wiki/O3b_mPOWER"
+  },
+  {
+    "from": "avio",
+    "to": "Europropulsion",
+    "kind": "joint_venture",
+    "to_type": "company",
+    "note": "Europropulsion, the maker of the solid boosters for Ariane 6 and Vega-C, is owned equally by ArianeGroup and Avio.",
+    "source_url": "https://en.wikipedia.org/wiki/Europropulsion"
+  },
+  {
+    "from": "arianegroup",
+    "to": "Europropulsion",
+    "kind": "joint_venture",
+    "to_type": "company",
+    "note": "Europropulsion, the maker of the solid boosters for Ariane 6 and Vega-C, is owned equally by ArianeGroup and Avio.",
+    "source_url": "https://en.wikipedia.org/wiki/Europropulsion"
+  }
+]

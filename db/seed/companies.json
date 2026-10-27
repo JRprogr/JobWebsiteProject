@@ -283,7 +283,8 @@
       "tenant": "leonardocompany",
       "host": "wd3",
       "site": "LeonardoCareerSite",
-      "every_hours": 6
+      "every_hours": 6,
+      "exclude_hiring_company_regex": "^Telespazio"
     },
     "active": true,
     "careers_url": "https://leonardocompany.wd3.myworkdayjobs.com/de-DE/LeonardoCareerSite",
@@ -2089,5 +2090,54 @@
       "fetch_text": true
     },
     "logo_url": "/logos/edgx.png"
+  },
+  {
+    "name": "CesiumAstro",
+    "slug": "cesiumastro",
+    "classification": "satellites",
+    "source_type": "lever",
+    "source_config": {
+      "site": "CesiumAstro"
+    },
+    "active": true,
+    "careers_url": "https://jobs.lever.co/CesiumAstro",
+    "hq_country": "US",
+    "logo_url": "/logos/cesiumastro.png"
+  },
+  {
+    "name": "Involve Space",
+    "slug": "involve-space",
+    "classification": "satellites",
+    "source_type": "custom",
+    "source_config": {
+      "kind": "base44-odoo",
+      "base": "https://careers.involvespace.eu",
+      "app_id": "6a326c3a01b600bf5811ff22",
+      "default_country": "IT",
+      "places": {
+        "Involve Space HQ": "Como, Italy"
+      }
+    },
+    "active": true,
+    "careers_url": "https://careers.involvespace.eu/",
+    "hq_country": "IT",
+    "logo_url": "/logos/involve-space.png"
+  },
+  {
+    "name": "Telespazio",
+    "slug": "telespazio",
+    "classification": "space-ops",
+    "source_type": "workday",
+    "source_config": {
+      "tenant": "leonardocompany",
+      "host": "wd3",
+      "site": "LeonardoCareerSite",
+      "hiring_company_regex": "^Telespazio",
+      "every_hours": 6
+    },
+    "active": true,
+    "careers_url": "https://leonardocompany.wd3.myworkdayjobs.com/en-US/LeonardoCareerSite",
+    "hq_country": "IT",
+    "logo_url": "/logos/telespazio.png"
   }
 ]

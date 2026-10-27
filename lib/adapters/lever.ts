@@ -10,7 +10,7 @@ type LeverPosting = {
   country?: string | null;
   workplaceType?: string | null;
   categories?: { location?: string; allLocations?: string[]; team?: string; department?: string };
-  salaryRange?: { min?: number; max?: number; currency?: string } | null;
+  salaryRange?: { min?: number; max?: number; currency?: string; interval?: string } | null;
   descriptionPlain?: string;
   lists?: { text?: string; content?: string }[];
   additionalPlain?: string;
@@ -47,6 +47,8 @@ export const lever: Adapter = async (company, ctx) => {
   return postings.map((p): NormalizedJob => {
     const cats = p.categories ?? {};
     const all = cats.allLocations?.length ? cats.allLocations : cats.location ? [cats.location] : [];
+    // an hourly wage ("54.56 per hour") is not a yearly salary and is not an integer either; only yearly ranges are kept
+    const annual = !/hour|day|week|month/i.test(p.salaryRange?.interval ?? "");
     return {
       external_id: p.id,
       title: decodeEntities(p.text).trim(),
@@ -54,9 +56,9 @@ export const lever: Adapter = async (company, ctx) => {
       remote: p.workplaceType === "remote",
       department: cats.department ?? cats.team ?? null,
       url: p.hostedUrl,
-      salary_min: p.salaryRange?.min ?? null,
-      salary_max: p.salaryRange?.max ?? null,
-      salary_currency: p.salaryRange?.currency ?? null,
+      salary_min: annual ? Math.round(p.salaryRange?.min ?? 0) || null : null,
+      salary_max: annual ? Math.round(p.salaryRange?.max ?? 0) || null : null,
+      salary_currency: annual ? (p.salaryRange?.currency ?? null) : null,
       posted_at: p.createdAt ? new Date(p.createdAt).toISOString() : null,
       country_hint: p.country ?? null,
       description: ctx.known.has(p.id) ? null : (bodyText(p) ?? ""),

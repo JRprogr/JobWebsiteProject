@@ -1,29 +1,60 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { classificationLabel } from "@/lib/classifications";
 import { countryName } from "@/lib/geo";
 import type { Register } from "@/lib/stats";
 import { CompanyLogo } from "./CompanyLogo";
-import { ArrowUpRightIcon } from "./icons";
+import { ArrowUpRightIcon, SearchIcon } from "./icons";
 
 const label = "font-mono text-[10px] tracking-[0.1em] text-dim";
 const fmt = (n: number) => n.toLocaleString("en");
 const figure = (c: Register, n: number) => (c.scraped ? fmt(n) : "—");
 const sourceLabel = (source: string) => (source === "custom" ? "OWN CAREERS SITE" : source.toUpperCase());
 
-type Props = { companies: Register[]; classifications: string[]; classification: string | null };
+type Props = { companies: Register[]; classifications: string[]; classification: string | null; query: string };
 
-export function RegisterView({ companies, classifications, classification }: Props) {
-  const shown = classification ? companies.filter((c) => c.classification === classification) : companies;
+// Every word typed must appear in the company's name, its classification, or the country of its headquarters ("rocket", "launch italy")
+const plain = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+function matches(c: Register, words: string[]): boolean {
+  const hay = plain(`${c.name} ${c.slug.replace(/-/g, " ")} ${c.classification ? classificationLabel(c.classification) : ""} ${c.hq ? countryName(c.hq) : ""}`);
+  return words.every((w) => hay.includes(w));
+}
+
+export function RegisterView({ companies, classifications, classification, query }: Props) {
+  const [text, setText] = useState(query);
+  const words = plain(text).split(/\s+/).filter(Boolean).slice(0, 6);
+  const inClassification = classification ? companies.filter((c) => c.classification === classification) : companies;
+  const shown = words.length ? inClassification.filter((c) => matches(c, words)) : inClassification;
   const live = shown.filter((c) => c.scraped).length;
+  // the classification buttons keep what is typed
+  const q = text.trim() ? `q=${encodeURIComponent(text.trim().slice(0, 40))}` : "";
+  const href = (s: string | null) => {
+    const parts = [s ? `classification=${encodeURIComponent(s)}` : "", q].filter(Boolean).join("&");
+    return parts ? `/companies?${parts}` : "/companies";
+  };
 
   return (
     <>
+      <label className="glass flex h-12 items-center gap-3 rounded-xl px-4 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-fg md:max-w-xl">
+        <SearchIcon className="shrink-0 text-dim" />
+        <input
+          type="search"
+          value={text}
+          onChange={(e) => setText(e.target.value.slice(0, 40))}
+          placeholder="Search companies, classifications or countries"
+          aria-label="Search companies, classifications or countries"
+          className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-dim"
+        />
+      </label>
+
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Classification">
         <span className={label}>CLASSIFICATION</span>
         {[null, ...classifications].map((s) => (
           <Link
             key={s ?? "all"}
-            href={s ? `/companies?classification=${encodeURIComponent(s)}` : "/companies"}
+            href={href(s)}
             aria-current={classification === s ? "true" : undefined}
             className={`rounded-lg border px-3 py-[7px] font-mono text-[11px] tracking-[0.08em] ${classification === s ? "border-fg bg-faint font-bold" : "border-line"}`}
           >
@@ -35,6 +66,13 @@ export function RegisterView({ companies, classifications, classification }: Pro
           {live < shown.length ? ` · ${live} LIVE` : ""}
         </span>
       </div>
+
+      {shown.length === 0 ? (
+        <div className="glass rounded-2xl p-6 font-mono text-xs leading-7 tracking-[0.06em]" role="status">
+          <p className="font-bold">NO COMPANY MATCHES.</p>
+          <p className="text-dim">Try a shorter word, a country, or clear the classification.</p>
+        </div>
+      ) : null}
 
       <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {shown.map((c) => (

@@ -1,0 +1,236 @@
+{
+  "spacex": {
+    "terms": [
+      "SPACE EXPLORATION TECHNOLOGIES"
+    ]
+  },
+  "blue-origin": {
+    "terms": [
+      "BLUE ORIGIN"
+    ]
+  },
+  "lockheed-martin": {
+    "terms": [
+      "LOCKHEED MARTIN"
+    ]
+  },
+  "rtx": {
+    "terms": [
+      "RAYTHEON",
+      "PRATT & WHITNEY",
+      "COLLINS AEROSPACE",
+      "RTX CORP"
+    ]
+  },
+  "boeing-space": {
+    "terms": [
+      "BOEING"
+    ],
+    "exclude": [
+      "BELL BOEING"
+    ]
+  },
+  "honeywell": {
+    "terms": [
+      "HONEYWELL"
+    ]
+  },
+  "palantir": {
+    "terms": [
+      "PALANTIR"
+    ]
+  },
+  "rocket-lab": {
+    "terms": [
+      "ROCKET LAB"
+    ]
+  },
+  "planet": {
+    "terms": [
+      "PLANET LABS"
+    ]
+  },
+  "blacksky": {
+    "terms": [
+      "BLACKSKY"
+    ]
+  },
+  "vantor": {
+    "terms": [
+      "MAXAR",
+      "VANTOR"
+    ]
+  },
+  "viasat": {
+    "terms": [
+      "VIASAT"
+    ]
+  },
+  "axiom-space": {
+    "terms": [
+      "AXIOM SPACE"
+    ]
+  },
+  "intuitive-machines": {
+    "terms": [
+      "INTUITIVE MACHINES"
+    ]
+  },
+  "loft-orbital": {
+    "terms": [
+      "LOFT ORBITAL"
+    ]
+  },
+  "spire": {
+    "terms": [
+      "SPIRE GLOBAL"
+    ]
+  },
+  "ast-spacemobile": {
+    "terms": [
+      "AST & SCIENCE",
+      "AST SPACEMOBILE"
+    ]
+  },
+  "airbus-defence-and-space": {
+    "ted": [
+      "Airbus Defence and Space",
+      "Airbus Defence & Space"
+    ]
+  },
+  "thales-alenia-space": {
+    "ted": [
+      "Thales Alenia Space"
+    ]
+  },
+  "leonardo": {
+    "ted": [
+      "Leonardo S.p.A",
+      "Leonardo SpA",
+      "Leonardo UK",
+      "Leonardo Germany",
+      "Leonardo Deutschland",
+      "Leonardo Electronics"
+    ]
+  },
+  "ohb": {
+    "ted": [
+      "OHB System",
+      "OHB Digital",
+      "OHB Italia",
+      "OHB SE"
+    ]
+  },
+  "ohb-sweden": {
+    "ted": [
+      "OHB Sweden"
+    ]
+  },
+  "arianegroup": {
+    "ted": [
+      "ArianeGroup",
+      "Ariane Group"
+    ]
+  },
+  "safran": {
+    "ted": [
+      "Safran Electronics",
+      "Safran Data Systems",
+      "Safran Aircraft Engines",
+      "Safran Aerosystems",
+      "Safran Spacecraft Propulsion"
+    ]
+  },
+  "avio": {
+    "ted": [
+      "Avio S.p.A",
+      "Avio SpA",
+      "Avio Aero"
+    ]
+  },
+  "kongsberg": {
+    "ted": [
+      "Kongsberg Defence",
+      "Kongsberg Gruppen",
+      "Kongsberg Satellite Services",
+      "Kongsberg Discovery"
+    ]
+  },
+  "gmv": {
+    "ted": [
+      "GMV Aerospace",
+      "GMV Sistemas",
+      "GMV Innovating",
+      "GMV Aeroespacial"
+    ]
+  },
+  "ses": {
+    "ted": [
+      "SES ASTRA",
+      "SES Satellites",
+      "SES Global",
+      "SES TechCom"
+    ]
+  },
+  "ssc": {
+    "ted": [
+      "Swedish Space Corporation"
+    ]
+  },
+  "sstl": {
+    "ted": [
+      "Surrey Satellite Technology"
+    ]
+  },
+  "dassault-aviation": {
+    "ted": [
+      "Dassault Aviation"
+    ]
+  },
+  "indra-avitech": {
+    "ted": [
+      "Indra Avitech"
+    ]
+  },
+  "gtd": {
+    "ted": [
+      "GTD Sistemas"
+    ]
+  },
+  "sti": {
+    "ted": []
+  },
+  "latitude": {
+    "ted": []
+  },
+  "ride": {
+    "ted": []
+  },
+  "aiko": {
+    "ted": []
+  },
+  "essp": {
+    "ted": []
+  },
+  "cosine": {
+    "ted": []
+  },
+  "tumbleweed": {
+    "ted": []
+  },
+  "esyen": {
+    "ted": []
+  },
+  "hitec": {
+    "ted": []
+  },
+  "cysec": {
+    "ted": []
+  },
+  "space-dreams": {
+    "ted": []
+  },
+  "edgx": {
+    "ted": []
+  }
+}

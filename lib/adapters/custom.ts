@@ -7,6 +7,7 @@ import { euPortal, euPortalDetail } from "./euportal.ts";
 import { linkList, linkListDetail } from "./linklist.ts";
 import { safran, safranDetail } from "./safran.ts";
 import { wixBoard, wixBoardDetail } from "./wixboard.ts";
+import { base44Odoo, base44OdooDetail } from "./base44odoo.ts";
 import type { Adapter, DetailFetcher, NormalizedJob } from "../types.ts";
 
 
@@ -145,6 +146,7 @@ const kinds: Record<string, { adapter: Adapter; detail: DetailFetcher }> = {
   "eu-portal": { adapter: euPortal, detail: euPortalDetail },
   "wix-board": { adapter: wixBoard, detail: wixBoardDetail },
   "safran-web": { adapter: safran, detail: safranDetail },
+  "base44-odoo": { adapter: base44Odoo, detail: base44OdooDetail },
 };
 
 const kindOf = (company: { slug: string; source_config: Record<string, unknown> }) => {

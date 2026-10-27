@@ -6,10 +6,11 @@ import { AboutButton } from "./AboutButton";
 import { ThemeToggle } from "./ThemeToggle";
 import { TipButton } from "./TipButton";
 
-const PAGES = [
+const PAGES: { href: string; label: string; short?: string }[] = [
   { href: "/", label: "OVERVIEW" },
   { href: "/statistics", label: "STATISTICS" },
-  { href: "/companies", label: "COMPANY REGISTER" },
+  { href: "/market", label: "MARKET INSIGHT", short: "MARKET" },
+  { href: "/companies", label: "COMPANY REGISTER", short: "REGISTER" },
 ];
 
 export function TopBar() {
@@ -30,7 +31,14 @@ export function TopBar() {
                 aria-current={current ? "page" : undefined}
                 className={`whitespace-nowrap rounded-[9px] border px-2 py-1.5 font-mono text-[10px] tracking-[0.06em] md:px-3 md:py-2 md:text-[11px] md:tracking-[0.08em] ${current ? "border-fg bg-faint font-bold" : "border-transparent text-dim hover:border-line"}`}
               >
-                {p.label}
+                {p.short ? (
+                  <>
+                    <span className="md:hidden">{p.short}</span>
+                    <span className="max-md:hidden">{p.label}</span>
+                  </>
+                ) : (
+                  p.label
+                )}
               </Link>
             );
           })}

@@ -1,11 +1,12 @@
 name: scrape
 
-# Scrapes every company whose interval has elapsed (hourly by default, big career sites every six hours, see
+# Scrapes every company whose interval has elapsed (every three hours by default, big career sites every six hours, see
 # source_config.every_hours in db/seed/companies.json). Runs here rather than on Vercel, which does not allow scrapers.
-# It also stores listing texts and tidies the database (lib/housekeeping.ts).
+# It also stores listing texts and tidies the database (lib/housekeeping.ts). Every run wakes the Neon compute, which is why this
+# fires every three hours and not hourly (the free plan's compute hours ran out once).
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17 */3 * * *"
   workflow_dispatch:
     inputs:
       slugs:
@@ -21,7 +22,7 @@ on:
         type: boolean
         default: false
 
-# One run at a time: a slow run must never overlap the next hourly one
+# One run at a time: a slow run must never overlap the next one
 concurrency:
   group: scrape
   cancel-in-progress: false

@@ -1,5 +1,6 @@
 import companies from "../db/seed/companies.json" with { type: "json" };
 import { sql } from "../lib/db.ts";
+import { syncCuratedLinks } from "../lib/linkSync.ts";
 
 const db = sql();
 for (const c of companies) {
@@ -13,3 +14,5 @@ for (const c of companies) {
   );
   console.log(`seeded ${c.slug} (${c.source_type}${c.active ? "" : ", inactive"})`);
 }
+
+console.log(`synced ${await syncCuratedLinks()} curated company links`);

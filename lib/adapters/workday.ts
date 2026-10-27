@@ -13,6 +13,8 @@ type Config = {
   searchText: string;
   excludeLocations?: RegExp;
   bulletMatch?: RegExp;
+  hiringInclude?: RegExp;
+  hiringExclude?: RegExp;
 };
 
 function cfg(company: { slug: string; source_config: Record<string, unknown> }): Config {
@@ -24,7 +26,7 @@ function cfg(company: { slug: string; source_config: Record<string, unknown> }):
   const hiringCompanyIds = Array.isArray(raw) ? raw.filter((x): x is string => typeof x === "string") : undefined;
   const rx = (key: string) => (typeof company.source_config[key] === "string" ? new RegExp(company.source_config[key] as string, "i") : undefined);
   const searchText = typeof company.source_config.search_text === "string" ? company.source_config.search_text : "";
-  return { tenant, host, site, hiringCompanyIds, searchText, excludeLocations: rx("exclude_locations_regex"), bulletMatch: rx("bullet_match_regex") };
+  return { tenant, host, site, hiringCompanyIds, searchText, excludeLocations: rx("exclude_locations_regex"), bulletMatch: rx("bullet_match_regex"), hiringInclude: rx("hiring_company_regex"), hiringExclude: rx("exclude_hiring_company_regex") };
 }
 
 // The CXS API (what the Workday careers UI itself calls) is the only public way to list postings; no auth required.
@@ -93,8 +95,17 @@ async function listAll(c: Config): Promise<{ id: string; item: ListItem }[]> {
     const ids = (findFacet(first.facets, "locations")?.values ?? []).filter((v) => v.id && !exclude.test(v.descriptor ?? "")).map((v) => v.id as string);
     if (ids.length === 0) throw new Error(`workday ${c.tenant}/${c.site}: exclude_locations_regex left no locations`);
     applied = { locations: ids };
-    first = await fetchPage(c, 0, applied);
   }
+  // One tenant shared by several companies (Leonardo and Telespazio): pick the legal entities by the names of the tenant's own
+  // hiringCompany facet, so an entity that appears later lands on the right side without a config change.
+  if (c.hiringInclude || c.hiringExclude) {
+    const ids = (findFacet(first.facets, "hiringCompany")?.values ?? [])
+      .filter((v) => v.id && (!c.hiringInclude || c.hiringInclude.test(v.descriptor ?? "")) && (!c.hiringExclude || !c.hiringExclude.test(v.descriptor ?? "")))
+      .map((v) => v.id as string);
+    if (ids.length === 0) throw new Error(`workday ${c.tenant}/${c.site}: the hiring company regexes left no legal entity`);
+    applied = { ...applied, hiringCompany: ids };
+  }
+  if (applied) first = await fetchPage(c, 0, applied);
   const pages = Math.max(0, Math.ceil(first.total / PAGE_SIZE) - 1);
   const rest: ListItem[] = [];
   await mapPool(

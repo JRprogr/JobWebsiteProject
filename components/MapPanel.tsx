@@ -1,9 +1,19 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { countryName, SCOPES, type Scope } from "@/lib/geo";
-import { EuMap } from "./EuMap";
 import { EuFlagIcon, GlobeIcon } from "./icons";
+
+// The world geometry is a few hundred KB, so the globe loads after the page is interactive; the frame keeps its size meanwhile
+const GlobeMap = dynamic(() => import("./GlobeMap").then((m) => m.GlobeMap), {
+  ssr: false,
+  loading: () => (
+    <div className="grid h-full w-full place-items-center font-mono text-[11px] tracking-[0.1em] text-map-ui" aria-hidden="true">
+      LOADING GLOBE…
+    </div>
+  ),
+});
 
 const SCOPE_ICON: Partial<Record<Scope, typeof GlobeIcon>> = { eu: EuFlagIcon, all: GlobeIcon };
 // "EUR" read as the currency, so the buttons spell out what they are
@@ -24,9 +34,6 @@ type Props = {
 
 export function MapPanel({ open, scope, counts, selected, highlighted, multi, onMulti, onToggle, onClear, onScope }: Props) {
   const [hovered, setHovered] = useState<string | null>(null);
-  const selectedSet = new Set(selected);
-  const highlightedSet = new Set(highlighted);
-
   const readout = hovered
     ? `${countryName(hovered).toUpperCase()} · ${counts[hovered] ?? 0} ${(counts[hovered] ?? 0) === 1 ? "ROLE" : "ROLES"}`
     : selected.length > 0
@@ -73,7 +80,7 @@ export function MapPanel({ open, scope, counts, selected, highlighted, multi, on
       </div>
 
       <div className="map-frame relative overflow-hidden rounded-[14px] border border-map-ui-line" style={{ background: "var(--map-panel)" }}>
-        <EuMap scope={scope} counts={counts} selected={selectedSet} highlighted={highlightedSet} hovered={hovered} onHover={setHovered} onToggle={onToggle} />
+        <GlobeMap scope={scope} counts={counts} selected={selected} highlighted={highlighted} hovered={hovered} onHover={setHovered} onToggle={onToggle} />
         <div className="scanlines absolute inset-0" aria-hidden="true" />
       </div>
 

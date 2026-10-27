@@ -4,7 +4,7 @@ import { reextractExperience } from "../lib/texts.ts";
 
 // npm run scrape                     every active company
 // npm run scrape -- <slug> [slug…]   just those companies
-// npm run scrape -- --due            only companies whose interval has elapsed (what the GitHub workflow runs every hour)
+// npm run scrape -- --due            only companies whose interval has elapsed (what the GitHub workflow runs every three hours)
 // --texts     also fetch the listing text of every open job that has none stored yet (one-off catch-up, slow; implies --backfill)
 // --backfill  read many more listing texts per company in one go (Workday, BambooHR, … only fetch 30 per run otherwise)
 // --force     skip the result guard (after a deliberate adapter change)

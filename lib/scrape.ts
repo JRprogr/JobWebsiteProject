@@ -246,9 +246,12 @@ export async function loadCompanies(slugs: string[]): Promise<Company[]> {
 
 const CONCURRENCY = 4;
 
-// Companies are scraped hourly unless source_config.every_hours says otherwise (big boards: 6). A run counts as on time
-// with SLACK_MIN to spare, so an hourly cron that drifts by a few minutes never skips a whole cycle. After a failed,
-// held-back or interrupted run the company is tried again after RETRY_MIN, whatever its own interval.
+// Companies are scraped every DEFAULT_EVERY_HOURS hours unless source_config.every_hours says otherwise (big boards: 6). Every run
+// of the workflow wakes the Neon compute, and the free plan's compute hours ran out in October 2026, so the default is 3 and the
+// cron fires every 3 hours too. A run counts as on time with SLACK_MIN to spare, so a cron that drifts by a few minutes never skips a
+// whole cycle. After a failed, held-back or interrupted run the company is tried again after RETRY_MIN (in practice at the next run
+// of the workflow), whatever its own interval.
+const DEFAULT_EVERY_HOURS = 3;
 const SLACK_MIN = 10;
 const RETRY_MIN = 50;
 
@@ -280,10 +283,10 @@ export async function scrapeDue(opts: RunOptions & { budgetMs: number }) {
        and (last.started_at is null
             or last.started_at < now() - interval '1 minute' * (
                  case when last.status = 'success'
-                      then greatest(coalesce((c.source_config->>'every_hours')::float8, 1) * 60 - $1::float8, $2::float8)
+                      then greatest(coalesce((c.source_config->>'every_hours')::float8, $3::float8) * 60 - $1::float8, $2::float8)
                       else $2::float8 end))
      order by coalesce(last.started_at, 'epoch'::timestamptz), c.name`,
-    [SLACK_MIN, RETRY_MIN],
+    [SLACK_MIN, RETRY_MIN, DEFAULT_EVERY_HOURS],
   ))) as Company[];
   return { due: due.length, ...(await scrapeMany(due, opts)) };
 }

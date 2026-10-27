@@ -3,7 +3,7 @@ import { sql } from "@/lib/db";
 // What the monitors ask: is the database reachable and has a scrape finished recently? It reveals nothing but those two
 // facts.
 //
-// The workflow's cron fires hourly, but GitHub does not promise to run a scheduled workflow on time — for this repo the
+// The workflow's cron fires every three hours, but GitHub does not promise to run a scheduled workflow on time — for this repo the
 // gap between two successful scrapes has ranged from a few minutes up to about 8.5 hours since the schedule went live
 // (measured from the Actions run history, 2026-09-30), not just occasionally but on nearly every run. That is GitHub's own
 // scheduler being best-effort, not a fault in the workflow or the scraper. The threshold below has margin above the worst

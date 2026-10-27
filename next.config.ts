@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: SECURITY_HEADERS },
-      ...["/", "/companies", "/statistics"].map((source) => ({ source, headers: [{ key: "Cache-Control", value: PAGE_CACHE }] })),
+      ...["/", "/companies", "/statistics", "/market"].map((source) => ({ source, headers: [{ key: "Cache-Control", value: PAGE_CACHE }] })),
     ];
   },
 };

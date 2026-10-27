@@ -8,6 +8,7 @@ export const metadata = { title: "Company Register" };
 export default async function CompaniesPage({ searchParams }: PageProps<"/companies">) {
   const sp = await searchParams;
   const raw = Array.isArray(sp.classification) ? sp.classification[0] : sp.classification;
+  const q = (Array.isArray(sp.q) ? sp.q[0] : sp.q)?.slice(0, 40) ?? "";
   const companies = await loadRegister();
   const classifications = sortClassifications([...new Set(companies.map((c) => c.classification).filter((s): s is string => s !== null))]);
   const classification = raw && classifications.includes(raw) ? raw : null;
@@ -18,7 +19,7 @@ export default async function CompaniesPage({ searchParams }: PageProps<"/compan
       title="Who is hiring."
       intro="Every space and defence employer we follow, with the number of open roles and a direct link to their own careers page."
     >
-      <RegisterView companies={companies} classifications={classifications} classification={classification} />
+      <RegisterView companies={companies} classifications={classifications} classification={classification} query={q} />
     </PageShell>
   );
 }

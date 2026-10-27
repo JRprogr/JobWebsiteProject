@@ -111,6 +111,8 @@ async function fromOverride(o: Override): Promise<Buffer | null> {
 //  size  longest side of the mark inside the 128x128 tile
 type Local = { key?: boolean; bg?: string; crop?: { left: number; top: number; width: number; height: number }; size?: number };
 const LOCAL: Record<string, Local> = {
+  cesiumastro: { crop: { left: 0, top: 0, width: 1042, height: 96 }, size: 118 },
+  telespazio: { size: 128 },
   northstar: { crop: { left: 1, top: 2, width: 125, height: 108 }, key: true, size: 112 },
   ses: { size: 110 },
   list: { crop: { left: 284, top: 0, width: 71, height: 75 }, size: 100 },
