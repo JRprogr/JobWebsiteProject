@@ -1,6 +1,7 @@
 import aliases from "../db/seed/link-aliases.json" with { type: "json" };
 import { politeFetch } from "../lib/adapters/http.ts";
 import { sql } from "../lib/db.ts";
+import { sleep } from "../lib/pool.ts";
 import { companyIds, syncCuratedLinks } from "../lib/linkSync.ts";
 import { importTed } from "./linksTed.mts";
 
@@ -12,8 +13,13 @@ import { importTed } from "./linksTed.mts";
 
 const API = "https://api.usaspending.gov/api/v2/search/spending_by_award/";
 const YEARS = 5;
-const PAGES = 5; // of 100 subawards each, biggest first
+const PAGES = 3; // of 100 subawards each, biggest first (the API is slow: one search can take a minute and a half)
 const EXTERNAL_PER_COMPANY = 5;
+// The API answers 503 now and then (and slowly under load), more so from a cloud runner and when asked quickly one request after
+// the other: ask gently, and when a search still fails wait longer and ask again before giving up on that company.
+const PAUSE_MS = 1_500;
+const ATTEMPTS = 4;
+const GIVE_UP_AFTER = 3; // companies in a row that failed after every attempt: the API is down, stop asking
 const EXTERNAL_MIN_USD = 500_000;
 
 type Alias = { terms?: string[]; exclude?: string[]; ted?: string[] };
@@ -52,8 +58,24 @@ async function fetchSubawards(term: string): Promise<Row[]> {
       });
     }
     if (!body.page_metadata.hasNext) break;
+    await sleep(PAUSE_MS);
   }
   return rows;
+}
+
+async function fetchWithRetry(term: string): Promise<Row[]> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fetchSubawards(term);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      // a request the API refuses for good (400, 404...) is not worth asking again; 429, 5xx, timeouts and dropped connections are
+      if (attempt === ATTEMPTS || /answered 4(?!29)/.test(message)) throw err;
+      const wait = 20 * attempt;
+      console.log(`retry ${attempt}/${ATTEMPTS - 1} for "${term}" in ${wait} s: ${message.slice(0, 120)}`);
+      await sleep(wait * 1000);
+    }
+  }
 }
 
 const upper = (s: string) => s.toUpperCase();
@@ -82,10 +104,13 @@ async function usaspending() {
   const stamp: string[] = [];
   const done: string[] = []; // companies whose search worked: only their old links are replaced
   const failed: string[] = [];
+  let inARow = 0;
+  // `npm run links usaspending spacex boeing-space` asks only for those companies (the retry after a partial run)
+  const only = new Set(process.argv.slice(3));
   const inserts: { from: string | null; fromName: string | null; to: string; amount: number; count: number; first: string | null; last: string | null; term: string }[] = [];
 
   for (const [slug, alias] of Object.entries(ALIASES)) {
-    if (!alias.terms) continue;
+    if (!alias.terms || (only.size > 0 && !only.has(slug))) continue;
     const to = ids.get(slug);
     if (!to) {
       console.log(`skip ${slug}: not in the register`);
@@ -94,12 +119,17 @@ async function usaspending() {
     const byPrime = new Map<string, Agg>();
     const rows: Row[] = [];
     try {
-      for (const term of alias.terms) rows.push(...(await fetchSubawards(term)));
+      for (const term of alias.terms) rows.push(...(await fetchWithRetry(term)));
     } catch (err) {
       failed.push(`${slug}: ${err instanceof Error ? err.message : String(err)}`);
       console.log(`FAILED ${slug}: ${failed.at(-1)}`);
+      if (++inARow >= GIVE_UP_AFTER) {
+        failed.push("stopped: three companies in a row failed, USAspending seems to be down");
+        break;
+      }
       continue;
     }
+    inARow = 0;
     done.push(to);
     for (const r of rows) {
       // only subawards that really went to this company (the search also matches the prime name)

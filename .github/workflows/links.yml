@@ -4,6 +4,16 @@ name: company links
 # re-syncs the hand-curated links in db/seed/links.json. Run it by hand now and then; the data changes slowly.
 on:
   workflow_dispatch:
+    inputs:
+      source:
+        description: "Which source to import"
+        type: choice
+        options: [all, curated, usaspending, ted]
+        default: all
+      slugs:
+        description: "USAspending only: just these companies, space separated (the retry after a partial run)"
+        required: false
+        default: ""
 
 concurrency:
   group: company-links
@@ -15,7 +25,7 @@ permissions:
 jobs:
   links:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
         with:
@@ -30,4 +40,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL }}
           NODE_OPTIONS: --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
-        run: node scripts/links.mts
+          SOURCE: ${{ inputs.source }}
+          SLUGS: ${{ inputs.slugs }}
+        run: node scripts/links.mts ${SOURCE:-all} $SLUGS
