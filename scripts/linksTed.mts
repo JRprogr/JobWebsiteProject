@@ -1,5 +1,5 @@
 import aliases from "../db/seed/link-aliases.json" with { type: "json" };
-import { USER_AGENT } from "../lib/adapters/http.ts";
+import { politeFetch } from "../lib/adapters/http.ts";
 import { sql } from "../lib/db.ts";
 import { sleep } from "../lib/pool.ts";
 
@@ -52,28 +52,25 @@ const pick = (o: Record<string, string[]> | undefined): string[] => {
   return [...new Set(list.map((x) => x.trim()).filter(Boolean))];
 };
 
-async function search(term: string): Promise<Notice[]> {
+export async function search(term: string): Promise<Notice[]> {
   const out: Notice[] = [];
   for (let page = 1; page <= MAX_PAGES; page++) {
-    let body = null as { notices?: Notice[]; totalNoticeCount?: number } | null;
-    for (let attempt = 1; attempt <= 3 && !body; attempt++) {
-      const res = await fetch(API, {
-        method: "POST",
-        headers: { "content-type": "application/json", "user-agent": USER_AGENT },
-        body: JSON.stringify({
-          query: `winner-name="${term.replace(/"/g, "")}" AND publication-date>=${SINCE}`,
-          fields: ["publication-number", "publication-date", "buyer-name", "winner-name", "total-value", "total-value-cur", "notice-title"],
-          limit: PAGE,
-          page,
-          scope: "ALL",
-          paginationMode: "PAGE_NUMBER",
-        }),
-        signal: AbortSignal.timeout(60_000),
-      }).catch(() => null);
-      if (res?.ok) body = (await res.json()) as typeof body;
-      else await sleep(attempt * 2_000);
-    }
-    if (!body) throw new Error(`TED did not answer for "${term}"`);
+    const res = await politeFetch(API, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        query: `winner-name="${term.replace(/"/g, "")}" AND publication-date>=${SINCE}`,
+        fields: ["publication-number", "publication-date", "buyer-name", "winner-name", "total-value", "total-value-cur", "notice-title"],
+        limit: PAGE,
+        page,
+        scope: "ALL",
+        paginationMode: "PAGE_NUMBER",
+      }),
+      signal: AbortSignal.timeout(60_000),
+    });
+    // politeFetch already waited and retried on 429 and 5xx; what is left is worth reading
+    if (!res.ok) throw new Error(`TED answered ${res.status} for "${term}": ${(await res.text()).replace(/\s+/g, " ").slice(0, 200)}`);
+    const body = (await res.json()) as { notices?: Notice[]; totalNoticeCount?: number };
     out.push(...(body.notices ?? []));
     if ((body.notices ?? []).length < PAGE) break;
     await sleep(300);

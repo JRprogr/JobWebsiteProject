@@ -1,5 +1,5 @@
 import aliases from "../db/seed/link-aliases.json" with { type: "json" };
-import { USER_AGENT } from "../lib/adapters/http.ts";
+import { politeFetch } from "../lib/adapters/http.ts";
 import { sql } from "../lib/db.ts";
 import { companyIds, syncCuratedLinks } from "../lib/linkSync.ts";
 import { importTed } from "./linksTed.mts";
@@ -27,9 +27,10 @@ async function fetchSubawards(term: string): Promise<Row[]> {
   const day = (d: Date) => d.toISOString().slice(0, 10);
   const rows: Row[] = [];
   for (let page = 1; page <= PAGES; page++) {
-    const res = await fetch(API, {
+    const res = await politeFetch(API, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "User-Agent": USER_AGENT },
+      headers: { "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(90_000),
       body: JSON.stringify({
         subawards: true,
         filters: { recipient_search_text: [term], award_type_codes: ["A", "B", "C", "D"], time_period: [{ start_date: day(start), end_date: day(end) }] },
@@ -40,7 +41,7 @@ async function fetchSubawards(term: string): Promise<Row[]> {
         page,
       }),
     });
-    if (!res.ok) throw new Error(`USAspending answered ${res.status} for "${term}"`);
+    if (!res.ok) throw new Error(`USAspending answered ${res.status} for "${term}": ${(await res.text()).replace(/\s+/g, " ").slice(0, 200)}`);
     const body = (await res.json()) as { results: Record<string, unknown>[]; page_metadata: { hasNext: boolean } };
     for (const r of body.results) {
       rows.push({
@@ -79,6 +80,8 @@ async function usaspending() {
   const db = sql();
   const ids = await companyIds();
   const stamp: string[] = [];
+  const done: string[] = []; // companies whose search worked: only their old links are replaced
+  const failed: string[] = [];
   const inserts: { from: string | null; fromName: string | null; to: string; amount: number; count: number; first: string | null; last: string | null; term: string }[] = [];
 
   for (const [slug, alias] of Object.entries(ALIASES)) {
@@ -89,26 +92,33 @@ async function usaspending() {
       continue;
     }
     const byPrime = new Map<string, Agg>();
-    for (const term of alias.terms) {
-      for (const r of await fetchSubawards(term)) {
-        // only subawards that really went to this company (the search also matches the prime name)
-        if (slugOf(r.sub) !== slug) continue;
-        const primeSlug = slugOf(r.prime);
-        if (primeSlug === slug) continue;
-        const name = clean(r.prime);
-        const k = primeSlug ?? `ext:${key(name)}`;
-        const a = byPrime.get(k) ?? { primeSlug, primeName: name, amount: 0, count: 0, first: null, last: null, bestAmount: 0 };
-        a.amount += r.amount;
-        a.count++;
-        if (r.amount > a.bestAmount) {
-          a.bestAmount = r.amount;
-          a.primeName = name;
-        }
-        if (r.date && (!a.first || r.date < a.first)) a.first = r.date;
-        if (r.date && (!a.last || r.date > a.last)) a.last = r.date;
-        byPrime.set(k, a);
-      }
+    const rows: Row[] = [];
+    try {
+      for (const term of alias.terms) rows.push(...(await fetchSubawards(term)));
+    } catch (err) {
+      failed.push(`${slug}: ${err instanceof Error ? err.message : String(err)}`);
+      console.log(`FAILED ${slug}: ${failed.at(-1)}`);
+      continue;
     }
+    done.push(to);
+    for (const r of rows) {
+      // only subawards that really went to this company (the search also matches the prime name)
+      if (slugOf(r.sub) !== slug) continue;
+      const primeSlug = slugOf(r.prime);
+      if (primeSlug === slug) continue;
+      const name = clean(r.prime);
+      const k = primeSlug ?? `ext:${key(name)}`;
+      const a = byPrime.get(k) ?? { primeSlug, primeName: name, amount: 0, count: 0, first: null, last: null, bestAmount: 0 };
+      a.amount += r.amount;
+      a.count++;
+      if (r.amount > a.bestAmount) {
+        a.bestAmount = r.amount;
+        a.primeName = name;
+      }
+      if (r.date && (!a.first || r.date < a.first)) a.first = r.date;
+      if (r.date && (!a.last || r.date > a.last)) a.last = r.date;
+      byPrime.set(k, a);
+  }
     const all = [...byPrime.values()].sort((x, y) => y.amount - x.amount);
     const register = all.filter((a) => a.primeSlug);
     const outside = all.filter((a) => !a.primeSlug && a.amount >= EXTERNAL_MIN_USD).slice(0, EXTERNAL_PER_COMPANY);
@@ -129,7 +139,7 @@ async function usaspending() {
   }
 
   await db.transaction([
-    db.query("delete from company_links where origin = 'usaspending'"),
+    db.query("delete from company_links where origin = 'usaspending' and to_company = any($1::uuid[])", [done]),
     ...inserts.map((l) =>
       db.query(
         `insert into company_links (from_company, from_name, to_company, kind, origin, weight, amount_usd, first_date, last_date, source_url, note)
@@ -142,9 +152,38 @@ async function usaspending() {
     ),
   ]);
   console.log(`stored ${inserts.length} USAspending links`);
+  if (failed.length) throw new Error(`USAspending failed for ${failed.length} ${failed.length === 1 ? "company" : "companies"} (their old links were kept): ${failed.join(" | ")}`);
 }
 
 const what = process.argv[2] ?? "all";
-if (what === "curated" || what === "all") console.log(`synced ${await syncCuratedLinks()} curated links`);
-if (what === "usaspending" || what === "all") await usaspending();
-if (what === "ted" || what === "all") await importTed();
+const problems: string[] = [];
+
+// A source that fails must not stop the others, and its reason must be readable without opening the log: the ::error:: line shows up
+// as an annotation on the run's summary page.
+async function step(name: string, run: () => Promise<void>) {
+  const started = Date.now();
+  try {
+    await run();
+    console.log(`${name}: done in ${Math.round((Date.now() - started) / 1000)} s`);
+  } catch (err) {
+    const message = (err instanceof Error ? err.message : String(err)).replace(/\s+/g, " ").slice(0, 900);
+    problems.push(`${name}: ${message}`);
+    console.log(`::error title=${name} failed::${message}`);
+    console.error(err);
+  }
+}
+
+// migrations 008 and 009 run with the deploy; a database that has not seen them yet needs a deploy first
+const present = await sql().query("select to_regclass('public.company_links') as t, (select count(*) from information_schema.columns where table_name = 'company_links' and column_name in ('currency', 'from_type', 'to_type'))::int as c");
+if (!present[0].t || present[0].c < 3) {
+  console.log("::error title=company_links is missing::Migrations 008 and 009 have not run on this database. Deploy first (the production build runs the migrations), then run this again.");
+  process.exit(1);
+}
+
+if (what === "curated" || what === "all") await step("curated links", async () => console.log(`synced ${await syncCuratedLinks()} curated links`));
+if (what === "usaspending" || what === "all") await step("USAspending", usaspending);
+if (what === "ted" || what === "all") await step("TED", importTed);
+if (problems.length) {
+  console.log(`${problems.length} of the sources failed`);
+  process.exit(1);
+}
