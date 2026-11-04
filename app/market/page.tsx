@@ -2,14 +2,14 @@ import { MarketGraph } from "@/components/MarketGraph";
 import { PageShell } from "@/components/PageShell";
 import { loadMarket } from "@/lib/market";
 
-export const metadata = { title: "Market insight" };
+export const metadata = { title: "Market insight [BETA]" };
 export const revalidate = 600;
 
 export default async function MarketPage() {
   const data = await loadMarket();
   return (
     <PageShell
-      eyebrow={`[ MARKET INSIGHT · ${data.nodes.filter((n) => n.slug).length} COMPANIES · ${data.links.length} LINKS ]`}
+      eyebrow={`[ MARKET INSIGHT [BETA] · ${data.nodes.filter((n) => n.slug).length} COMPANIES · ${data.links.length} LINKS ]`}
       title="Who is who."
       intro="The industry as a network: every company on the board grouped by what it does, and the ownership, joint-venture, partnership and contract links between them, from ESA and EU programmes to defence procurement."
     >
